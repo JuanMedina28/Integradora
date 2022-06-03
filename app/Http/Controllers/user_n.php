@@ -14,11 +14,25 @@ class user_n extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password_confirmation' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            
         ], [
-            'name.required'=>'El campo name no puede estar vacio.',
-            'name.string'=>'El campo name debe ser texto.',
-            'name.max'=>'El campo name debe tener menos de 255 letras',
+            'name.required'=>'Nombre no puede estar vacio.',
+            'name.string'=>'Nombre debe ser de texto.',
+            'name.max'=>'Nombre debe tener menos de 255 letras',
+            'email.required'=>'e-mail no puede estar vacio.',
+            'email.string'=>'e-mail debe ser de texto.',
+            'email.email'=>'El formato de e-mail no es correcto',
+            'email.max'=>'e-mail debe tener menos de 255 caracteres',
+            'email.unique'=>'e-mail ya existe',
+            'password_confirmation.required'=>'Por favor ingrese una contrasena para confirmar',
+            'password_confirmation.string'=>'Ingrese caracteres para la contrasena de confirmacion',
+            'password_confirmation.min'=>'La contrasena de confirmacion debe ser de minimo 8 caracteres',
+            'password.required'=>'Por favor ingrese una contrasena',
+            'password.string'=>'Ingrese caracteres para la contraseaa',
+            'password.min'=>'La contrasena debe ser de minimo 8 caracteres',
+            'password.confirmed'=>'Las contrasenas no coinciden',
         ]);
 
         if($validator->fails()){
@@ -31,6 +45,7 @@ class user_n extends Controller
             $user->email =$request->email;
             $user->password =Hash::make($request->password);
             $user->save();
+            return $user;
         }
        
        
