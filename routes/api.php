@@ -24,6 +24,10 @@ Route::post('user/guardar',
     [user_n::class,'guardar_us']  
 );
 
+Route::post('servicios/guardar',
+    [servicios::class,'guardar_serv']  
+)->middleware("auth:api");
+
 Route::post('login', function (Request $request) {
 
     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {

@@ -15,12 +15,11 @@ return new class extends Migration
     {
         Schema::create('chat', function (Blueprint $table) {
             $table->id();
+            $table->string('chatID');
             $table->date('fecha');
             $table->string('mensaje');
-            $table->bigInteger('id_pserv');
-            $table->bigInteger('id_user_con');
-            $table->foreign('id_pserv')->references('id')->on('pservicio');
-            $table->foreign('id_user_con')->references('id')->on('users');
+            $table->bigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
     }
