@@ -42,6 +42,11 @@ class user_n extends Controller
             $user = new User();
         
             $user->name =$request->name;
+            $user->apaterno =$request->apaterno;
+            $user->amaterno =$request->amaterno;
+            $user->status =$request->status;
+            $user->tipo_us =$request->tipo_us;
+            $user->url_img_us ="Sin Aplicar";
             $user->email =$request->email;
             $user->password =Hash::make($request->password);
             $user->save();
