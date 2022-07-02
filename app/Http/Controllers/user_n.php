@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class user_n extends Controller
 {
+    public function listar_user(){
+
+        $us= User::all();
+        return $us;
+    }
+
     public function guardar_us(Request $request){
         
         $validator = Validator::make($request->all(), [
@@ -46,8 +52,17 @@ class user_n extends Controller
             $user->amaterno =$request->amaterno;
             $user->status =$request->status;
             $user->tipo_us =$request->tipo_us;
+            if($request->img_us != null){
+            if($request->file('img_us')->isValid()){
+                $ruta_archivo = $request->file('img_us')->store('imagenes','public');
+                $user->url_img_us =$ruta_archivo;
+            }
+        }else{
             $user->url_img_us ="Sin Aplicar";
+        }
+            //$user->url_img_us ="Sin Aplicar";
             $user->email =$request->email;
+            $user->celular =$request->celular;
             $user->password =Hash::make($request->password);
             $user->save();
             return $user;

@@ -19,6 +19,13 @@ return new class extends Migration
             $table->string('amaterno',50)->nullable()->after('apaterno');
             $table->string('status')->nullable();
             $table->string('tipo_us')->nullable()->after('amaterno');
+            $table->integer('pvez')->nullable();
+            $table->string('celular')->nullable();
+            $table->string('calleyn')->nullable();
+            $table->string('n_iden')->nullable();
+            $table->string('municipio')->nullable();
+            $table->integer('cp')->nullable();
+            $table->string('estado')->nullable();
         });
     }
 
@@ -35,6 +42,13 @@ return new class extends Migration
             $table->dropColumn('amaterno');
             $table->dropColumn('status');
             $table->dropColumn('tipo_us');
+            $table->dropColumn('pvez');
+            $table->dropColumn('celular');
+            $table->dropColumn('calleyn');
+            $table->dropColumn('n_iden');
+            $table->dropColumn('municipio');
+            $table->dropColumn('cp');
+            $table->dropColumn('estado');
         });
     }
 };

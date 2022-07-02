@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nombre_libro');
             $table->decimal('precio',$precision = 8, $scale = 2); 
             $table->string('des');
+            $table->string('tipo_serv');
             $table->text('url_img');
             $table->bigInteger('id_us');
             $table->foreign('id_us')->references('id')->on('users');
