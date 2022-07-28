@@ -25,4 +25,30 @@ class prestador_s extends Controller
         return "No";
                    
     }
+    public function guardar2(Request $request){
+
+        $pser = new m_pservicio();
+        
+        $pser->razon_social =$request->razon_social;
+        $pser->url_com_dom ="Sin Aplicar";
+            if($request->url_logo != null){
+                if($request->file('url_logo')->isValid()){
+                    $ruta_archivo = $request->file('url_logo')->store('imagenes','public');
+                    $pser->url_logo =$ruta_archivo;
+                }
+            }else{
+                $pser->url_logo ="Sin Aplicar";
+            }
+            
+        $pser->rfc = $request->rfc;
+        $pser->tipo_ser = $request->tipo_ser;
+        $pser->id_us = $request->user()->id;
+
+        $userModify = User::find($request->user()->id);
+        $userModify->tipo_us = 2;
+        $userModify->status = 1;
+        $userModify->save();
+
+        $pser->save();
+    }
 }

@@ -84,12 +84,12 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                            <input type="text" class="form-control form-control-alternative" id="nombreNegocio" v-model="negocio.nombre"  placeholder="Nombre del Negocio...">
+                                                            <input type="text" class="form-control form-control-alternative" id="nombreNegocio" v-model="negocio.razon_social"  placeholder="Ingrese la Razon Social">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                            <textarea class="form-control form-control-alternative" id="descripcionNegocio"  rows="3" v-model="negocio.descripcion" placeholder="Escribe una descripción del negocio..."></textarea>
+                                                            <input type="text" class="form-control form-control-alternative" id="descripcionNegocio"  v-model="negocio.rfc" placeholder="Escribe el RFC de tu negocio">
                                                             </div>
                                                         </div>
                                                         
@@ -102,22 +102,13 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <input type="text" class="form-control form-control-alternative" id="categoriaNegocio"  v-model="negocio.categoria" placeholder="Categoria del Negocio...">
+                                                                <input type="number" class="form-control form-control-alternative" id="categoriaNegocio"  v-model="negocio.celular" placeholder="Telefono del Negocio">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <input type="text" class="form-control form-control-alternative" id="giroNegocio" v-model="negocio.giro" placeholder="Giro del Negocio...">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        
-                                                        
 
                                                         <div class="col-md-6">
-                                                            <select class="form-control" data-toggle="select" title="Simple select" data-live-search="true" data-live-search-placeholder="Search ...">
+                                                            <select class="form-control" data-toggle="select" title="Simple select" v-model="negocio.tipo_ser">
+                                                                <option disabled selected>Elige tu tipo de Negocio</option>
                                                                 <option>Ingeribles - Alimentos y bebidas.</option>
                                                                 <option>Ambiente - Sonido y  luces.</option>
                                                                 <option>Música - Músicos y DJ's.</option>
@@ -125,16 +116,42 @@
                                                                 <option>Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
                                                                 <option>Personal de servicio - Exteriores e interiores.</option>
                                                             </select>
-                                                        </div>  
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <textarea class="form-control form-control-alternative" id="etiquetasNegocio" v-model="negocio.etiquetas"  rows="3" placeholder="Escribe etiquetas sobre el negocio..."></textarea>
-                                                    </div>
                                                         </div>
+                                                        
+                                                        
                                                     </div>
+
+                                                    <div class="row">
+
+                                                         <div class="col-md-6">
+                                                            <select class="form-control" data-toggle="select" title="Simple select" data-live-search="true" data-live-search-placeholder="Search ..." v-model="negocio.estado">
+                                                                <option disabled selected>Selecciona tu Estado</option>
+                                                                <option>Edo. Mex.</option>
+                                                               
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <select class="form-control" data-toggle="select" title="Simple select" data-live-search="true" data-live-search-placeholder="Search ..." v-model="negocio.municipio">
+                                                                <option disabled selected>Selecciona tu Municipio</option>
+                                                                <option>Tecamac</option>
+                                                                <option>Zumpango</option>
+                                                                <option>Ecatepec</option>
+                                                            </select>
+                                                        </div>  
+
+                                                        
+                                                       
+                                                        
+                                                    </div>
+                                                    <div class="row mt-4">
+                                                    <div class="col-md-12">
                                                     <input type="file" class="form-control form-control-alternative" id="url_img_us"  accept="image/*" @change="subirFoto">
                                                     <br>
+                                                    </div>
+                                                    </div>
                                                         <center>
+
                                                 <button type="button" class="btn btn-dark text-cyan btn-lg" @click="guardarNegocio">Guardar</button>
                                             </center>
 
@@ -169,13 +186,14 @@
             },
             guardarNegocio(){
                 const datosNegocio = new FormData;
-                datosNegocio.set('nombre',this.negocio.nombre);
-                datosNegocio.set('descripcion',this.negocio.descripcion);
-                datosNegocio.set('categoria',this.negocio.categoria);
-                datosNegocio.set('giro',this.negocio.giro);
-                datosNegocio.set('telefono',this.negocio.telefono);
-                datosNegocio.set('etiquetas',this.negocio.etiquetas);
-                datosNegocio.set('url_img_us',this.url_img_us);
+                //datosNegocio.set('nombre',this.negocio.nombre);
+                datosNegocio.set('razon_social',this.negocio.razon_social);
+                datosNegocio.set('rfc',this.negocio.rfc);
+                datosNegocio.set('tipo_ser',this.negocio.tipo_ser);
+                datosNegocio.set('celular',this.negocio.celular);
+                datosNegocio.set('estado',this.negocio.estado);
+                datosNegocio.set('municipio',this.negocio.municipio);
+                datosNegocio.set('url_logo',this.url_img_us);
                 axios.post('/negocioGuardar',datosNegocio)
                     .then((response) => {
                         window.location="/home";                

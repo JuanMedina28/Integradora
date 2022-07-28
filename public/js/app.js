@@ -5401,14 +5401,15 @@ __webpack_require__.r(__webpack_exports__);
       this.url_img_us = e.target.files[0];
     },
     guardarNegocio: function guardarNegocio() {
-      var datosNegocio = new FormData();
-      datosNegocio.set('nombre', this.negocio.nombre);
-      datosNegocio.set('descripcion', this.negocio.descripcion);
-      datosNegocio.set('categoria', this.negocio.categoria);
-      datosNegocio.set('giro', this.negocio.giro);
-      datosNegocio.set('telefono', this.negocio.telefono);
-      datosNegocio.set('etiquetas', this.negocio.etiquetas);
-      datosNegocio.set('url_img_us', this.url_img_us);
+      var datosNegocio = new FormData(); //datosNegocio.set('nombre',this.negocio.nombre);
+
+      datosNegocio.set('razon_social', this.negocio.razon_social);
+      datosNegocio.set('rfc', this.negocio.rfc);
+      datosNegocio.set('tipo_ser', this.negocio.tipo_ser);
+      datosNegocio.set('celular', this.negocio.celular);
+      datosNegocio.set('estado', this.negocio.estado);
+      datosNegocio.set('municipio', this.negocio.municipio);
+      datosNegocio.set('url_logo', this.url_img_us);
       axios.post('/negocioGuardar', datosNegocio).then(function (response) {
         window.location = "/home";
       })["catch"](function (error) {
@@ -5681,50 +5682,50 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.negocio.nombre,
-      expression: "negocio.nombre"
+      value: _vm.negocio.razon_social,
+      expression: "negocio.razon_social"
     }],
     staticClass: "form-control form-control-alternative",
     attrs: {
       type: "text",
       id: "nombreNegocio",
-      placeholder: "Nombre del Negocio..."
+      placeholder: "Ingrese la Razon Social"
     },
     domProps: {
-      value: _vm.negocio.nombre
+      value: _vm.negocio.razon_social
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
 
-        _vm.$set(_vm.negocio, "nombre", $event.target.value);
+        _vm.$set(_vm.negocio, "razon_social", $event.target.value);
       }
     }
   })])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-6"
   }, [_c("div", {
     staticClass: "form-group"
-  }, [_c("textarea", {
+  }, [_c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.negocio.descripcion,
-      expression: "negocio.descripcion"
+      value: _vm.negocio.rfc,
+      expression: "negocio.rfc"
     }],
     staticClass: "form-control form-control-alternative",
     attrs: {
+      type: "text",
       id: "descripcionNegocio",
-      rows: "3",
-      placeholder: "Escribe una descripción del negocio..."
+      placeholder: "Escribe el RFC de tu negocio"
     },
     domProps: {
-      value: _vm.negocio.descripcion
+      value: _vm.negocio.rfc
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
 
-        _vm.$set(_vm.negocio, "descripcion", $event.target.value);
+        _vm.$set(_vm.negocio, "rfc", $event.target.value);
       }
     }
   })])])]), _vm._v(" "), _c("div", {
@@ -5739,82 +5740,129 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.negocio.categoria,
-      expression: "negocio.categoria"
+      value: _vm.negocio.celular,
+      expression: "negocio.celular"
     }],
     staticClass: "form-control form-control-alternative",
     attrs: {
-      type: "text",
+      type: "number",
       id: "categoriaNegocio",
-      placeholder: "Categoria del Negocio..."
+      placeholder: "Telefono del Negocio"
     },
     domProps: {
-      value: _vm.negocio.categoria
+      value: _vm.negocio.celular
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
 
-        _vm.$set(_vm.negocio, "categoria", $event.target.value);
+        _vm.$set(_vm.negocio, "celular", $event.target.value);
       }
     }
   })])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group"
-  }, [_c("input", {
+  }, [_c("select", {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.negocio.giro,
-      expression: "negocio.giro"
+      value: _vm.negocio.tipo_ser,
+      expression: "negocio.tipo_ser"
     }],
-    staticClass: "form-control form-control-alternative",
+    staticClass: "form-control",
     attrs: {
-      type: "text",
-      id: "giroNegocio",
-      placeholder: "Giro del Negocio..."
-    },
-    domProps: {
-      value: _vm.negocio.giro
+      "data-toggle": "select",
+      title: "Simple select"
     },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
 
-        _vm.$set(_vm.negocio, "giro", $event.target.value);
+        _vm.$set(_vm.negocio, "tipo_ser", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
-  })])])]), _vm._v(" "), _c("div", {
+  }, [_c("option", {
+    attrs: {
+      disabled: "",
+      selected: ""
+    }
+  }, [_vm._v("Elige tu tipo de Negocio")]), _vm._v(" "), _c("option", [_vm._v("Ingeribles - Alimentos y bebidas.")]), _vm._v(" "), _c("option", [_vm._v("Ambiente - Sonido y  luces.")]), _vm._v(" "), _c("option", [_vm._v("Música - Músicos y DJ's.")]), _vm._v(" "), _c("option", [_vm._v("Decoración - Exteriores e interiores.")]), _vm._v(" "), _c("option", [_vm._v("Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.")]), _vm._v(" "), _c("option", [_vm._v("Personal de servicio - Exteriores e interiores.")])])])]), _vm._v(" "), _c("div", {
     staticClass: "row"
-  }, [_vm._m(2), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
   }, [_c("div", {
-    staticClass: "form-group"
-  }, [_c("textarea", {
+    staticClass: "col-md-6"
+  }, [_c("select", {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.negocio.etiquetas,
-      expression: "negocio.etiquetas"
+      value: _vm.negocio.estado,
+      expression: "negocio.estado"
     }],
-    staticClass: "form-control form-control-alternative",
+    staticClass: "form-control",
     attrs: {
-      id: "etiquetasNegocio",
-      rows: "3",
-      placeholder: "Escribe etiquetas sobre el negocio..."
-    },
-    domProps: {
-      value: _vm.negocio.etiquetas
+      "data-toggle": "select",
+      title: "Simple select",
+      "data-live-search": "true",
+      "data-live-search-placeholder": "Search ..."
     },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
 
-        _vm.$set(_vm.negocio, "etiquetas", $event.target.value);
+        _vm.$set(_vm.negocio, "estado", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
-  })])])]), _vm._v(" "), _c("input", {
+  }, [_c("option", {
+    attrs: {
+      disabled: "",
+      selected: ""
+    }
+  }, [_vm._v("Selecciona tu Estado")]), _vm._v(" "), _c("option", [_vm._v("Edo. Mex.")])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.negocio.municipio,
+      expression: "negocio.municipio"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "data-toggle": "select",
+      title: "Simple select",
+      "data-live-search": "true",
+      "data-live-search-placeholder": "Search ..."
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+
+        _vm.$set(_vm.negocio, "municipio", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      disabled: "",
+      selected: ""
+    }
+  }, [_vm._v("Selecciona tu Municipio")]), _vm._v(" "), _c("option", [_vm._v("Tecamac")]), _vm._v(" "), _c("option", [_vm._v("Zumpango")]), _vm._v(" "), _c("option", [_vm._v("Ecatepec")])])])]), _vm._v(" "), _c("div", {
+    staticClass: "row mt-4"
+  }, [_c("div", {
+    staticClass: "col-md-12"
+  }, [_c("input", {
     staticClass: "form-control form-control-alternative",
     attrs: {
       type: "file",
@@ -5824,7 +5872,7 @@ var render = function render() {
     on: {
       change: _vm.subirFoto
     }
-  }), _vm._v(" "), _c("br"), _vm._v(" "), _c("center", [_c("button", {
+  }), _vm._v(" "), _c("br")])]), _vm._v(" "), _c("center", [_c("button", {
     staticClass: "btn btn-dark text-cyan btn-lg",
     attrs: {
       type: "button"
@@ -5917,21 +5965,6 @@ var staticRenderFns = [function () {
   }, [_c("i", {
     staticClass: "ni ni-shop text-degradado"
   }), _vm._v("  Negocio")])])])]);
-}, function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("select", {
-    staticClass: "form-control",
-    attrs: {
-      "data-toggle": "select",
-      title: "Simple select",
-      "data-live-search": "true",
-      "data-live-search-placeholder": "Search ..."
-    }
-  }, [_c("option", [_vm._v("Ingeribles - Alimentos y bebidas.")]), _vm._v(" "), _c("option", [_vm._v("Ambiente - Sonido y  luces.")]), _vm._v(" "), _c("option", [_vm._v("Música - Músicos y DJ's.")]), _vm._v(" "), _c("option", [_vm._v("Decoración - Exteriores e interiores.")]), _vm._v(" "), _c("option", [_vm._v("Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.")]), _vm._v(" "), _c("option", [_vm._v("Personal de servicio - Exteriores e interiores.")])])]);
 }];
 render._withStripped = true;
 

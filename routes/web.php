@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\prestador_s;
 use App\Http\Controllers\user_n;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -48,7 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 		})->name('registroDual');
 
 		Route::post("/clienteGuardar", [user_n::class, 'guardar2'])->name('validacionClient');
-		//Route::post("/negocioGuardar", [NegocioController::class, 'guardar2'])->name('validacionNegocio');
+		Route::post("/negocioGuardar", [prestador_s::class, 'guardar2'])->name('validacionNegocio');
 	});
 });
 
