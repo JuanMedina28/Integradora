@@ -2971,6 +2971,41 @@ fieldset:disabled a.btn
     pointer-events: none;
 }
 
+
+
+.btn-cyan {
+    color: #000;
+    background-color: #42dbd4;
+    border-color: #42dbd4;
+  }
+  .btn-cyan:hover {
+    color: #000;
+    background-color: #36ACA6;
+    border-color: #36ACA6;
+  }
+  .btn-check:focus + .btn-cyan, .btn-cyan:focus {
+    color: #000;
+    background-color: #36ACA6;
+    border-color: #36ACA6;
+    box-shadow: 0 0 0 0.25rem #2D8D88;
+  }
+  .btn-check:checked + .btn-cyan, .btn-check:active + .btn-cyan, .btn-cyan:active, .btn-cyan.active, .show > .btn-cyan.dropdown-toggle {
+    color: #000;
+    background-color: #36ACA6;
+    border-color: #36ACA6;
+  }
+  .btn-check:checked + .btn-cyan:focus, .btn-check:active + .btn-cyan:focus, .btn-cyan:active:focus, .btn-cyan.active:focus, .show > .btn-cyan.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.25rem #2D8D88;
+  }
+  .btn-cyan:disabled, .btn-cyan.disabled {
+    color: #000;
+    background-color: #36ACA6;
+    border-color: #36ACA6;
+  }
+
+
+
+
 .btn-primary
 {
     color: #fff;
@@ -7927,7 +7962,7 @@ button.close
 
 .bg-primary
 {
-    background-color: #5e72e4 !important;
+    background-color: #ffffff !important;
 }
 
 a.bg-primary:hover,
@@ -8072,6 +8107,25 @@ button.bg-neutral:focus
 {
     background-color: black !important;
 }
+
+/*  BACKGROUD DE LA PALETA DE COLORES DE PARTY SERVICE ----------------------------------------------------------------------------*/
+
+.bg-black{
+    background-color: #000;
+}
+
+.bg-gris-oxford
+{
+    --bs-bg-opacity: 1;
+    background-color: #303030;
+}
+
+.bg-gris {
+    --bs-bg-opacity: 1;
+    background-color: #999999;
+}
+
+/*  BACKGROUD DE LA PALETA DE COLORES DE PARTY SERVICE ----------------------------------------------------------------------------*/
 
 a.bg-darker:hover,
 a.bg-darker:focus,
@@ -15046,7 +15100,7 @@ button.bg-lighter:focus
 
 .bg-gradient-primary
 {
-    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important;
+    background: linear-gradient(87deg, #ffffff 0, #ffffff 100%) !important;
 }
 
 .bg-gradient-secondary
@@ -16494,10 +16548,21 @@ a.text-teal:focus
     color: #0da5c0 !important;
 }
 
+.text-rosita
+{
+    color: #ff2bba !important;
+}
+
 .text-cyan
 {
     color: #2bffc6 !important;
 }
+
+.text-degradado{
+    background: -webkit-linear-gradient(#ff2bba,#42dbd4);
+    -webkit-background-clip: text;
+    color: transparent; 
+  }
 
 a.text-cyan:hover,
 a.text-cyan:focus
@@ -19003,7 +19068,7 @@ textarea[resize='horizontal']
 }
 .navbar-horizontal .navbar-brand img
 {
-    height: 30px;
+    height: 50px;
 }
 
 .navbar-horizontal .navbar-dark .navbar-brand

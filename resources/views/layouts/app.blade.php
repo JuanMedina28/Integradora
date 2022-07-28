@@ -13,36 +13,44 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <!-- Extra details for Live View on GitHub Pages -->
-
+        <!-- MIX -->
+        <script src="{{ asset('js/app.js')}}" defer></script>
+        <link type="text/css" href="{{ asset('css/app.css')}}" rel="stylesheet">
+ 
         <!-- Icons -->
         <link href="{{ asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
         <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
         <!-- Argon CSS -->
         <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+
+        <link rel="stylesheet" href="assets/vendor/select2/dist/css/select2.min.css">
+        <script src="assets/vendor/select2/dist/js/select2.min.js"></script>
     </head>
     <body class="{{ $class ?? '' }}">
-        @auth()
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-            @include('layouts.navbars.sidebar')
-        @endauth
-        
-        <div class="main-content">
-            @include('layouts.navbars.navbar')
-            @yield('content')
+        <div id="app_party">
+            @auth()
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                @include('layouts.navbars.sidebar')
+            @endauth
+            
+            <div class="main-content">
+                @include('layouts.navbars.navbar')
+                @yield('content')
+            </div>
+
+            @guest()
+                @include('layouts.footers.guest')
+            @endguest
+
+            <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
+            <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            
+            @stack('js')
+            
+            <!-- Argon JS -->
+            <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
         </div>
-
-        @guest()
-            @include('layouts.footers.guest')
-        @endguest
-
-        <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
-        <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        
-        @stack('js')
-        
-        <!-- Argon JS -->
-        <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
     </body>
 </html>

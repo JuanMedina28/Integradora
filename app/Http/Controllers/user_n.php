@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\m_pservicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -72,6 +73,34 @@ class user_n extends Controller
         
 
         
+    } 
+    public function guardar2(Request $request){
+
+        $userid = auth()->id();
+
+        $user = User::find($request->id = $userid);
+
+        $user->name = $request->name;
+        $user->apaterno = $request->apaterno;
+        $user->amaterno = $request->amaterno;
+        $user->celular =$request->celular;
+        if($request->url_img_us != null){
+            if($request->file('url_img_us')->isValid()){
+                $ruta_archivo = $request->file('url_img_us')->store('imagenes','public');
+                $user->url_img_us =$ruta_archivo;
+            }
+        }else{
+            $user->url_img_us ="Sin Aplicar";
+        }
+
+        $userModify = User::find($request->user()->id);
+        $userModify->tipo_us = 3;
+        $userModify->status = 1;
+        $userModify->save();
+
+        $user->save();
+
+
     }
 
 
