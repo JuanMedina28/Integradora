@@ -7,6 +7,7 @@ use App\Models\m_servicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class servicios extends Controller
 {
@@ -57,6 +58,69 @@ class servicios extends Controller
         $serv->save();
 
         return $serv;
+    }
+    
+    /*Funciones para web*/ 
+    public function vista(){
+        return view('pages.servicios');
+    }
+    public function listar(Request $request){
+
+        if($request->user()->tipo_usuario == 1){
+            return m_servicio::join('users','users.id','=','servicio.id_us')
+            ->select("servicio.*",'users.name as nego_name')
+            ->get();
+        }
+
+        return m_servicio::join('users','users.id','=','servicio.id_us')
+        ->select("servicio.*",'users.name as nego_name')
+        ->where('users.id', '=', $request->user()->id)
+        ->get();
+    }
+    public function guardar(Request $request){
+        $nuevoServicio = new m_servicio();
+        $nuevoServicio->id_us=$request->id_us;
+        $nuevoServicio->nombre_libro=$request->nombre_libro;
+        $nuevoServicio->precio=$request->precio;
+        $nuevoServicio->des=$request->des;
+        $nuevoServicio->tipo_serv=$request->tipo_serv;
+        if($request->url_img != null){
+            if($request->file('url_img')->isValid()){
+                $ruta_archivo = $request->file('url_img')->store('imagenes','public');
+                $nuevoServicio->url_img =$ruta_archivo;
+            }
+        }else{
+            $nuevoServicio->url_img ="Sin Aplicar";
+        }
+
+        //Validación si es un tipo negocio el que inserta
+        if($request->user()->tipo_us == 2){
+            $aux = DB::table('users')->where('id', $request->user()->id)->first();
+            $nuevoServicio->id_us = $aux->id;
+        }
+        $nuevoServicio->save();
+    }
+    public function editar(Request $request){
+        $servicio = m_servicio::find($request->id);
+        //$alimento->id_negocio = $request->id_negocio;
+        $servicio->nombre_libro = $request->nombre_libro;
+        $servicio->precio = $request->precio;
+        $servicio->des = $request->des;
+        $servicio->tipo_serv=$request->tipo_serv;
+        if($request->file('url_img')!=null){
+            $servicio->url_img = $request->file('url_img')->store('imagenes','public');
+        }
+
+        $servicio->save();
+    }
+    public function verArchivos($id){
+        $servicio = m_servicio::find($id);
+        $ruta = 'public/'.$servicio->url_img;
+        return Storage::download($ruta);
+    }
+    public function eliminar($id){
+        $servicio = m_servicio::find($id);
+        $servicio->delete();
     }
 
 }

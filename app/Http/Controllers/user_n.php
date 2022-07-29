@@ -102,6 +102,10 @@ class user_n extends Controller
 
 
     }
+    public function usuarioEspec(Request $request){
+        //if($request->user()->password=='$2y$10$7DAnuvpcYp6Yh3R1WYRN4eCKwGEzZqmAcnTyWP15UR4Av0EzhW6DW'){                    
+        return User::find($request->user()->id);
+    }
 
 
 

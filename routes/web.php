@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\prestador_s;
+use App\Http\Controllers\servicios;
 use App\Http\Controllers\user_n;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,15 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('icons', function () {return view('pages.icons');})->name('icons'); 
 		Route::get('table-list', function () {return view('pages.tables');})->name('table');
 		Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+	
+		Route::get("/servicios", [servicios::class, 'vista'])->name("crud_servicios");
+		Route::get("/servicios_listar", [servicios::class, 'listar']);
+		Route::post("/servicio_guardar", [servicios::class, 'guardar']);
+		Route::post("/servicio_editar", [servicios::class, 'editar']);
+		Route::delete("/servicio_eliminar/{id}", [servicios::class, 'eliminar']);
+		Route::get("/verIMG/{id}", [AlimentosController::class, 'verArchivos']);
 	});
+	Route::get("/usuarioEspec", [user_n::class, 'usuarioEspec']);
 
 	Route::group(['middleware' => 'pasado'], function() {
 		Route::get('/registroDual', function () {
