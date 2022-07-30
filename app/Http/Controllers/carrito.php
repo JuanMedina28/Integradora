@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\m_carrito;
 use App\Models\m_detalle_venta;
 use App\Models\m_servicio;
+use App\Models\m_user;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Openpay\Data\Openpay;
+use Openpay\Data\OpenpayApiAuthError;
+use Openpay\Data\OpenpayApiConnectionError;
+use Openpay\Data\OpenpayApiError;
+use Openpay\Data\OpenpayApiRequestError;
+use Openpay\Data\OpenpayApiTransactionError;
 
 class carrito extends Controller
 {
@@ -28,12 +36,14 @@ class carrito extends Controller
                 ->where('id_serv', $request->id_ser)
                 ->first();
             $carrito2->scant = $carrito->scant + 1;
+            $carrito2->stotal = $carrito->stotal + $ser->precio;
             $carrito2->save();
         } else {
             $carrito = new m_carrito();
             $carrito->id_serv = $ser->id;
             $carrito->id_dventa = $sventa->id;
             $carrito->scant = 1;
+            $carrito->stotal = $ser->precio;
             $carrito->status = $request->status;
             $carrito->save();
         }
@@ -48,7 +58,6 @@ class carrito extends Controller
         $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
 
         $ser = m_servicio::where('id', $request->id_ser)->first();
-
 
         $carrito = m_carrito::where('id_serv', $ser->id)->first();
 
@@ -73,10 +82,15 @@ class carrito extends Controller
     public function lista_carrito()
     {
 
-        $lcarrito = DB::table('carrito')
+        $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
             ->join("servicio", "servicio.id", "=", "carrito.id_serv")
-            ->select('carrito.*', 'servicio.tipo_serv as servicio', 'servicio.precio as precio')
-            ->where('status', 1)
+            ->join("users", "users.id", "=", "servicio.id_us")
+            ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
+            ->where('carrito.status', 1)
+            ->where('dventa.status', 1)
+            ->where('dventa.id_user', Auth::user()->id)
             ->distinct('tipo_serv')
             ->get();
 
@@ -85,63 +99,75 @@ class carrito extends Controller
 
     /*********************************Fin Listar Carrito************************* */
 
-    /*********************************Lista Ventas****************************** */
-    public function lista_ventas()
-    {
-        $ventas = DB::table('dventa')
-            ->select('dventa.*')
-            ->where('id_user', Auth::user()->id)
-            ->get();
-
-        return $ventas;
-    }
-
-    /****************************Fin Lista Ventas ********************************/
-
-
-    /***************************Guardar Venta*************************** */
-    public function eliminar_venta(Request $request)
-    {
-
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-
-        if ($sventa) {
-            $dventa = m_detalle_venta::find($sventa->id);
-            if ($dventa->cant == 1) {
-
-                $dventa->delete();
-            } else {
-                $dventa->cant = $sventa->cant - 1;
-                $ser = m_servicio::where('id', $request->id_ser)->first();
-                $dventa->total = $dventa->total - $ser->precio;
-                $dventa->fecha = date("Y/m/d");
-                $dventa->save();
-            }
-        }
-    }
-
-    /*********************************Fin Eliminar Venta************************* */
 
     /***************************Pagar Venta*************************** */
     public function pagar_venta(Request $request)
     {
+        $us = m_user::where('id', Auth::user()->id)->first();
 
         $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
 
-        if ($sventa) {
+        if ($sventa && $us) {
             $dventa = m_detalle_venta::find($sventa->id);
             $dventa->status = $request->status;
-            $dventa->save();
+            /*-----------------------------------OpenPAY-------------------------------------------*/
+            try {
 
-            //$venta = m_venta::where('id_dventa', $request->id_pago)->where('status',1);
-        }
-        $venta = m_carrito::where('id_dventa', $request->id_pago)->where('status', 1)->get();
+                $openpay = Openpay::getInstance('mx969jutgahr3m09j5xz', 'sk_065a62c5c5ab42b59c52976d0ccc1d25', 'MX');
+                Openpay::setProductionMode(false);
 
-        if ($venta) {
-            foreach ($venta as $ven) {
-                $ven->status = 2;
-                $ven->save();
+                $customer = array(
+                    'name' => $us->name,
+                    'last_name' => $us->apaterno,
+                    'phone' => $us->celular,
+                    'email' => $us->email,
+                );
+                $chargeData = array(
+                    'method' => 'card',
+                    'source_id' => $request->token_card,
+                    'currency' => 'MXN',
+                    'amount' => $sventa->total,
+                    'send_email' => true,
+                    'description' => 'Cantidad de servicios: ' . $sventa->cant,
+                    'device_session_id' => $request->id_device,
+                    'customer' => $customer
+                );
+
+                $charge = $openpay->charges->create($chargeData);
+
+                if ($charge->status == 'completed') {
+                    $dventa->save();
+
+                    $venta = m_carrito::where('id_dventa', $request->id_pago)->where('status', 1)->get();
+                    if ($venta) {
+                        foreach ($venta as $ven) {
+                            $ven->status = 2;
+                            $ven->save();
+                        }
+                    }
+                }
+
+                return 'Pago Completo: '.$charge->id.', Status: '.$charge->status;
+
+            } catch (OpenpayApiTransactionError $e) {
+                return 'ERROR on the transaction: ' . $e->getMessage() .
+                    ' [error code: ' . $e->getErrorCode() .
+                    ', error category: ' . $e->getCategory() .
+                    ', HTTP code: ' . $e->getHttpCode() .
+                    ', request ID: ' . $e->getRequestId() . ']';
+            } catch (OpenpayApiRequestError $e) {
+                return 'ERROR on the request: ' . $e->getMessage();
+            } catch (OpenpayApiConnectionError $e) {
+                return 'ERROR while connecting to the API: ' . $e->getMessage();
+            } catch (OpenpayApiAuthError $e) {
+                return 'ERROR on the authentication: ' . $e->getMessage();
+            } catch (OpenpayApiError $e) {
+                return 'ERROR on the API: ' . $e->getMessage();
+            } catch (Exception $e) {
+                return 'Error on the script: ' . $e->getMessage();
             }
+
+            /*-----------------------------------Fin OpenPAY-------------------------------------------*/
         }
     }
 

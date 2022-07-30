@@ -33,9 +33,27 @@ Route::post('user/pser',
     [prestador_s::class,'g_pser']  
 );
 
+Route::get('user/ver',
+    [user_n::class,'l_user']  
+)->middleware("auth:api");
+
 Route::get('user/listar',
     [user_n::class,'listar_user']  
-);
+)->middleware("auth:api");
+
+Route::get('ps/listar',[prestador_s::class,'listar_ps'])->middleware("auth:api");
+
+Route::get('ps/listar_negocios',
+    [prestador_s::class,'listar_ps']  
+)->middleware("auth:api");
+
+Route::post('ps/buscar',
+    [prestador_s::class,'buscar_ps']  
+)->middleware("auth:api");
+
+Route::get('ps/listarrz',
+[prestador_s::class,'listar_psrz']  
+)->middleware("auth:api");
 
 Route::post('servicios/guardar',
     [servicios::class,'guardar_serv']  
@@ -43,6 +61,14 @@ Route::post('servicios/guardar',
 
 Route::get('servicios/listar',
     [servicios::class,'listar_serv']  
+)->middleware("auth:api");
+
+Route::post('servicios/listar_tipo',
+    [servicios::class,'listar_serv_tipo']  
+)->middleware("auth:api");
+
+Route::post('servicios/buscar',
+    [servicios::class,'listar_busqueda']  
 )->middleware("auth:api");
 
 Route::get('servicios/listar2',
@@ -59,9 +85,34 @@ Route::post('ventas/guardar',
     [detalle_v::class,'guardar_venta']  
 )->middleware("auth:api");
 
+Route::post('ventas/eliminar',
+    [detalle_v::class,'eliminar_venta']  
+)->middleware("auth:api");
+
+Route::get('ventas/lista',
+    [detalle_v::class,'lista_ventas']  
+)->middleware("auth:api");
+
+Route::post('ventas/pago_op',
+    [detalle_v::class,'pago_openpay']  
+)->middleware("auth:api");
+
+Route::post('ventas/pagar',
+    [carrito::class,'pagar_venta']  
+)->middleware("auth:api");
+
 Route::post('carrito/guardar',
     [carrito::class,'guardar_c']  
 )->middleware("auth:api");
+
+Route::post('carrito/eliminar',
+    [carrito::class,'eliminar_carrito']  
+)->middleware("auth:api");
+
+Route::get('carrito/lista',
+    [carrito::class,'lista_carrito']  
+)->middleware("auth:api");
+
 
 
 

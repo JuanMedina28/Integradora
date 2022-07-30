@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\m_user;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -11,7 +14,21 @@ class user_n extends Controller
 {
     public function listar_user(){
 
-        $us= User::all();
+        $us = DB::table('users')
+        ->select('users.*')
+        ->where('id', Auth::user()->id)
+        ->get();
+        //$us=m_user::where('id',Auth::user()->id)->first();
+        //$us= User::all();
+        return $us;
+    }
+
+    public function l_user(){
+
+        $us = DB::table('users')
+        ->select('users.*')
+        ->where('id', Auth::user()->id)
+        ->get();
         return $us;
     }
 
@@ -63,15 +80,23 @@ class user_n extends Controller
             //$user->url_img_us ="Sin Aplicar";
             $user->email =$request->email;
             $user->celular =$request->celular;
+            $user->edad =0;
             $user->password =Hash::make($request->password);
             $user->save();
             return $user;
         }
-       
-       
         
+    }
 
-        
+    public function listar_psrz(Request $request){
+
+        $us = DB::table('pservicio')
+        ->select('pservicio.razon_social')
+        ->where('id_us', $request->id)
+        ->get();
+        //$us=m_user::where('id',Auth::user()->id)->first();
+        //$us= User::all();
+        return $us;
     }
 
 

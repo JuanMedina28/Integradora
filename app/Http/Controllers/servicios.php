@@ -18,6 +18,27 @@ class servicios extends Controller
         return $serv;
     }
 
+    public function listar_serv_tipo(Request $request){
+
+        $serv = DB::table('servicio')
+        ->join("users", "users.id", "=", "servicio.id_us")
+        ->join("pservicio", "pservicio.id_us", "=", "users.id")
+        ->where('pservicio.tipo_ser', $request->tipo_ser)
+        ->select('servicio.*', 'pservicio.tipo_ser as tipo')
+        ->get();
+        return $serv;
+    }
+
+    public function listar_busqueda(Request $request){
+
+        $serv = DB::table('servicio')
+        ->where('tipo_serv','like', '%'.$request->tipo_ser.'%')
+        ->orwhere('des','like', '%'.$request->tipo_ser.'%')
+        ->select('servicio.*')
+        ->get();
+        return $serv;
+    }
+
     public function listar_serv2(){
 
         $serv = m_servicio::all();
