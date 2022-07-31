@@ -6,8 +6,8 @@
                     <div class="header pb-12">
                       <div class="row align-items-center py-4">
                         <div class="col-lg-6 col-7">
-                          <h1 class=" text-rosita d-inline-block mb-0">Pedidos</h1>
-                          <h4 class="text-white mb-0">Aquí puedes visualizar todos los pedidos.</h4>
+                          <h1 class=" text-rosita d-inline-block mb-0">Ventas</h1>
+                          <h4 class="text-white mb-0">Aquí puedes visualizar tus Ventas</h4>
                         </div>
                       </div>
                     </div>

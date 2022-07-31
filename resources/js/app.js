@@ -26,6 +26,8 @@ Vue.component('inicio-component', require('./components/InicioComponent.vue').de
 Vue.component('pedidos-component', require('./components/PedidosComponent.vue').default);
 Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
 Vue.component('usuarios-component', require('./components/UsuariosComponent.vue').default);
+Vue.component('negocios-component', require('./components/NegociosComponent.vue').default);
+Vue.component('inicioroot-component', require('./components/InicioRootComponent.vue').default);
 /**
 /**
  * Next, we will create a fresh Vue application instance and attach it to

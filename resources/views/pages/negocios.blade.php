@@ -1,0 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
+<negocios-component/>
+
+@endsection

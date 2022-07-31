@@ -106,13 +106,27 @@ class servicios extends Controller
         
     }
 
-    public function listar2(){
+    public function listar2(Request $request){
         
+        $filtro = $request->buscador;
 
-        return m_servicio::join('users','users.id','=','servicio.id_us')
-        ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
-        ->select("servicio.*",'pservicio.tipo_ser as nego_name')
-        ->get();
+        if($filtro!=null){
+            $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
+            ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+            ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->where('tipo_serv', 'like', '%'.$filtro.'%')
+            ->get();
+            
+        }else{
+            $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
+            ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+            ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->get();
+        }
+
+        return $usuarios;
+
+        
         
     }
 

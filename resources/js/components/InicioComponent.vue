@@ -9,6 +9,12 @@
                 </div>
                 <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
                         <center><h1 class="text-rosita">Servicios Disponibles</h1></center><br>
+                        <div class="input-group mb-3">
+                <input type="search" class="form-control" v-model="buscador" @keyup="buscarServicio" placeholder="Recipient's username" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn  btn-dark bg-dark" type="button"  id="button-addon2"><h4 class="text-cyan">Buscar Servicios</h4></button>
+                </div>
+            </div>
                         <paginate name="var_servicios" :per="4" :list="servicios" tag="div" class="card-deck">
                             <div class="card shadow-lg" style="max-width: 20rem;" v-for="servicio in paginated('var_servicios')">
                                 <img class="card-img-top" width="300px" height="200px" :src="'/storage/'+servicio.url_img" alt="Card image cap">
@@ -68,7 +74,9 @@ export default {
         return{
             servicios: {},
             negocios: {},
-            paginate: ['var_servicios', 'var_negocios']
+            paginate: ['var_servicios', 'var_negocios'],
+            buscador: '',
+            setTimeoutBuscador: ''
         }
     }, methods:{
         listar_negocios(){
@@ -84,7 +92,11 @@ export default {
                 window.location.href = 'http://localhost:8000' +'/servicios'
         },
         listar_servicios(){
-                axios.get("/servicios_listar2").then((response)=>{
+                axios.get("/servicios_listar2",{
+                    params: {
+                        buscador: this.buscador
+                    }
+                }).then((response)=>{
                     this.servicios = response.data;
                 }).catch((error)=>{
                     console.log(error.response)
@@ -105,7 +117,11 @@ export default {
             })
         }, around(value){
                 return parseFloat(Math.round(value)).toFixed(2);
-         }
+         },
+         buscarServicio(){
+                clearTimeout(this.setTimeoutBuscador);
+                this.setTimeoutBuscador = setTimeout(this.listar_servicios, 350);
+            }
     }
 }
 </script>

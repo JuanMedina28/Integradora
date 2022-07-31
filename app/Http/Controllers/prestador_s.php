@@ -68,4 +68,8 @@ class prestador_s extends Controller
         ->select("pservicio.*",'users.celular as nego_celular', 'users.email as nego_email')
         ->get();
     }
+    
+    public function vista(){
+        return view('pages.negocios');
+    }
 }

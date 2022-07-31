@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::delete("/servicio_eliminar/{id}", [servicios::class, 'eliminar']);
 		Route::get("/verIMG/{id}", [AlimentosController::class, 'verArchivos']);
 
-		Route::get("/negocios", [InicioController::class, 'vista'])->name('crud_negocios');
+		Route::get("/negocios", [prestador_s::class, 'vista'])->name('crud_negocios');
 		Route::get("/negocios_listar1", [prestador_s::class, 'listar1']);
 		Route::get("/negocios_listar2", [prestador_s::class, 'listar2']);
 

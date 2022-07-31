@@ -121,14 +121,14 @@
                     </a>
                 </li>
                 @endif
-                @if(Auth::user()->can('mostarCliente'))<!-- FALTA MODIFICAR LA VALIDACION -->
+                
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('carrito') }}">
                         <i class="ni ni-cart text-degradado"></i>
                         <h3><span class="nav-link-text text-cyan">Carrito</span></h3>
                     </a>
                 </li>
-                @endif
+               
                 
                 @if(Auth::user()->can('mostarAdmin&Negocio'))
                 <li class="nav-item">

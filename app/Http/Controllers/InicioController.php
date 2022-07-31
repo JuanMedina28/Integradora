@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 class InicioController extends Controller
 {
     public function vista(){
-        return view('pages.inicio');
+        if(auth()->user()->tipo_us == 3){
+            return view('pages.inicio');
+        }else{
+            return view('pages.inicioroot');
+        }
     }
 }
