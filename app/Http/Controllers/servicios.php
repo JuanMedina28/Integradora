@@ -64,6 +64,7 @@ class servicios extends Controller
     public function vista(){
         return view('pages.servicios');
     }
+
     public function listar(Request $request){
 
         if($request->user()->tipo_usuario == 1){
@@ -77,10 +78,21 @@ class servicios extends Controller
         ->where('users.id', '=', $request->user()->id)
         ->get();
     }
+
+    public function listar2(){
+        
+
+        return m_servicio::join('users','users.id','=','servicio.id_us')
+        ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+        ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+        ->get();
+        
+    }
+
     public function guardar(Request $request){
         $nuevoServicio = new m_servicio();
         $nuevoServicio->id_us=$request->id_us;
-        $nuevoServicio->nombre_libro=$request->nombre_libro;
+        $nuevoServicio->nombre_libro="No aplica";
         $nuevoServicio->precio=$request->precio;
         $nuevoServicio->des=$request->des;
         $nuevoServicio->tipo_serv=$request->tipo_serv;
@@ -103,7 +115,7 @@ class servicios extends Controller
     public function editar(Request $request){
         $servicio = m_servicio::find($request->id);
         //$alimento->id_negocio = $request->id_negocio;
-        $servicio->nombre_libro = $request->nombre_libro;
+        $servicio->nombre_libro="No aplica";
         $servicio->precio = $request->precio;
         $servicio->des = $request->des;
         $servicio->tipo_serv=$request->tipo_serv;

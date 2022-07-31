@@ -45,10 +45,24 @@ class prestador_s extends Controller
         $pser->id_us = $request->user()->id;
 
         $userModify = User::find($request->user()->id);
+        $userModify->celular = $request->celular;
         $userModify->tipo_us = 2;
         $userModify->status = 1;
+        if($request->url_logo != null){
+            if($request->file('url_logo')->isValid()){
+                $ruta_archivo = $request->file('url_logo')->store('imagenes','public');
+                $userModify->url_img_us =$ruta_archivo;
+            }
+        }else{
+            $userModify->url_img_us ="Sin Aplicar";
+        }
         $userModify->save();
 
         $pser->save();
+    }
+    public function listar2(){
+        return m_pservicio::join('users','users.id','=','pservicio.id_us')
+        ->select("pservicio.*",'users.celular as nego_celular', 'users.email as nego_email')
+        ->get();
     }
 }

@@ -30,10 +30,10 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col" class="sort" data-sort="name"><h5>Nombre</h5></th>
-                                        <th></th>
+                                        <th scope="col" class="sort" data-sort="status"><h5>Imagen</h5></th>
                                         <th scope="col" class="sort" data-sort="name"><h5>Negocio</h5></th>
-                                        <th scope="col" class="sort" data-sort="status"><h5>Precio</h5></th>
-                                        <th scope="col" class="sort" data-sort="status"><h5>Tipo</h5></th>
+                                        <th scope="col" class="sort" data-sort="precio"><h5>Precio</h5></th>
+                                        
                                         <th scope="col"><h5>Descripci&oacute;n</h5></th>
                                         <th scope="col"></th>
                                     </tr>
@@ -41,7 +41,7 @@
                                 <paginate name="var_servicios" :per="10" :list="lista_servicios" tag="tbody" class="list">
                                     <tr v-for="v_servicio in paginated('var_servicios')">
                                           <td class="budget">
-                                              {{ v_servicio.nombre_libro }}
+                                              {{ v_servicio.tipo_serv }}
                                           </td>
                                           <td>
                                             <a href="#" class="" data-toggle="tooltip" @click="abrirFoto(v_servicio.url_img)" data-original-title="Romina Hadid">
@@ -54,9 +54,7 @@
                                           <td>
                                             ${{ around(v_servicio.precio) }} MXN
                                           </td>
-                                          <td>
-                                              {{ v_servicio.tipo_serv }}
-                                          </td>
+                                          
                                           <td>
                                               {{ v_servicio.des }}
                                           </td>
@@ -102,7 +100,7 @@
                     </div>
                     <div class="modal-body">
                                 <!-- FORMULARIO -->
-                                  <input type="text" class="form-control" id="nombre" v-model="servicio.nombre_libro" placeholder="Nombre del servicio">
+                                  <input type="text" class="form-control" id="nombre" v-model="servicio.tipo_serv" placeholder="Nombre del servicio">
                                   <br>
                                   <div v-if="logeado.tipo_usuario==1">
                                   <label>Negocio:</label>
@@ -112,16 +110,6 @@
                                   <br>
                                   </div>
                                   <input type="number" class="form-control" id="precio" min="1" v-model="servicio.precio"  placeholder="Precio">
-                                  <br>
-                                  <select class="form-control" data-toggle="select" title="Simple select" v-model="servicio.tipo_serv">
-                                        <option disabled selected>Elige el tipo de servicio</option>
-                                        <option>Ingeribles - Alimentos y bebidas.</option>
-                                        <option>Ambiente - Sonido y  luces.</option>
-                                        <option>Música - Músicos y DJ's.</option>
-                                        <option>Decoración - Exteriores e interiores.</option>
-                                        <option>Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
-                                        <option>Personal de servicio - Exteriores e interiores.</option>
-                                    </select>
                                   <br>
                                   <textarea class="form-control" id="descripcion"  rows="3" v-model="servicio.des" placeholder="Escribe una descripción detallada del servicio"></textarea>
                                   <br>

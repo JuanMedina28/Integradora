@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\detalle_v;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\prestador_s;
+use App\Http\Controllers\Profile_2;
 use App\Http\Controllers\servicios;
 use App\Http\Controllers\user_n;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +48,31 @@ Route::group(['middleware' => 'auth'], function () {
 	
 		Route::get("/servicios", [servicios::class, 'vista'])->name("crud_servicios");
 		Route::get("/servicios_listar", [servicios::class, 'listar']);
+		Route::get("/servicios_listar2", [servicios::class, 'listar2']);
 		Route::post("/servicio_guardar", [servicios::class, 'guardar']);
 		Route::post("/servicio_editar", [servicios::class, 'editar']);
 		Route::delete("/servicio_eliminar/{id}", [servicios::class, 'eliminar']);
 		Route::get("/verIMG/{id}", [AlimentosController::class, 'verArchivos']);
+
+		Route::get("/negocios", [InicioController::class, 'vista'])->name('crud_negocios');
+		Route::get("/negocios_listar2", [prestador_s::class, 'listar2']);
+
+		Route::get("/clientes", [InicioController::class, 'vista'])->name('crud_clientes');
+
+		Route::get("/usuarios", [InicioController::class, 'vista'])->name('crud_usuarios');
+
+		Route::get("/pedidos", [detalle_v::class, 'vista'])->name('pedidos');
+
+		Route::get("/carrito", [InicioController::class, 'vista'])->name('carrito');
+
+		Route::post("/modificarFotoPerfil",[Profile_2::class, 'foto']);
+		Route::get("/consulta",[Profile_2::class, 'nose']);
+		Route::post("/nameEmail",[Profile_2::class, 'nameEmail']);
+		Route::post("/pModify",[Profile_2::class, 'password']);
+
 	});
 	Route::get("/usuarioEspec", [user_n::class, 'usuarioEspec']);
+	Route::get("/inicio", [InicioController::class, 'vista'])->name('inicio');
 
 	Route::group(['middleware' => 'pasado'], function() {
 		Route::get('/registroDual', function () {

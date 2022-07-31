@@ -22,6 +22,11 @@ window.Vue = require('vue').default;
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('regist-component', require('./components/RegistroDualComponent.vue').default);
 Vue.component('servicios-component', require('./components/ServiciosComponent.vue').default);
+Vue.component('inicio-component', require('./components/InicioComponent.vue').default);
+Vue.component('pedidos-component', require('./components/PedidosComponent.vue').default);
+Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
+Vue.component('usuarios-component', require('./components/UsuariosComponent.vue').default);
+/**
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

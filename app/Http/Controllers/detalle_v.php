@@ -35,4 +35,8 @@ class detalle_v extends Controller
 
     /*********************************Fin Guardar Venta************************* */
 
+    /*********************************FUNCIONES WEB***************************** */
+    public function vista(){
+        return view('pages.pedidos');
+    }
 }
