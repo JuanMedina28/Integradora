@@ -55,11 +55,16 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get("/verIMG/{id}", [AlimentosController::class, 'verArchivos']);
 
 		Route::get("/negocios", [InicioController::class, 'vista'])->name('crud_negocios');
+		Route::get("/negocios_listar1", [prestador_s::class, 'listar1']);
 		Route::get("/negocios_listar2", [prestador_s::class, 'listar2']);
 
 		Route::get("/clientes", [InicioController::class, 'vista'])->name('crud_clientes');
 
-		Route::get("/usuarios", [InicioController::class, 'vista'])->name('crud_usuarios');
+		Route::get("/usuarios", [user_n::class, 'vista'])->name('crud_usuarios');
+		Route::get("/usuarios_listar", [user_n::class, 'listar']);
+		Route::post("/usuarios_editar", [user_n::class, 'editar']);
+		Route::post("/usuarios_guardar", [user_n::class, 'guardar']);
+		Route::delete("/usuarios_eliminar/{id}", [user_n::class, 'eliminar']);
 
 		Route::get("/pedidos", [detalle_v::class, 'vista'])->name('pedidos');
 

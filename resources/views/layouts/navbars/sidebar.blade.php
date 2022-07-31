@@ -89,14 +89,14 @@
                     </a>
                 </li>-->
                 @endif
-               <!--@if(Auth::user()->can('mostrarAdmin'))
+               @if(Auth::user()->can('mostrarAdmin'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('crud_negocios') }}">
                     <i class="ni ni-shop text-degradado"></i>
                     <h3><span class="nav-link-text text-cyan">Negocios</span></h3>
                     </a>
                 </li>
-                @endif-->
+                @endif
                 @if(Auth::user()->can('mostarAdmin&Negocio'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('crud_servicios') }}">

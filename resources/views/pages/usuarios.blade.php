@@ -2,6 +2,6 @@
 
 @section('content')
 
-<servicios-component/>
+<usuarios-component/>
 
 @endsection

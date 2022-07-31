@@ -67,16 +67,43 @@ class servicios extends Controller
 
     public function listar(Request $request){
 
-        if($request->user()->tipo_usuario == 1){
-            return m_servicio::join('users','users.id','=','servicio.id_us')
-            ->select("servicio.*",'users.name as nego_name')
-            ->get();
-        }
+        $filtro = $request->buscador;
 
-        return m_servicio::join('users','users.id','=','servicio.id_us')
+        
+
+        if($request->user()->tipo_us == 1){
+
+            if($filtro!=null){
+                $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
+                ->select("servicio.*",'users.name as nego_name')
+                ->where('tipo_serv', 'like', '%'.$filtro.'%')
+                ->get();
+                if($usuarios!=null){
+                    //$usuarios = User::all();
+                }else{
+                    $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
+                    ->select("servicio.*",'users.name as nego_name')
+                    ->get();
+                }
+            }else{
+                $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
+                    ->select("servicio.*",'users.name as nego_name')
+                    ->get();
+            }
+
+            return $usuarios;
+
+
+        }else{
+
+            return m_servicio::join('users','users.id','=','servicio.id_us')
         ->select("servicio.*",'users.name as nego_name')
         ->where('users.id', '=', $request->user()->id)
         ->get();
+
+        }
+
+        
     }
 
     public function listar2(){

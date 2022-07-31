@@ -60,6 +60,9 @@ class prestador_s extends Controller
 
         $pser->save();
     }
+    public function listar1(){
+        return m_pservicio::all();
+    }
     public function listar2(){
         return m_pservicio::join('users','users.id','=','pservicio.id_us')
         ->select("pservicio.*",'users.celular as nego_celular', 'users.email as nego_email')

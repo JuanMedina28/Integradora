@@ -102,7 +102,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <input type="number" class="form-control form-control-alternative" id="categoriaNegocio"  v-model="negocio.celular" placeholder="Telefono del Negocio">
+                                                                <input type="tel" minlength="10" maxlength="10" class="form-control form-control-alternative" id="categoriaNegocio"  v-model="negocio.celular" placeholder="Telefono del Negocio">
                                                             </div>
                                                         </div>
 

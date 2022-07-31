@@ -3,9 +3,9 @@
 
         <form>
                  
-                <div class="header pt-4  pb-4" style="background-image: url('storage/imagenes/bg-2.jpg'); background-size: cover; background-position: center;" >
+                <div class="header pt-4  pb-4" style="background-image: url('img/bg-2.jpg'); background-size: cover; background-position: center;" >
 
-                <center><a><img :src="'storage/imagenes/ps-lg.png'" width="300" ></a></center>
+                <center><a><img :src="'img/ps-lg.png'" width="300" ></a></center>
                 </div>
                 <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
                         <center><h1 class="text-rosita">Servicios Disponibles</h1></center><br>
@@ -40,7 +40,7 @@
                                     <p class="card-text">Telefono: {{negocio.nego_celular}}</p>
                                 </div>
                                  <div class="card-footer text-muted">
-                                    <a href="#" class="btn btn-dark text-cyan">Ver mas...</a>
+                                    <a href="#" class="btn btn-dark text-cyan" @click="ira()">Ver mas...</a>
                                 </div>  
                             </div>
                     </paginate>
@@ -79,6 +79,9 @@ export default {
                 .catch((error)=>{
                     console.log(error.response);
                 })
+        },
+        ira(){
+                window.location.href = 'http://localhost:8000' +'/servicios'
         },
         listar_servicios(){
                 axios.get("/servicios_listar2").then((response)=>{

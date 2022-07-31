@@ -3,7 +3,7 @@
         <form>
                 <div class="header bg-gradient-dark pt-5 pt-nd-6">
                   <div class="container-fluid">
-                    <div class="header pb-6">
+                    <div class="header pb-4">
                       <div class="row align-items-center py-4">
                         <div class="col-lg-6 col-7">
                           <h1 class="text-rosita d-inline-block mb-0">Servicios</h1>
@@ -17,7 +17,15 @@
                 </div>
                 
     <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
-      <br><br><br><br>
+      <br><br>
+      <div v-if="logeado.tipo_us==1">
+           <div class="input-group mb-3">
+                <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarServicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan">Buscar Usuario</h4></button>
+                </div>
+            </div>
+      </div>
       <div class="row">
         <div class="col">
           <div class="card">
@@ -102,10 +110,10 @@
                                 <!-- FORMULARIO -->
                                   <input type="text" class="form-control" id="nombre" v-model="servicio.tipo_serv" placeholder="Nombre del servicio">
                                   <br>
-                                  <div v-if="logeado.tipo_usuario==1">
+                                  <div v-if="logeado.tipo_us==1">
                                   <label>Negocio:</label>
                                   <select name="select" class="form-control"  v-model="servicio.id_us">
-                                      <option v-for="nego in select_negocio" :value="nego.id" >{{nego.name}}</option>
+                                      <option v-for="nego in select_negocio" :value="nego.id" >{{nego.razon_social}}</option>
                                   </select>
                                   <br>
                                   </div>
@@ -193,14 +201,16 @@ Vue.use(VuePaginate)
                 select_negocio:{},
                 ruta : '',
                 paginate: ['var_servicios'],
-                logeado: {}
+                logeado: {},
+                buscador: '',
+                setTimeoutBuscador: ''
             }
         },methods:{
             subirFoto(e){
                 this.servicio.url_img = e.target.files[0];
             },
             negocios(){
-              axios.get('/lista_usuarios')
+              axios.get('/negocios_listar1')
                 .then((response) => {
                     this.select_negocio = response.data;
                 })
@@ -209,7 +219,11 @@ Vue.use(VuePaginate)
                 })
             },
             listar_servicio(){
-                axios.get("/servicios_listar").then((response)=>{
+                axios.get("/servicios_listar", {
+                  params: {
+                        buscador: this.buscador
+                    }
+                }).then((response)=>{
                     this.lista_servicios = response.data;
                 }).catch((error)=>{
                     console.log(error.response)
@@ -289,6 +303,11 @@ Vue.use(VuePaginate)
                 .catch((error)=>{
                     console.log(error.response);
                 })
+            },
+            
+            buscarServicio(){
+                clearTimeout(this.setTimeoutBuscador);
+                this.setTimeoutBuscador = setTimeout(this.listar_servicio, 350);
             },
             around(value){
                 return parseFloat(Math.round(value)).toFixed(2);

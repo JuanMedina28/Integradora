@@ -107,6 +107,68 @@ class user_n extends Controller
         return User::find($request->user()->id);
     }
 
+    /************Funciones administrar usuarios++++++++ */
+    public function vista(){
+        return view('pages.usuarios');
+    }
+    public function listar(Request $request){
+
+        $filtro = $request->buscador;
+
+        if($filtro!=null){
+            $usuarios = User::where('name', 'like', '%'.$filtro.'%')
+            ->orWhere('email', 'like', '%'.$filtro.'%')
+            ->get();
+            if($usuarios!=null){
+                //$usuarios = User::all();
+            }else{
+                $usuarios = User::all();
+            }
+        }else{
+            $usuarios = User::all();
+        }
+
+        
+
+        return $usuarios;
+
+        //return User::all();
+
+    }
+    public function editar(Request $request){
+        $usuario = User::find($request->id);
+                $usuario->name = $request->name;
+                $usuario->email = $request->email;
+                $usuario->celular = $request->celular;
+                /*$password = $request->password;
+                $usuario->password = Hash::make($password);*/   
+                $usuario->tipo_us = $request->tipo_us;
+                if($request->file('url_img_us')!=null){
+                    $usuario->url_img_us = $request->file('url_img_us')->store('imagenes','public');
+                }
+
+                $usuario->save();
+    }
+    public function guardar(Request $request){
+                $nuevousuario = new User();
+                $nuevousuario->name = $request->name;
+                $nuevousuario->email = $request->email;
+                $nuevousuario->celular = $request->celular;
+                $password = $request->password;
+                $nuevousuario->password = Hash::make($password);  
+                $nuevousuario->tipo_us = $request->tipo_us;
+                if($request->file('url_img_us')!=null){
+                    $nuevousuario->url_img_us = $request->file('url_img_us')->store('imagenes','public');
+                }
+
+                $nuevousuario->save();
+    }
+    public function eliminar($id){
+        if($id>2){
+            $usuario = User::find($id);
+            $usuario->delete();
+        }
+    }
 
 
 
