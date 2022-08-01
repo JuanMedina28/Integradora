@@ -28,6 +28,8 @@ Vue.component('profile-component', require('./components/ProfileComponent.vue').
 Vue.component('usuarios-component', require('./components/UsuariosComponent.vue').default);
 Vue.component('negocios-component', require('./components/NegociosComponent.vue').default);
 Vue.component('inicioroot-component', require('./components/InicioRootComponent.vue').default);
+Vue.component('carrito-component', require('./components/CarritoComponent.vue').default);
+Vue.component('historial-component', require('./components/HistorialComponent.vue').default);
 /**
 /**
  * Next, we will create a fresh Vue application instance and attach it to

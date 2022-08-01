@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\carrito;
 use App\Http\Controllers\detalle_v;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\prestador_s;
@@ -67,8 +68,19 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::delete("/usuarios_eliminar/{id}", [user_n::class, 'eliminar']);
 
 		Route::get("/pedidos", [detalle_v::class, 'vista'])->name('pedidos');
+		Route::get("/compras", [detalle_v::class, 'vista2'])->name('compras');
+		Route::get("/compras_listar", [detalle_v::class, 'lista_ventas']);
+		Route::post("/compras_borrar", [detalle_v::class, 'eliminar_venta2']);
 
-		Route::get("/carrito", [InicioController::class, 'vista'])->name('carrito');
+		Route::get("/muestra", [carrito::class, 'muestra']);
+
+		Route::get("/carrito", [carrito::class, 'vista'])->name('carrito');
+
+		Route::post("/procesarPagos", [carrito::class, 'pagar_venta2']);
+		Route::get("/items", [carrito::class, 'lista_carrito']);
+		Route::post("/carrito_guardar", [carrito::class, 'guardar_c2']);
+		Route::post("/newItem", [detalle_v::class, 'guardar_venta2']);
+		Route::post("/deleteItem", [carrito::class, 'eliminar_carrito2']);
 
 		Route::post("/modificarFotoPerfil",[Profile_2::class, 'foto']);
 		Route::get("/consulta",[Profile_2::class, 'nose']);
@@ -76,6 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post("/pModify",[Profile_2::class, 'password']);
 
 	});
+	
 	Route::get("/usuarioEspec", [user_n::class, 'usuarioEspec']);
 	Route::get("/inicio", [InicioController::class, 'vista'])->name('inicio');
 

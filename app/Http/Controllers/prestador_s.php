@@ -95,8 +95,8 @@ class prestador_s extends Controller
 
     public function buscar_ps(Request $request){
         $ps= DB::table('pservicio')
-        ->where('tipo_ser','like', '%'.$request->tipo_ser.'%')
-        ->orwhere('razon_social','like', '%'.$request->tipo_ser.'%')
+        ->where('tipo_ser','ilike', '%'.$request->tipo_ser.'%')
+        ->orwhere('razon_social','ilike', '%'.$request->tipo_ser.'%')
         ->select('pservicio.*')
         ->get();
         return $ps;

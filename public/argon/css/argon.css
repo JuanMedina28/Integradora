@@ -8113,6 +8113,10 @@ button.bg-neutral:focus
 .bg-black{
     background-color: #000;
 }
+.bg-black-gradient{
+    background-color: #000;
+    --bs-bg-opacity: 0.1;
+}
 
 .bg-gris-oxford
 {

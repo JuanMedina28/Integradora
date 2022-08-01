@@ -42,6 +42,31 @@ class detalle_v extends Controller
 
         $dventa->save();
     }
+    
+    public function guardar_venta2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            $dventa->cant = $sventa->cant + 1;
+            $ser = m_servicio::where('id', $request->id)->first();
+            $dventa->total = $dventa->total + $ser->precio;
+            $dventa->fecha = date("Y/m/d");
+        } else {
+            $dventa = new m_detalle_venta();
+            $dventa->no_venta = "No Aplica";
+            $dventa->fecha = date("Y/m/d");
+            $dventa->status = 1;
+            $dventa->cant = 1;
+            $dventa->id_user = Auth::user()->id;
+            $ser = m_servicio::where('id', $request->id)->first();
+            $dventa->total = $ser->precio;
+        }
+
+        $dventa->save();
+    }
 
     /*********************************Fin Guardar Venta************************* */
 
@@ -49,6 +74,10 @@ class detalle_v extends Controller
     
     public function vista(){
         return view('pages.pedidos');
+    }
+
+    public function vista2(){
+        return view('pages.historial');
     }
 
     /*********************************Lista Ventas****************************** */
@@ -87,7 +116,28 @@ class detalle_v extends Controller
             }
         }
     }
+    
+    public function eliminar_venta2(Request $request)
+    {
 
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            if ($dventa->cant == 1) {
+
+                $dventa->delete();
+            } else {
+                $dventa->cant = $sventa->cant - 1;
+                $ser = m_servicio::where('id', $request->id_serv)->first();
+                $dventa->total = $dventa->total - $ser->precio;
+                $dventa->fecha = date("Y/m/d");
+                $dventa->save();
+            }
+        }
+
+        return $request;
+    }
     /*********************************Fin Eliminar Venta************************* */
 
     /*+++++++++++++++++++++++++++++++++++++++++OPEN PAY+++++++++++++++++++++++++++++++++++++++++++++++ */

@@ -131,13 +131,13 @@ export default {
                 })
             },
             irUsuarios(){
-                window.location.href = 'http://localhost:8000' +'/usuarios'
+                window.location.href = '/usuarios'
         },
         irServicios(){
-                window.location.href = 'http://localhost:8000' +'/servicios'
+                window.location.href = '/servicios'
         },
         irVentas(){
-                window.location.href = 'http://localhost:8000' +'/servicios'
+                window.location.href = '/servicios'
         },
     }
 }

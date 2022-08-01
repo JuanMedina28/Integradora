@@ -26,7 +26,7 @@
         <link rel="stylesheet" href="assets/vendor/select2/dist/css/select2.min.css">
         <script src="assets/vendor/select2/dist/js/select2.min.js"></script>
 
-        
+        @stack('jsH')
     </head>
     <body class="{{ $class ?? '' }}">
         <div id="app_party">

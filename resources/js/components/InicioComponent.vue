@@ -9,12 +9,25 @@
                 </div>
                 <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
                         <center><h1 class="text-rosita">Servicios Disponibles</h1></center><br>
-                        <div class="input-group mb-3">
-                <input type="search" class="form-control" v-model="buscador" @keyup="buscarServicio" placeholder="Recipient's username" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn  btn-dark bg-dark" type="button"  id="button-addon2"><h4 class="text-cyan">Buscar Servicios</h4></button>
-                </div>
-            </div>
+                        
+            <div class="row mb-4" >
+                        <div class="col-3">
+                            <label style="color: white;">Buscar Servicio:</label><input v-model="buscador" @keyup="buscarServicio" style="color:white;background: black;" type="search" class="form-control"  placeholder="Buscar Servicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-3">
+                            <label style="color: white;">Filtrar:</label>
+                            <select class="form-control" data-toggle="select" title="Simple select"  style="color:white;background: black;">
+                                            <option disabled selected>Tipo de Servicio</option>
+                                            <option>Ingeribles - Alimentos y bebidas.</option>
+                                            <option>Ambiente - Sonido y  luces.</option>
+                                            <option>Música - Músicos y DJ's.</option>
+                                            <option>Decoración - Exteriores e interiores.</option>
+                                            <option>Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
+                                            <option>Personal de servicio - Exteriores e interiores.</option>
+                            </select>
+                        </div>
+                    </div>
                         <paginate name="var_servicios" :per="4" :list="servicios" tag="div" class="card-deck">
                             <div class="card shadow-lg" style="max-width: 20rem;" v-for="servicio in paginated('var_servicios')">
                                 <img class="card-img-top" width="300px" height="200px" :src="'/storage/'+servicio.url_img" alt="Card image cap">
@@ -101,8 +114,8 @@ export default {
                 }).catch((error)=>{
                     console.log(error.response)
                 })
-        }, cargaItem(alimento){
-            axios.post("/newItem", alimento).then((response)=>{
+        }, cargaItem(servicio){
+            axios.post("/newItem", servicio).then((response)=>{
 
                 Swal.fire({
                 position: 'top-end',
@@ -111,6 +124,11 @@ export default {
                 showConfirmButton: false,
                 timer: 1500
                 })
+                location.reload();
+            }).catch((error)=>{
+                console.log(error.response);
+            })
+            axios.post("/carrito_guardar", servicio).then((response)=>{
                 location.reload();
             }).catch((error)=>{
                 console.log(error.response);

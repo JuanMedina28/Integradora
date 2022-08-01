@@ -125,7 +125,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('carrito') }}">
                         <i class="ni ni-cart text-degradado"></i>
-                        <h3><span class="nav-link-text text-cyan">Carrito</span></h3>
+                        <h3><span class="nav-link-text text-cyan">Mis Servicios</span></h3>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('compras') }}">
+                        <i class="ni ni-cart text-degradado"></i>
+                        <h3><span class="nav-link-text text-cyan">Mis Compras</span></h3>
                     </a>
                 </li>
                

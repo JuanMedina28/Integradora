@@ -49,6 +49,34 @@ class carrito extends Controller
         }
     }
 
+    public function guardar_c2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        $ser = m_servicio::where('id', $request->id)->first();
+
+        $carrito = m_carrito::where('id_serv', $ser->id)->where('status', 1)->first();
+
+        if ($carrito && $sventa && $ser) {
+            //$carrito2 = m_venta::where('id_dventa',$sventa->id)->find($request->id_libro);
+            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
+                ->where('id_serv', $request->id)
+                ->first();
+            $carrito2->scant = $carrito->scant + 1;
+            $carrito2->stotal = $carrito->stotal + $ser->precio;
+            $carrito2->save();
+        } else {
+            $carrito = new m_carrito();
+            $carrito->id_serv = $ser->id;
+            $carrito->id_dventa = $sventa->id;
+            $carrito->scant = 1;
+            $carrito->stotal = $ser->precio;
+            $carrito->status = 1;
+            $carrito->save();
+        }
+    }
+
     /**********************************Fin Guardar Carrito*********************** */
 
     /********************************Eliminar carrito***************************** */
@@ -65,6 +93,29 @@ class carrito extends Controller
 
             $carrito2 = m_carrito::where('id_dventa', $sventa->id)
                 ->where('id_serv', $request->id_ser)
+                ->first();
+            if ($carrito->scant == 1) {
+                $carrito2->delete();
+            } else {
+                $carrito2->scant = $carrito->scant - 1;
+                $carrito2->save();
+            }
+        }
+    }
+
+    public function eliminar_carrito2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        $ser = m_servicio::where('id', $request->id_serv)->first();
+
+        $carrito = m_carrito::where('id_serv', $ser->id)->first();
+
+        if ($carrito && $sventa && $ser) {
+
+            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
+                ->where('id_serv', $request->id_serv)
                 ->first();
             if ($carrito->scant == 1) {
                 $carrito2->delete();
@@ -101,6 +152,11 @@ class carrito extends Controller
 
 
     /***************************Pagar Venta*************************** */
+    public function muestra(){
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+        $dventa = m_detalle_venta::find($sventa->id);
+        return $dventa;
+    }
     public function pagar_venta(Request $request)
     {
         $us = m_user::where('id', Auth::user()->id)->first();
@@ -170,6 +226,81 @@ class carrito extends Controller
             /*-----------------------------------Fin OpenPAY-------------------------------------------*/
         }
     }
+    public function pagar_venta2(Request $request)
+    {
+        $us = m_user::where('id', Auth::user()->id)->first();
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa && $us) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            $dventa->status = 2;
+            /*-----------------------------------OpenPAY-------------------------------------------*/
+            try {
+
+                $openpay = Openpay::getInstance('mx969jutgahr3m09j5xz', 'sk_065a62c5c5ab42b59c52976d0ccc1d25', 'MX');
+                Openpay::setProductionMode(false);
+
+                $customer = array(
+                    'name' => $us->name,
+                    'last_name' => $us->apaterno,
+                    'phone' => $us->celular,
+                    'email' => $us->email,
+                );
+                $chargeData = array(
+                    'method' => 'card',
+                    'source_id' => $_POST['token_id'],
+                    'currency' => 'MXN',
+                    'amount' => $sventa->total,
+                    'send_email' => true,
+                    'description' => 'Cantidad de servicios: ' . $sventa->cant,
+                    'device_session_id' => $_POST['deviceIdHiddenFieldName'],
+                    'customer' => $customer
+                );
+
+                $charge = $openpay->charges->create($chargeData);
+
+                if ($charge->status == 'completed') {
+                    $dventa->save();
+
+                    $venta = m_carrito::where('id_dventa', $sventa->id)->where('status', 1)->get();
+                    if ($venta) {
+                        foreach ($venta as $ven) {
+                            $ven->status = 2;
+                            $ven->save();
+                        }
+                    }
+                }
+
+                //return 'Pago Completo: '.$charge->id.', Status: '.$charge->status;
+                return view("pages.historial");
+
+            } catch (OpenpayApiTransactionError $e) {
+                return 'ERROR on the transaction: ' . $e->getMessage() .
+                    ' [error code: ' . $e->getErrorCode() .
+                    ', error category: ' . $e->getCategory() .
+                    ', HTTP code: ' . $e->getHttpCode() .
+                    ', request ID: ' . $e->getRequestId() . ']';
+            } catch (OpenpayApiRequestError $e) {
+                return 'ERROR on the request: ' . $e->getMessage();
+            } catch (OpenpayApiConnectionError $e) {
+                return 'ERROR while connecting to the API: ' . $e->getMessage();
+            } catch (OpenpayApiAuthError $e) {
+                return 'ERROR on the authentication: ' . $e->getMessage();
+            } catch (OpenpayApiError $e) {
+                return 'ERROR on the API: ' . $e->getMessage();
+            } catch (Exception $e) {
+                return 'Error on the script: ' . $e->getMessage();
+            }
+
+            /*-----------------------------------Fin OpenPAY-------------------------------------------*/
+        }
+    }
 
     /*********************************Fin Pagar Venta************************* */
+
+    /*************Funciones Web*************** */
+    public function vista(){
+        return view('pages.carrito');
+    }
 }

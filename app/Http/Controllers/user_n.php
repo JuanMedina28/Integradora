@@ -135,8 +135,8 @@ class user_n extends Controller
         $filtro = $request->buscador;
 
         if($filtro!=null){
-            $usuarios = User::where('name', 'like', '%'.$filtro.'%')
-            ->orWhere('email', 'like', '%'.$filtro.'%')
+            $usuarios = User::where('name', 'ilike', '%'.$filtro.'%')
+            ->orWhere('email', 'ilike', '%'.$filtro.'%')
             ->get();
             if($usuarios!=null){
                 //$usuarios = User::all();
