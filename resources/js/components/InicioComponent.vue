@@ -28,25 +28,35 @@
                             </select>
                         </div>
                     </div>
-                        <paginate name="var_servicios" :per="4" :list="servicios" tag="div" class="card-deck">
-                            <div class="card shadow-lg" style="max-width: 20rem;" v-for="servicio in paginated('var_servicios')">
-                                <img class="card-img-top" width="300px" height="200px" :src="'/storage/'+servicio.url_img" alt="Card image cap">
-                                <div class="card-body">
-                                    <h3 class="card-title text-black">{{servicio.tipo_serv}}</h3>
-                                    <p class="card-text text-black">{{servicio.des}}</p>
-                                    <p class="card-text text-black">{{servicio.nego_name}}</p>
-                                    <p class="card-text text-black">$ {{around(servicio.precio)}} MXN</p>
+
+                    <paginate name="var_servicios" :per="8" :list="servicios" tag="div" class="card-deck">
+                        <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <a href="#" @click="abrirFoto(v_servicio.url_img)">
+                                      <img alt="Image placeholder" width="30px" height="30px" :src="'/storage/'+v_servicio.url_img">
+                                    </a>
+                                    <h3>{{ v_servicio.tipo_serv }}</h3>
                                 </div>
-                            <div class="card-footer text-muted">
-                                <a href="#" class="btn btn-dark text-cyan" @click="cargaItem(servicio)">Agregar al Carrito</a>
+                                <div class="face back">
+                                    
+                                    <h3>{{ v_servicio.nego_name}}</h3>
+                                    <p>{{ v_servicio.des }}</p>
+                                    <b>${{ around(v_servicio.precio) }} MXN</b>
+                                    
+                                   
+                                    <a href="#" class="btn btn-dark text-cyan" @click="cargaItem(v_servicio)">Agregar al Carrito</a>
+                                
+                                </div>
                             </div>
-                            </div>
+                        </div>
                         </paginate>
                         <nav aria-label="...">
                             <br>
                               <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
-                              <br>
+                            <br>
                         </nav>
+                        
 
                     <center><h1 class="text-rosita">Negocios</h1></center><br>
                     <paginate name="var_negocios" :per="3" :list="negocios" tag="div" class="card-deck">

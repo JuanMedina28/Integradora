@@ -18,83 +18,45 @@
                 
     <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
       <br><br>
-      <div v-if="logeado.tipo_us==1">
+      
            <div class="input-group mb-3">
                 <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarServicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
                 <div class="input-group-append">
                     <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan">Buscar Usuario</h4></button>
                 </div>
             </div>
+
+            <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
+                        <paginate name="var_servicios" :per="8" :list="lista_servicios" tag="div" class="card-deck">
+                        <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <a href="#" @click="abrirFoto(v_servicio.url_img)">
+                                      <img alt="Image placeholder" width="30px" height="30px" :src="'/storage/'+v_servicio.url_img">
+                                    </a>
+                                    <h3>{{ v_servicio.tipo_serv }}</h3>
+                                </div>
+                                <div class="face back">
+                                    
+                                    <h3>{{ v_servicio.nego_name}}</h3>
+                                    <p>{{ v_servicio.des }}</p>
+                                    <b>${{ around(v_servicio.precio) }} MXN</b>
+                                    <div class="contact_serv">
+                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_servicio(v_servicio)">Modificar</a>
+                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarServicio(v_servicio)">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </paginate>
+                        <nav aria-label="...">
+                            <br>
+                              <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
+                            <br>
+                        </nav>
+                </div>
+      
       </div>
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <!-- Card header -->
-
-
-                <div class="table-responsive">
-                        <div>
-                            <table class="table align-items-center">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col" class="sort" data-sort="name"><h5>Nombre</h5></th>
-                                        <th scope="col" class="sort" data-sort="status"><h5>Imagen</h5></th>
-                                        <th scope="col" class="sort" data-sort="name"><h5>Negocio</h5></th>
-                                        <th scope="col" class="sort" data-sort="precio"><h5>Precio</h5></th>
-                                        
-                                        <th scope="col"><h5>Descripci&oacute;n</h5></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <paginate name="var_servicios" :per="10" :list="lista_servicios" tag="tbody" class="list">
-                                    <tr v-for="v_servicio in paginated('var_servicios')">
-                                          <td class="budget">
-                                              {{ v_servicio.tipo_serv }}
-                                          </td>
-                                          <td>
-                                            <a href="#" class="" data-toggle="tooltip" @click="abrirFoto(v_servicio.url_img)" data-original-title="Romina Hadid">
-                                                <img alt="Image placeholder" width="30px" height="30px" :src="'/storage/'+v_servicio.url_img">
-                                            </a>
-                                          </td>
-                                          <td class="budget">
-                                            {{ v_servicio.nego_name}}
-                                          </td>
-                                          <td>
-                                            ${{ around(v_servicio.precio) }} MXN
-                                          </td>
-                                          
-                                          <td>
-                                              {{ v_servicio.des }}
-                                          </td>
-                                          <td class="text-right">
-                                              <div class="dropdown">
-                                                  <button class="btn btn-sm btn-icon-only text-dark"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                  </button>
-                                                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arro bg-gris-oxford">
-                                                      <button  type="button" class="dropdown-item btn-dark text-cyan" @click="editar_servicio(v_servicio)">Modificar</button>
-                                                      <button  type="button" class="dropdown-item btn-dark text-rosita" @click="eliminarServicio(v_servicio)">Eliminar</button>
-                                                  </div>
-                                              </div>
-                                          </td>
-                                      </tr>
-                                    </paginate>
-                                  
-                            </table>
-                        </div>
-                        <div class="card-footer py-4">
-                          <nav aria-label="...">
-                              <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0'], 'li': 'page-item', 'a':['page-link', 'bg-dark']}"></paginate-links>
-                          </nav>
-                        </div>
-
-
-                </div>
-            </div><br><br>
-           
-                  </div>
-                </div>
-              </div>
 
                   <!-- Modal -->
               <div class="modal fade" id="formulario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

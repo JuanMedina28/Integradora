@@ -28,65 +28,40 @@
                 </div>
             </div>
 
-            <div class="row">
-                  <div class="col">
-                    <div class="card">
-                      <div class="table-responsive">
-                          <div>
-                              <table class="table align-items-center table-ligth">
-                                  <thead class="thead-ligth">
-                                      <tr>
-                                          <th scope="col" class="sort" data-sort="name"><h5>Nombre</h5></th>
-                                          <th scope="col" class="sort" data-sort="">Foto</th>
-                                          <th scope="col" class="sort" data-sort="budget"><h5>Email</h5></th>
-                                          <th scope="col" class="sort" data-sort="status"><h5>Telefono</h5></th>
-                                          <th scope="col" class="sort" data-sort="status"><h5>Rol</h5></th>
-                                          <th scope="col"></th>
-                                      </tr>
-                                  </thead>
-                                    <paginate name="var_usuarios" :per="6" :list="lista_usuarios"  tag="tbody" class="list">                  
-                                      <tr v-for="v_usuario in paginated('var_usuarios')">
-                                          <td class="budget">
-                                              {{ v_usuario.name }} 
-                                          </td>
-                                          <td>
-                                            <a href="#" class="avatar avatar-sm" data-toggle="tooltip" @click="abrirFoto(v_usuario.url_img_us)" data-original-title="Romina Hadid">
-                                                <img alt="Image placeholder" :src="'/storage/'+v_usuario.url_img_us">
-                                            </a>
-                                          </td>
-                                          <td>
-                                              {{v_usuario.email}}
-                                          </td>
-                                          <td>
-                                              {{v_usuario.celular}}
-                                          </td>
-                                          <td>
-                                              <div v-if="v_usuario.tipo_us==1">Administrador</div>
-                                              <div v-if="v_usuario.tipo_us==2">Negocio</div>
-                                              <div v-if="v_usuario.tipo_us==3">Cliente</div>
+                <paginate name="var_usuarios" :per="8" :list="lista_usuarios" tag="div" class="card-deck">
+                        <div class="col-3" v-for="usuario in paginated('var_usuarios')">
+                            <div class="card_usu bg-dark">
+                              <div class="head_usu">
+                                <div class="circle_usu"></div>
+                                <div class="img_usu">
+                                  <a @click="abrirFoto(usuario.url_img_us)">
+                                    <img :src="'/storage/'+usuario.url_img_us">
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="des_usu">
+                                <h3>{{ usuario.name }} </h3>
+                                <h3>
+                                  <div v-if="usuario.tipo_us==1">Administrador</div>
+                                  <div v-if="usuario.tipo_us=2">Negocio</div>
+                                  <div v-if="usuario.tipo_us==3">Cliente</div>
+                                </h3>
+                                <h3>{{usuario.email}}</h3>
+                                <h3>{{usuario.celular}}</h3>
+                              </div>
+                              <div class="contact_usu">
+                                <a  type="button" class="dropdown-item bg-dark text-cyan" @click="editar_usuario(usuario)">Modificar</a>
+                                <a  type="button" class="dropdown-item bg-dark text-rosita" @click="eliminarUsuario(usuario)">Eliminar</a>
+                              </div>
+                            </div>
+                        </div>
+                        </paginate>
+                        <nav aria-label="...">
+                            <br>
+                              <paginate-links for="var_usuarios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
+                            <br>
+                        </nav>
 
-                                          </td>
-                                          <td class="text-right">
-                                              <div class="dropdown">
-                                                  <button class="btn btn-sm btn-icon-only text-dark"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                  </button>
-                                                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow bg-gris-oxford">
-                                                      <button  type="button" class="dropdown-item btn-dark text-cyan" @click="editar_usuario(v_usuario)">Modificar</button>
-                                                      <button  type="button" class="dropdown-item btn-dark text-rosita" @click="eliminarUsuario(v_usuario)">Eliminar</button>
-                                                  </div>
-                                              </div>
-                                          </td>
-                                      </tr>
-                                    </paginate>
-                              </table>
-                          </div>
-                        <paginate-links for="var_usuarios" :classes="{'ul': ['pagination','justify-content-end','nb-0'], 'li': 'page-item', 'a':['page-link', 'bg-dark']}"></paginate-links>
-                               
-                    </div>
-                  </div>
-                </div>
-              </div>
           </div>
 
           <!-- Modal -->

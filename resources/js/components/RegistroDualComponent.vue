@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-2"></div>
                     <div class="col"><br><br>
-                        <div class="card bg-gris">
+                        <div class="card">
                             <div class="nav-wrapper">
                                 <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                                     <li class="nav-item">
@@ -33,7 +33,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="card shadow bg-gris">
+                            <div class="card shadow ">
                                 <div class="card-body">
                                     <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">

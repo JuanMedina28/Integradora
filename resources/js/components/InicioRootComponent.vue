@@ -14,89 +14,124 @@
 
 
                     <div v-if="logeado.tipo_us==1">
+                    <center><h1 class="text-rosita">Bienvemido Admin: <span style="color: white;">{{logeado.name}}</span></h1></center>
+                    
+                        <div
+                class="d-flex align-items-center justify-content-center align-items-center h-100 mt-0 bg-gris-oxford"
+                style="min-height: 80vh"
+            >
+                <br />
+                <section>
+                    
                     <div class="row">
-
-                        
-                        <div class="col-md-4">
-                            
-                             <div class="card bg-dark text-white">
-                        <img class="card-img" src="img/bg-2.jpg" alt="Card image">
-                        <div class="card-img-overlay">
-                            <h4 class="card-title" style="color: white;">Administrar Usuarios</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                            
-                            <a href="#" class="btn btn-dark bg-dark" @click="irUsuarios()" style="display: inline-block; width: 100%;">Ir a</a>
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/tienda.jpg" alt="" />
+                                    <h3>Negocios</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Negocios</h1>
+                                    <p>Aquí podrás administras los negocios que se han registrado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarNegocios()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/envio.jpg" alt="" />
+                                    <h3>Servicios</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Servicios</h1>
+                                    <p>Aquí podrás administrar todos los servicios que se han registrado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarServicios()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/programador.jpg" alt="" />
+                                    <h3>Usuarios</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Usuarios</h1>
+                                    <p>Aquí podrás administrar todos los usuarios que se han registrado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarUsuarios()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="col-md-4">
-                            
-                             <div class="card bg-dark text-white">
-                        <img class="card-img" src="img/bg-2.jpg" alt="Card image">
-                        <div class="card-img-overlay">
-                            <h4 class="card-title" style="color: white;">Administrar Servicios</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                            
-                            <a href="#" class="btn btn-dark bg-dark" @click="irServicios()" style="display: inline-block; width: 100%;">Ir a</a>
-                        </div>
-                        </div>
-
-                        </div>
-                        <div class="col-md-4">
-                            
-                             <div class="card bg-dark text-white">
-                        <img class="card-img" src="img/bg-2.jpg" alt="Card image">
-                        <div class="card-img-overlay">
-                            <h4 class="card-title" style="color: white;">Administrar Ventas</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                            
-                            <a href="#" class="btn btn-dark bg-dark"  @click="irVentas()"  style="display: inline-block; width: 100%;">Ir a</a>
-                        </div>
-                        </div>
-
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/tarjeta-de-debito.webp" alt="" />
+                                    <h3>Pagos</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Pagos</h1>
+                                    <p>Aquí podrás administrar todos los pagos que se han realizado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarPagos()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                        
+                </section>
+            </div>
                         
                         
             </div>
 
             <div v-if="logeado.tipo_us==2">
+            <center><h1 class="text-rosita">Bienvemido: <span style="color: white;">{{logeado.names}}</span></h1></center>
+                    
+                        
+                    <section>
+                    
                     <div class="row">
-
+                       
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/envio.jpg" alt="" />
+                                    <h3>Servicios</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Servicios</h1>
+                                    <p>Aquí podrás administrar todos los servicios que se han registrado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarServicios()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
-                        
-                        
-                        <div class="col-md-6">
-                            
-                             <div class="card bg-dark text-white" style="max-width: 400px; margin: auto;">
-                        <img class="card-img" src="img/bg-2.jpg" alt="Card image">
-                        <div class="card-img-overlay">
-                            <h4 class="card-title" style="color: white;">Administrar Servicios</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                            <br><br>
-                            <a href="#" class="btn btn-dark bg-dark" @click="irServicios()" style="display: inline-block; width: 100%;">Ir a</a>
-                        </div>
-                        </div>
-
-                        </div>
-                        <div class="col-md-6">
-                            
-                             <div class="card bg-dark text-white"  style="max-width: 400px; margin: auto;">
-                        <img class="card-img" src="img/bg-2.jpg" alt="Card image">
-                        <div class="card-img-overlay">
-                            <h4 class="card-title" style="color: white;">Administrar Ventas</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                            <br><br>
-                            <a href="#" class="btn btn-dark bg-dark"  @click="irVentas()"  style="display: inline-block; width: 100%;">Ir a</a>
-                        </div>
-                        </div>
-
+                        <div class="col-3">
+                            <div class="cards-servicios">
+                                <div class="face front">
+                                    <img src="storage/menu/tarjeta-de-debito.webp" alt="" />
+                                    <h3>Pagos</h3>
+                                </div>
+                                <div class="face back">
+                                    <h1>Pagos</h1>
+                                    <p>Aquí podrás administrar todos los pagos que se han realizado</p>
+                                    <div class="link">
+                                        <a href="#" class="btn btn-dark text-cyan" @click="mandarPagos()">Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                        
+                </section>
                         
                         
             </div>
@@ -121,6 +156,18 @@ export default {
             }
         
     }, methods:{
+        mandarNegocios(){
+            window.location.href = '/negocios'
+        },
+        mandarServicios(){
+            window.location.href = '/servicios'
+        },
+        mandarUsuarios(){
+            window.location.href = '/usuarios'
+        },
+        mandarPagos(){
+            
+        },
         usuarioEspec(){
                 axios.get('/usuarioEspec')
                 .then((response) => {

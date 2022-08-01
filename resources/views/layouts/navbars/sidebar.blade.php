@@ -105,15 +105,8 @@
                     </a>
                 </li>
                 @endif
+               
                 @if(Auth::user()->can('mostrarAdmin'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('crud_clientes') }}">
-                        <i class="ni ni-credit-card text-degradado"></i>
-                        <h3><span class="nav-link-text text-cyan">Clientes</span></h3>
-                    </a>
-                </li>
-                @endif
-                @if(Auth::user()->can('mostrarAdminUser'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('crud_usuarios') }}">
                         <i class="ni ni-circle-08 text-degradado"></i>
@@ -122,12 +115,14 @@
                 </li>
                 @endif
                 
+                @if(Auth::user()->can('mostrarCliente'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('carrito') }}">
                         <i class="ni ni-cart text-degradado"></i>
                         <h3><span class="nav-link-text text-cyan">Mis Servicios</span></h3>
                     </a>
                 </li>
+                
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('compras') }}">
@@ -135,6 +130,7 @@
                         <h3><span class="nav-link-text text-cyan">Mis Compras</span></h3>
                     </a>
                 </li>
+                @endif
                
                 
                 @if(Auth::user()->can('mostarAdmin&Negocio'))

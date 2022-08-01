@@ -54,7 +54,7 @@ class AuthServiceProvider extends ServiceProvider
                 return false;
             }
         });
-        GATE::define('mostarCliente', function(User $user){
+        GATE::define('mostrarCliente', function(User $user){
             if($user->tipo_us==3){
                 return true;
             }else{

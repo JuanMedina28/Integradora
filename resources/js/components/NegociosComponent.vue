@@ -18,70 +18,42 @@
             </div>
 
             <!-- TABLA -->
-            <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
+            <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh">
               <br><br><br><br>
-                <div class="row">
-                  <div class="col">
-                    <div class="card">
-                      <div class="table-responsive">
-                          <div>
-                              <table class="table align-items-center">
-                                  <thead class="thead-light">
-                                      <tr>
-                                          <th scope="col" class="sort" data-sort="name"><h5>Razon Social</h5></th>
-                                          <th scope="col" class="sort" data-sort="">Foto</th>
-                                          <th scope="col" class="sort" data-sort="name"><h5>Giro</h5></th>
-                                          <th scope="col" class="sort" data-sort="name"><h5>Email</h5></th>
-                                          
-                                          <th scope="col" class="sort" data-sort="name">Telefono</th>
-                                          <th scope="col" class="sort" data-sort="name">RFC</th>
-                                          <th scope="col"></th>
-                                      </tr>
-                                  </thead>
-                                    <paginate name="var_negocios" :per="10" :list="lista_negocios"  tag="tbody" class="list">                  
-                                      <tr v-for="v_negocio in paginated('var_negocios')">
-                                          <td class="budget">
-                                              {{ v_negocio.razon_social }}
-                                          </td>
-                                          <td>
-                                            <a href="#" class="avatar avatar-sm" data-toggle="tooltip" @click="abrirFoto(v_negocio.url_logo)" data-original-title="Romina Hadid">
-                                                <img alt="Image placeholder" :src="'/storage/'+v_negocio.url_logo">
-                                            </a>
-                                          </td>
-                                          <td>
-                                              {{ v_negocio.tipo_ser }}
-                                          </td>
-                                          <td> 
-                                            {{ v_negocio.nego_email }}                              
-                                          </td>
-                                          <td>
-                                              {{ v_negocio.nego_celular }}
-                                          </td>
-                                          <td>
-                                              {{ v_negocio.rfc }}
-                                          </td>
-                                          <td class="text-right">
-                                              <div class="dropdown">
-                                                  <button class="btn btn-sm btn-icon-only text-dark"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                  </button>
-                                                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow bg-gris-oxford">
-                                                      <button  type="button" class="dropdown-item btn-dark text-cyan" @click="editar_negocio(v_negocio)">Modificar</button>
-                                                      <button  type="button" class="dropdown-item btn-dark text-rosita" @click="eliminarNegocio(v_negocio)">Eliminar</button>
-                                                  </div>
-                                              </div>
-                                          </td>
-                                      </tr>
-                                    </paginate>
-                              </table>
-                          </div>
-                                    <paginate-links for="var_negocios" :classes="{'ul': ['pagination','justify-content-end','nb-0'], 'li': 'page-item', 'a':['page-link', 'bg-dark']}"></paginate-links>
-                               
-                    </div>
-                  </div>
+              
+                        <paginate name="var_negocios" :per="8" :list="lista_negocios" tag="div" class="card-deck">
+                        <div class="col-3" v-for="v_negocio in paginated('var_negocios')">
+                            <div class="card_nego bg-dark">
+                              <div class="head_nego">
+                                <div class="circle_nego"></div>
+                                <div class="img_nego">
+                                  <a @click="abrirFoto(v_negocio.url_logo)">
+                                    <img :src="'/storage/'+v_negocio.url_logo">
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="des_nego">
+                                <h2>{{ v_negocio.razon_social }}</h2>
+                                <p>{{ v_negocio.tipo_ser }}</p>
+                                <b>{{v_negocio.nego_email}}</b>
+                                <p>{{v_negocio.nego_celular}}</p>
+                                <p>{{v_negocio.rfc}}</p>
+                              </div>
+                              <div class="contact_nego">
+                                <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_negocio(v_negocio)">Ver Detalles</a>
+                                <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarNegocio(v_negocio)">Eliminar</a>
+                              </div>
+                            </div>
+                        </div>
+                        </paginate>
+                        <nav aria-label="...">
+                            <br>
+                              <paginate-links for="var_negocios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
+                            <br>
+                        </nav>
                 </div>
-              </div>
-          </div>
+               
+          
 
           <!-- Modal -->
               <div class="modal fade" id="formulario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
