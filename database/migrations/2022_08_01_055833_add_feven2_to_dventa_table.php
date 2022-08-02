@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('pservicio', function (Blueprint $table) {
-            $table->string('des')->nullable()->after('tipo_ser');
+        Schema::table('dventa', function (Blueprint $table) {
+            $table->string('fevent2')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('pservicio', function (Blueprint $table) {
-            $table->dropColumn('des');
+        Schema::table('dventa', function (Blueprint $table) {
+            $table->dropColumn('edad');
         });
     }
 };

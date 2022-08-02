@@ -88,6 +88,31 @@ class user_n extends Controller
         
     }
 
+
+    public function guardar_us2(Request $request){
+        
+            $user = User::where('id', Auth::user()->id)->first();
+        
+            $user->name =$request->name;
+            $user->apaterno =$request->apaterno;
+            $user->amaterno =$request->amaterno;
+            $user->celular =$request->celular;
+            $user->save();
+            return $user;
+    }
+
+    public function guardar_us3(Request $request){
+        
+        $user = User::where('id', Auth::user()->id)->first();
+    
+        $user->calleyn =$request->calle;
+        $user->n_iden =$request->no;
+        $user->municipio =$request->cp;
+        $user->cp =$request->mun;
+        $user->save();
+        return $user;
+}
+
     public function listar_psrz(Request $request){
 
         $us = DB::table('pservicio')

@@ -38,14 +38,16 @@ class carrito extends Controller
             $carrito2->scant = $carrito->scant + 1;
             $carrito2->stotal = $carrito->stotal + $ser->precio;
             $carrito2->save();
+            return 'Carrito detalle existente';
         } else {
-            $carrito = new m_carrito();
-            $carrito->id_serv = $ser->id;
-            $carrito->id_dventa = $sventa->id;
-            $carrito->scant = 1;
-            $carrito->stotal = $ser->precio;
-            $carrito->status = $request->status;
-            $carrito->save();
+            $carrito3 = new m_carrito();
+            $carrito3->id_serv = $ser->id;
+            $carrito3->id_dventa = $sventa->id;
+            $carrito3->scant = 1;
+            $carrito3->stotal = $ser->precio;
+            $carrito3->status = $request->status;
+            $carrito3->save();
+            return 'carrito nuevo';
         }
     }
 
@@ -59,7 +61,7 @@ class carrito extends Controller
 
         $ser = m_servicio::where('id', $request->id_ser)->first();
 
-        $carrito = m_carrito::where('id_serv', $ser->id)->first();
+        $carrito = m_carrito::where('id_serv', $ser->id)->where('status', 1)->first();
 
         if ($carrito && $sventa && $ser) {
 
@@ -68,11 +70,14 @@ class carrito extends Controller
                 ->first();
             if ($carrito->scant == 1) {
                 $carrito2->delete();
+                return 'Carrito eliminado '.$carrito2;
             } else {
                 $carrito2->scant = $carrito->scant - 1;
                 $carrito2->save();
+                return 'Carrito descontado '.$carrito;
             }
         }
+        return 'Fallo el eliminar';
     }
 
     /**********************************Fin Eliminar Carrito*********************** */
@@ -110,6 +115,7 @@ class carrito extends Controller
         if ($sventa && $us) {
             $dventa = m_detalle_venta::find($sventa->id);
             $dventa->status = $request->status;
+            $dventa->fevent2 = $request->fevent;
             /*-----------------------------------OpenPAY-------------------------------------------*/
             try {
 
@@ -172,4 +178,18 @@ class carrito extends Controller
     }
 
     /*********************************Fin Pagar Venta************************* */
+
+    /***************************Concluir*************************** */
+    public function concluir(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id', $request->id_v)->where('status', 2)->first();
+
+        if ($sventa) {
+            $sventa->status = 3;
+            $sventa->save();
+            return 'Concluida';
+             }
+             return 'Fallo el Concluir'.$request->id_v;
+    }
 }

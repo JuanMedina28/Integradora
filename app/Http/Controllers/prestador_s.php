@@ -40,6 +40,14 @@ class prestador_s extends Controller
         return $us;
     }
 
+    public function listar_unps(){
+
+        $us = DB::table('pservicio')
+        ->select('pservicio.*')
+        ->where('id_us', Auth::user()->id)
+        ->get();
+        return $us;
+    }
 
     public function listar_ps(){
         $ps= m_pservicio::all();

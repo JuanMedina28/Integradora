@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\m_carrito;
 use App\Models\m_detalle_venta;
 use App\Models\m_servicio;
 use Exception;
@@ -29,6 +30,8 @@ class detalle_v extends Controller
             $ser = m_servicio::where('id', $request->id_ser)->first();
             $dventa->total = $dventa->total + $ser->precio;
             $dventa->fecha = date("Y/m/d");
+            $dventa->save();
+            return $dventa;
         } else {
             $dventa = new m_detalle_venta();
             $dventa->no_venta = "No Aplica";
@@ -38,9 +41,11 @@ class detalle_v extends Controller
             $dventa->id_user = Auth::user()->id;
             $ser = m_servicio::where('id', $request->id_ser)->first();
             $dventa->total = $ser->precio;
+            $dventa->save();
+            return $dventa;
         }
 
-        $dventa->save();
+        
     }
 
     /*********************************Fin Guardar Venta************************* */
@@ -59,7 +64,54 @@ class detalle_v extends Controller
         return $ventas;
     }
 
+    public function lista_venta_nego()
+    {
+        $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "dventa.id_user")
+            ->join("pservicio", "pservicio.id_us", "=", "servicio.id_us")
+            ->select('carrito.*','dventa.fevent2 as fevent2', 
+            'dventa.fecha as fecha', 
+            'servicio.tipo_serv as tipo',
+            'users.name as name',
+             'users.apaterno as ap', 
+             'users.amaterno as am',
+             'dventa.id as id_v',
+             'dventa.status as st')
+            ->where('pservicio.id_us', Auth::user()->id)
+            ->orderBy('dventa.fecha', 'desc')
+            ->get();
+
+        return $lcarrito;
+    }
+
+
+    
+
     /****************************Fin Lista Ventas ********************************/
+
+
+    /*********************************Validar fecha****************************** */
+    public function validar_fecha(Request $request){
+        
+             $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->select('carrito.*')
+            ->where('dventa.fevent2',$request->fecha)
+            ->where('carrito.status', 1)
+            ->get();
+
+            if($lcarrito){
+                return "Ya existe una venta";
+            }else{
+                return "No existe una venta";
+            }
+
+    }
+
+    /****************************validar fecha ********************************/
 
 
     /***************************eliminar Venta*************************** */
