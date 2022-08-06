@@ -98,14 +98,14 @@
                                         </div>
                                         <div class="text-center">
                                             <!--<button type="button" id="pay-button" class="btn btn-success mt-4">Guardar</button>-->
-                                            <button type="button" id="pay-button"  class="btn btn-success mt-4">Guardar</button>
+                                            <button type="button" id="pay-button" @click="abrir()"  class="btn btn-success mt-4">Pagar</button>
                                         </div>
                                     </div>
                                 </form>
                       </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-dark text-rosita" data-dismiss="modal">Cancelar</button>
-                      <button type="button" class="btn btn-dark text-cyan" @click="eliminar_alimento()" id="botoncito">Confirmar</button>
+                      <button type="button" class="btn btn-dark text-rosita" @click="abrir()" data-dismiss="modal">Cancelar</button>
+                      
                     </div>
                   </div>
                 </div>

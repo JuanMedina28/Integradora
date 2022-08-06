@@ -133,15 +133,15 @@ class user_n extends Controller
     public function listar(Request $request){
 
         $filtro = $request->buscador;
-
+        
         if($filtro!=null){
             $usuarios = User::where('name', 'ilike', '%'.$filtro.'%')
             ->orWhere('email', 'ilike', '%'.$filtro.'%')
             ->get();
-            if($usuarios!=null){
-                //$usuarios = User::all();
-            }else{
+            if(empty($usuarios)){
                 $usuarios = User::all();
+            }else{
+                
             }
         }else{
             $usuarios = User::all();
@@ -182,11 +182,16 @@ class user_n extends Controller
 
                 $nuevousuario->save();
     }
-    public function eliminar($id){
-        if($id>2){
-            $usuario = User::find($id);
-            $usuario->delete();
+    public function eliminar($idn){
+        
+        $userModify = User::find($idn);
+
+        if($userModify->status == 2){
+            $userModify->status = 1;
+        }else{
+            $userModify->status = 2;
         }
+        $userModify->save();
     }
 
     public function listar_psrz(Request $request){
@@ -200,6 +205,29 @@ class user_n extends Controller
         return $us;
     }
 
+/********************Funciones WEB********** */
+public function filtro(Request $request){
+    $filtro = $request->key;
 
+        if($filtro != 3){
+            $usuarios =  User::where('status', $filtro)
+            ->get();
+        }else{
+            $usuarios =  User::all();
+        }
+    return $usuarios;
+}
+public function filtro2(Request $request){
+    $filtro = $request->key2;
+
+        if($filtro != 4){
+            $usuarios =  User::where('tipo_us', $filtro)
+            ->get();
+        }else{
+            $usuarios =  User::all();
+        }
+    return $usuarios;
+}
+/********************Fin Funciones********** */
 
 }

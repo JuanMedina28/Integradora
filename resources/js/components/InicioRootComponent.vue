@@ -7,20 +7,17 @@
 
                 <center><a><img :src="'img/ps-lg.png'" width="300" ></a></center>
                 </div>
-                <div class="container-fluid pt-5 bg-gris-oxford" style="min-height: 80vh"><br>
+                <div class="container-fluid pt-1 " style="min-height: 80vh"><br>
                         
 
                        
 
 
                     <div v-if="logeado.tipo_us==1">
-                    <center><h1 class="text-rosita">Bienvemido Admin: <span style="color: white;">{{logeado.name}}</span></h1></center>
+                    <center><h1 class="text-rosita">Bienvenido Admin: <span style="color: white;">{{logeado.name}}</span></h1></center>
                     
-                        <div
-                class="d-flex align-items-center justify-content-center align-items-center h-100 mt-0 bg-gris-oxford"
-                style="min-height: 80vh"
-            >
-                <br />
+                     <br>
+                
                 <section>
                     
                     <div class="row">
@@ -86,13 +83,12 @@
                         </div>
                     </div>
                 </section>
-            </div>
                         
                         
             </div>
 
             <div v-if="logeado.tipo_us==2">
-            <center><h1 class="text-rosita">Bienvemido: <span style="color: white;">{{logeado.names}}</span></h1></center>
+            <center><h1 class="text-rosita">Bienvenido: <span style="color: white;">{{logeado.names}}</span></h1></center>
                     
                         
                     <section>

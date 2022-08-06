@@ -43,42 +43,13 @@ class detalle_v extends Controller
         $dventa->save();
     }
     
-    public function guardar_venta2(Request $request)
-    {
 
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-
-        if ($sventa) {
-            $dventa = m_detalle_venta::find($sventa->id);
-            $dventa->cant = $sventa->cant + 1;
-            $ser = m_servicio::where('id', $request->id)->first();
-            $dventa->total = $dventa->total + $ser->precio;
-            $dventa->fecha = date("Y/m/d");
-        } else {
-            $dventa = new m_detalle_venta();
-            $dventa->no_venta = "No Aplica";
-            $dventa->fecha = date("Y/m/d");
-            $dventa->status = 1;
-            $dventa->cant = 1;
-            $dventa->id_user = Auth::user()->id;
-            $ser = m_servicio::where('id', $request->id)->first();
-            $dventa->total = $ser->precio;
-        }
-
-        $dventa->save();
-    }
 
     /*********************************Fin Guardar Venta************************* */
 
    
     
-    public function vista(){
-        return view('pages.pedidos');
-    }
 
-    public function vista2(){
-        return view('pages.historial');
-    }
 
     /*********************************Lista Ventas****************************** */
     public function lista_ventas()
@@ -91,6 +62,24 @@ class detalle_v extends Controller
             ->get();
 
         return $ventas;
+    }
+    public function lista_vcar(Request $request)
+    {
+       
+
+         $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "servicio.id_us")
+            ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
+            ->where('carrito.status', 1)
+            ->where('dventa.status', 1)
+            ->where('dventa.id', $request->carrito)
+            ->distinct('tipo_serv')
+            ->get();
+
+        return $lcarrito;
     }
 
     /****************************Fin Lista Ventas ********************************/
@@ -116,28 +105,7 @@ class detalle_v extends Controller
             }
         }
     }
-    
-    public function eliminar_venta2(Request $request)
-    {
 
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-
-        if ($sventa) {
-            $dventa = m_detalle_venta::find($sventa->id);
-            if ($dventa->cant == 1) {
-
-                $dventa->delete();
-            } else {
-                $dventa->cant = $sventa->cant - 1;
-                $ser = m_servicio::where('id', $request->id_serv)->first();
-                $dventa->total = $dventa->total - $ser->precio;
-                $dventa->fecha = date("Y/m/d");
-                $dventa->save();
-            }
-        }
-
-        return $request;
-    }
     /*********************************Fin Eliminar Venta************************* */
 
     /*+++++++++++++++++++++++++++++++++++++++++OPEN PAY+++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -188,4 +156,100 @@ class detalle_v extends Controller
             return 'Error on the script: ' . $e->getMessage();
         }
     }
+
+    /*************Funciones web*********** */
+    public function vista(){
+        return view('pages.pedidos');
+    }
+
+    public function vista2(){
+        return view('pages.historial');
+    }
+    public function lista_ventas2()
+    {
+        
+        $ventas = DB::table('dventa')
+            ->select('dventa.*')
+            ->where('status', 1)
+            ->orderBy('fecha', 'desc')
+            ->orderBy('status', 'asc')
+            ->get();
+
+        return $ventas;
+    }
+    public function lista_ventas3()
+    {
+        $ventas = DB::table('dventa')
+            
+            ->select('dventa.*')
+            ->where('status', 2)
+            ->orderBy('fecha', 'desc')
+            ->orderBy('status', 'asc')
+            ->get();
+
+        return $ventas;
+    }
+    public function lista_vcar2(Request $request)
+    {
+        
+         $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "servicio.id_us")
+            ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
+            ->where('carrito.status', 2)
+            ->where('dventa.status', 2)
+            ->where('dventa.id', $request->carrito2)
+            ->distinct('tipo_serv')
+            ->get();
+
+        return $lcarrito;
+    } 
+    public function eliminar_venta2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            if ($dventa->cant == 1) {
+
+                $dventa->delete();
+            } else {
+                $dventa->cant = $sventa->cant - 1;
+                $ser = m_servicio::where('id', $request->id_serv)->first();
+                $dventa->total = $dventa->total - $ser->precio;
+                $dventa->fecha = date("Y/m/d");
+                $dventa->save();
+            }
+        }
+
+        return $request;
+    }
+    public function guardar_venta2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            $dventa->cant = $sventa->cant + 1;
+            $ser = m_servicio::where('id', $request->id)->first();
+            $dventa->total = $dventa->total + $ser->precio;
+            $dventa->fecha = date("Y/m/d");
+        } else {
+            $dventa = new m_detalle_venta();
+            $dventa->no_venta = "No Aplica";
+            $dventa->fecha = date("Y/m/d");
+            $dventa->status = 1;
+            $dventa->cant = 1;
+            $dventa->id_user = Auth::user()->id;
+            $ser = m_servicio::where('id', $request->id)->first();
+            $dventa->total = $ser->precio;
+        }
+
+        $dventa->save();
+    }
+    /**************FIn Funciones Web********** */
 }

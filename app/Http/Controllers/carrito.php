@@ -49,33 +49,7 @@ class carrito extends Controller
         }
     }
 
-    public function guardar_c2(Request $request)
-    {
 
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-
-        $ser = m_servicio::where('id', $request->id)->first();
-
-        $carrito = m_carrito::where('id_serv', $ser->id)->where('status', 1)->first();
-
-        if ($carrito && $sventa && $ser) {
-            //$carrito2 = m_venta::where('id_dventa',$sventa->id)->find($request->id_libro);
-            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
-                ->where('id_serv', $request->id)
-                ->first();
-            $carrito2->scant = $carrito->scant + 1;
-            $carrito2->stotal = $carrito->stotal + $ser->precio;
-            $carrito2->save();
-        } else {
-            $carrito = new m_carrito();
-            $carrito->id_serv = $ser->id;
-            $carrito->id_dventa = $sventa->id;
-            $carrito->scant = 1;
-            $carrito->stotal = $ser->precio;
-            $carrito->status = 1;
-            $carrito->save();
-        }
-    }
 
     /**********************************Fin Guardar Carrito*********************** */
 
@@ -103,28 +77,7 @@ class carrito extends Controller
         }
     }
 
-    public function eliminar_carrito2(Request $request)
-    {
 
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-
-        $ser = m_servicio::where('id', $request->id_serv)->first();
-
-        $carrito = m_carrito::where('id_serv', $ser->id)->first();
-
-        if ($carrito && $sventa && $ser) {
-
-            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
-                ->where('id_serv', $request->id_serv)
-                ->first();
-            if ($carrito->scant == 1) {
-                $carrito2->delete();
-            } else {
-                $carrito2->scant = $carrito->scant - 1;
-                $carrito2->save();
-            }
-        }
-    }
 
     /**********************************Fin Eliminar Carrito*********************** */
 
@@ -152,11 +105,7 @@ class carrito extends Controller
 
 
     /***************************Pagar Venta*************************** */
-    public function muestra(){
-        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
-        $dventa = m_detalle_venta::find($sventa->id);
-        return $dventa;
-    }
+  
     public function pagar_venta(Request $request)
     {
         $us = m_user::where('id', Auth::user()->id)->first();
@@ -225,6 +174,14 @@ class carrito extends Controller
 
             /*-----------------------------------Fin OpenPAY-------------------------------------------*/
         }
+    }
+
+
+    /*********************************Fin Pagar Venta************************* */
+
+    /*************Funciones Web*************** */
+    public function vista(){
+        return view('pages.carrito');
     }
     public function pagar_venta2(Request $request)
     {
@@ -297,10 +254,55 @@ class carrito extends Controller
         }
     }
 
-    /*********************************Fin Pagar Venta************************* */
+    public function eliminar_carrito2(Request $request)
+    {
 
-    /*************Funciones Web*************** */
-    public function vista(){
-        return view('pages.carrito');
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        $ser = m_servicio::where('id', $request->id_serv)->first();
+
+        $carrito = m_carrito::where('id_serv', $ser->id)->first();
+
+        if ($carrito && $sventa && $ser) {
+
+            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
+                ->where('id_serv', $request->id_serv)
+                ->first();
+            if ($carrito->scant == 1) {
+                $carrito2->delete();
+            } else {
+                $carrito2->scant = $carrito->scant - 1;
+                $carrito2->save();
+            }
+        }
     }
+    public function guardar_c2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        $ser = m_servicio::where('id', $request->id)->first();
+
+        $carrito = m_carrito::where('id_serv', $ser->id)->where('status', 1)->first();
+
+        if ($carrito && $sventa && $ser) {
+            //$carrito2 = m_venta::where('id_dventa',$sventa->id)->find($request->id_libro);
+            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
+                ->where('id_serv', $request->id)
+                ->first();
+            $carrito2->scant = $carrito->scant + 1;
+            $carrito2->stotal = $carrito->stotal + $ser->precio;
+            $carrito2->save();
+        } else {
+            $carrito = new m_carrito();
+            $carrito->id_serv = $ser->id;
+            $carrito->id_dventa = $sventa->id;
+            $carrito->scant = 1;
+            $carrito->stotal = $ser->precio;
+            $carrito->status = 1;
+            $carrito->save();
+        }
+    }
+
+    /*************Fin Funciones Web*************** */
 }

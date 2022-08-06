@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\m_carrito;
 use App\Models\m_servicio;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,12 +38,6 @@ class servicios extends Controller
         ->orwhere('des','like', '%'.$request->tipo_ser.'%')
         ->select('servicio.*')
         ->get();
-        return $serv;
-    }
-
-    public function listar_serv2(){
-
-        $serv = m_servicio::all();
         return $serv;
     }
 
@@ -81,7 +76,7 @@ class servicios extends Controller
         return $serv;
     }
     
-    /*Funciones para web*/ 
+    /******************Funciones para web******************/ 
     public function vista(){
         return view('pages.servicios');
     }
@@ -103,12 +98,12 @@ class servicios extends Controller
                     //$usuarios = User::all();
                 }else{
                     $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
-                    ->select("servicio.*",'users.name as nego_name')
+                    ->select("servicio.*",'users.name as nego_name','users.status as statusn')
                     ->get();
                 }
             }else{
                 $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
-                    ->select("servicio.*",'users.name as nego_name')
+                    ->select("servicio.*",'users.name as nego_name','users.status as statusn')
                     ->get();
             }
 
@@ -135,8 +130,15 @@ class servicios extends Controller
             $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
             ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
             ->select("servicio.*",'pservicio.tipo_ser as nego_name')
-            ->where('tipo_serv', 'like', '%'.$filtro.'%')
+            ->where('tipo_serv', 'ilike', '%'.$filtro.'%')
+            ->orWhere('tipo_ser', 'ilike', '%'.$filtro.'%')
             ->get();
+            if(empty($usuarios)){
+                $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
+                ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+                ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+                ->get();
+            }
             
         }else{
             $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
@@ -192,9 +194,71 @@ class servicios extends Controller
         $ruta = 'public/'.$servicio->url_img;
         return Storage::download($ruta);
     }
-    public function eliminar($id){
-        $servicio = m_servicio::find($id);
-        $servicio->delete();
+    public function eliminar($idn){
+
+        $usuario = m_servicio::find( $idn);
+
+        $userl = User::find($usuario->id_us);
+
+        if($userl->status == 2){
+            $userl->status = 1;
+        }else{
+            $userl->status = 2;
+        }
+
+        $userl->save();
+
+        
     }
+    public function listar_serv2(){
+
+        $serv = m_servicio::all();
+        return $serv;
+    }
+    public function filtro(Request $request){
+        $filtro = $request->key;
+
+        if($filtro != 7){
+            if($filtro == 1){
+                $filtro = 'Ingeribles - Alimentos y bebidas.';
+            
+            }
+            if($filtro == 2){
+                $filtro = 'Ambiente - Sonido y luces.';
+            
+            }
+            if($filtro == 3){
+                $filtro = "Música - Músicos y DJ's.";
+            
+            }
+            if($filtro == 4){
+                $filtro = 'Decoración - Exteriores e interiores.';
+            
+            }
+            if($filtro == 5){
+                $filtro = 'Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.';
+            
+            }
+            if($filtro == 6){
+                $filtro = 'Personal de servicio - Exteriores e interiores.';
+            
+            }
+            $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
+            ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+            ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->where('pservicio.tipo_ser', 'ilike', '%'.$filtro.'%')
+            ->get();
+        }else{
+            $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
+            ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+            ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->get();
+
+        }
+        return $usuarios;
+    }
+    /***************************Fin Funciones WEB************ */
+
+    ///////////
 
 }

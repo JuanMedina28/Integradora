@@ -18,15 +18,46 @@
                 
     <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
       <br><br>
-      
-           <div class="input-group mb-3">
+
+            <div class="row mb-4" >
+                        <div class="col-3">
+                          <label style="color: white;">Buscar:</label>
+                            <div class="input-group ">
+                              
                 <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarServicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
                 <div class="input-group-append">
-                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan">Buscar Usuario</h4></button>
+                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan"><i class="fa fa-search" aria-hidden="true"></i></h4></button>
                 </div>
             </div>
+                        </div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
 
-            <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
+                            <label style="color: white;">Filtrar:</label>
+                            <select class="form-control" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Tipo de Servicio</option>
+                                            <option>Ingeribles - Alimentos y bebidas.</option>
+                                            <option>Ambiente - Sonido y  luces.</option>
+                                            <option>Música - Músicos y DJ's.</option>
+                                            <option>Decoración - Exteriores e interiores.</option>
+                                            <option>Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
+                                            <option>Personal de servicio - Exteriores e interiores.</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+
+                            <label style="color: white;">Estatus</label>
+                            <select class="form-control" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Eslige el estatus</option>
+                                            <option>Habilitado</option>
+                                            <option>Deshabilitado</option>
+                                            
+                            </select>
+                        </div>
+                    </div>
+
+
+            
                         <paginate name="var_servicios" :per="8" :list="lista_servicios" tag="div" class="card-deck">
                         <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
                             <div class="cards-servicios">
@@ -37,13 +68,18 @@
                                     <h3>{{ v_servicio.tipo_serv }}</h3>
                                 </div>
                                 <div class="face back">
-                                    
+                                <div v-if="v_servicio.statusn==2">
+                                <span class="text-white bg-red" style="font-size: 20px;">Inhabilitado</span>
+                                </div>
+                                <div v-if="v_servicio.statusn==1">
+                                <span class="text-white bg-green" style="font-size: 24px;">Habilitado</span>
+                                </div>
                                     <h3>{{ v_servicio.nego_name}}</h3>
                                     <p>{{ v_servicio.des }}</p>
                                     <b>${{ around(v_servicio.precio) }} MXN</b>
                                     <div class="contact_serv">
-                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_servicio(v_servicio)">Modificar</a>
-                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarServicio(v_servicio)">Eliminar</a>
+                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_servicio(v_servicio)">Detalles</a>
+                                        <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarServicio(v_servicio)">Alta/Baja</a>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +90,7 @@
                               <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
                             <br>
                         </nav>
-                </div>
+                
       
       </div>
 
@@ -228,13 +264,16 @@ Vue.use(VuePaginate)
                this.nuevoServicio();
             },
             eliminar_servicio(){
-                axios.delete("/servicio_eliminar/"+this.servicio.id).then((response)=>{
-                  this.lista_servicios = response;
-                  this.servicio = {};
-                  $("#eliminacionServicio").modal("toggle");
+              console.log(this.servicio.id)
+              let idn = this.servicio.id;
+                axios.post("/servicio_baja/"+idn).then((response)=>{
+                  
+                  
                 }).catch((error)=>{
                   console.log(error.response);
                 })
+                this.servicio = {};
+                  $("#eliminacionServicio").modal("toggle");
                 this.listar_servicio();
             },
             nuevoServicio(){

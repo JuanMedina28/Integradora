@@ -19,7 +19,44 @@
 
             <!-- TABLA -->
             <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh">
-              <br><br><br><br>
+              <div class="row mb-4" >
+                        <div class="col-3">
+                          <label style="color: white;">Buscar:</label>
+                            <div class="input-group ">
+                              
+                <input type="search" class="form-control" placeholder="Recipient's username" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan"><i class="fa fa-search" aria-hidden="true"></i></h4></button>
+                </div>
+            </div>
+                        </div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+
+                            <label style="color: white;">Filtrar:</label>
+                            <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Giro del negocio</option>
+                                            <option value="1">Ingeribles - Alimentos y bebidas.</option>
+                                            <option value="2">Ambiente - Sonido y luces.</option>
+                                            <option value="3">Música - Músicos y DJ's.</option>
+                                            <option value="4">Decoración - Exteriores e interiores.</option>
+                                            <option value="5">Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
+                                            <option value="6">Personal de servicio - Exteriores e interiores.</option>
+                                            <option value="7">Mostrar Todos</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+
+                            <label style="color: white;">Estatus</label>
+                            <select class="form-control" @change="onChange2($event)" v-model="key2" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Eslige el estatus</option>
+                                            <option value="1">Habilitado</option>
+                                            <option value="2">Deshabilitado</option>
+                                            <option value="3">Todos</option>
+                                            
+                            </select>
+                        </div>
+                    </div>
               
                         <paginate name="var_negocios" :per="8" :list="lista_negocios" tag="div" class="card-deck">
                         <div class="col-3" v-for="v_negocio in paginated('var_negocios')">
@@ -33,15 +70,20 @@
                                 </div>
                               </div>
                               <div class="des_nego">
-                                <h2>{{ v_negocio.razon_social }}</h2>
+                                <div v-if="v_negocio.status==2">
+                                <h2>{{ v_negocio.razon_social }} <span class="text-white bg-red" style="font-size: 14px;">Inhabilitado</span></h2>
+                                </div>
+                                <div v-if="v_negocio.status==1">
+                                <h2>{{ v_negocio.razon_social }} <span class="text-white bg-green" style="font-size: 14px;">Habilitado</span></h2>
+                                </div>
                                 <p>{{ v_negocio.tipo_ser }}</p>
                                 <b>{{v_negocio.nego_email}}</b>
                                 <p>{{v_negocio.nego_celular}}</p>
                                 <p>{{v_negocio.rfc}}</p>
                               </div>
                               <div class="contact_nego">
-                                <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_negocio(v_negocio)">Ver Detalles</a>
-                                <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarNegocio(v_negocio)">Eliminar</a>
+                                <a  type="button" class="dropdown-item btn-dark bg-dark text-cyan" @click="editar_negocio(v_negocio)">Detalles</a>
+                                <a  type="button" class="dropdown-item btn-dark bg-dark text-rosita" @click="eliminarNegocio(v_negocio)">Alta/Baja</a>
                               </div>
                             </div>
                         </div>
@@ -102,17 +144,17 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Estatus</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
-                      <h4>¿Seguro que desea eliminar este negocio?</h4>
+                      <h4>¿Seguro que desea cambiar el status de la cuenta?</h4>
                       </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <button type="button" class="btn btn-primary" @click="eliminar_negocio()" id="botoncito">Eliminar</button>
+                      <button type="button" class="btn btn-primary" @click="eliminar_negocio()" id="botoncito">}Confirmar</button>
                     </div>
                   </div>
                 </div>
@@ -155,7 +197,10 @@
                 lista_negocios:{},
                 editando:false,
                 ruta : '',
-                paginate: ['var_negocios']
+                idneg: '',
+                paginate: ['var_negocios'],
+                key: '',
+                key2: ''
             }
         },methods:{
             subirFoto(e){
@@ -208,22 +253,29 @@
               this.nuevoNegocio();
             },
             eliminar_negocio(){
-               axios.delete('/negocio_eliminar/'+this.negocio.id)
+              console.log(this.negocio.id)
+              let idn = this.negocio.id;
+               axios.post('/negocio_baja/'+ idn )
               .then((response) => {
-                    this.lista_negocios = response;
-                    this.negocio = {};
-                    $("#eliminacionNegocio").modal("toggle");
+                
+                    
                 })
                 .catch((error)=>{
                     console.log(error.response);
                 })
-                this.listar_negocios();           
+                this.negocio = {};
+                      this.listar_negocios();
+                    $("#eliminacionNegocio").modal("toggle");          
             },nuevoNegocio(){
               $("#formulario").modal("toggle");
-            }, eliminarNegocio(param_negocio){
-              $("#eliminacionNegocio").modal("toggle");
+            }, 
+            eliminarNegocio(param_negocio){
+              
               this.negocio = param_negocio;
-            }, cerrarModal(){              
+              console.log(this.negocio = param_negocio);
+              $("#eliminacionNegocio").modal("toggle");
+            }, 
+            cerrarModal(){              
               $("#formulario").modal("toggle");
               this.editando=false;
               this.negocio = {};
@@ -233,6 +285,32 @@
             }, abrirFoto(ruta){
               this.ruta = ruta;
               $("#viewfoto").modal("toggle");
+            },
+            onChange(event) {
+
+             axios.get("/negocios_filtrar",{
+                    params: {
+                        key: event.target.value
+                    }
+                }).then((response)=>{
+                    this.lista_negocios = response.data;
+                }).catch((error)=>{
+                    console.log(error.response)
+                })
+            console.log(event.target.value)
+        },
+        onChange2(event) {
+
+             axios.get("/negocios_filtrar2",{
+                    params: {
+                        key2: event.target.value
+                    }
+                }).then((response)=>{
+                    this.lista_negocios = response.data;
+                }).catch((error)=>{
+                    console.log(error.response)
+                })
+              console.log(event.target.value)
             }
         }
     }

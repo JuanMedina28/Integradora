@@ -107,7 +107,7 @@
                                                         </div>
 
                                                         <div class="col-md-6">
-                                                            <select class="form-control" data-toggle="select" title="Simple select" v-model="negocio.tipo_ser">
+                                                            <select class="form-control" data-toggle="select" title="Simple select">
                                                                 <option disabled selected>Elige tu tipo de Negocio</option>
                                                                 <option>Ingeribles - Alimentos y bebidas.</option>
                                                                 <option>Ambiente - Sonido y  luces.</option>
@@ -124,9 +124,8 @@
                                                     <div class="row">
 
                                                          <div class="col-md-6">
-                                                            <select class="form-control" data-toggle="select" title="Simple select" data-live-search="true" data-live-search-placeholder="Search ..." v-model="negocio.estado">
-                                                                <option disabled selected>Selecciona tu Estado</option>
-                                                                <option>Edo. Mex.</option>
+                                                            <select class="form-control" data-toggle="select" title="Simple select" data-live-search="true" >
+                                                                <option disabled selected>Estado de México</option>
                                                                
                                                             </select>
                                                         </div>

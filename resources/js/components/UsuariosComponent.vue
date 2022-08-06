@@ -19,14 +19,43 @@
         <!-- TABLA -->
         <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
             
-              <br><br>
-
-            <div class="input-group mb-3">
+              <div class="row mb-4" >
+                        <div class="col-3">
+                          <label style="color: white;">Buscar:</label>
+                            <div class="input-group ">
+                              
                 <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarUsuario" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
                 <div class="input-group-append">
-                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan">Buscar Usuario</h4></button>
+                    <button class="btn  btn-dark bg-dark" type="button" id="button-addon2"><h4 class="text-cyan"><i class="fa fa-search" aria-hidden="true"></i></h4></button>
                 </div>
             </div>
+                        </div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+
+                            <label style="color: white;">Filtrar:</label>
+                            <select class="form-control" @change="onChange2($event)" v-model="key2" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Tipo de Servicio</option>
+                                            <option value="3">Clientes</option>
+                                            <option value="2">Negocios</option>
+                                            <option value="1">Administrador</option>
+                                            <option value="4">Todos</option>
+                                            
+                            </select>
+                        </div>
+                        <div class="col-3">
+
+                            <label style="color: white;">Estatus</label>
+                            <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select" >
+                                            <option disabled selected>Eslige el estatus</option>
+                                            <option value="1">Habilitado</option>
+                                            <option value="2">Deshabilitado</option>
+                                            <option value="3">Todos</option>
+                                            
+                            </select>
+                        </div>
+                    </div>
+
 
                 <paginate name="var_usuarios" :per="8" :list="lista_usuarios" tag="div" class="card-deck">
                         <div class="col-3" v-for="usuario in paginated('var_usuarios')">
@@ -41,9 +70,15 @@
                               </div>
                               <div class="des_usu">
                                 <h3>{{ usuario.name }} </h3>
+                                 <div v-if="usuario.status==2">
+                                <h2>{{usuario.name }} <span class="text-white bg-red" style="font-size: 14px;">Inhabilitado</span></h2>
+                                </div>
+                                <div v-if="usuario.status==1">
+                                <h2>{{ usuario.name }} <span class="text-white bg-green" style="font-size: 14px;">Habilitado</span></h2>
+                                </div>
                                 <h3>
                                   <div v-if="usuario.tipo_us==1">Administrador</div>
-                                  <div v-if="usuario.tipo_us=2">Negocio</div>
+                                  <div v-if="usuario.tipo_us==2">Negocio</div>
                                   <div v-if="usuario.tipo_us==3">Cliente</div>
                                 </h3>
                                 <h3>{{usuario.email}}</h3>
@@ -161,6 +196,7 @@ import VuePaginate from "vue-paginate";
             console.log('Component mounted.');
             this.listar_usuarios();
             this.usuarioEspec();
+            this.items();
         }
         ,data(){
             return {
@@ -172,7 +208,9 @@ import VuePaginate from "vue-paginate";
                 confirmacion: '',
                 logeado: {},
                 buscador: '',
-                setTimeoutBuscador: ''
+                setTimeoutBuscador: '',
+                key: '',
+                key2: ''
             }
         },methods:{
             subirFoto(e){
@@ -245,16 +283,19 @@ import VuePaginate from "vue-paginate";
               this.nuevoUsuario();
             },
             eliminar_usuario(){
-               axios.delete('/usuarios_eliminar/'+this.usuario.id)
+              console.log(this.usuario.id)
+              let idn = this.usuario.id;
+               axios.post('/usuarios_baja/'+ idn)
               .then((response) => {
-                    this.lista_usuarios = response;
-                    this.usuario = {};
-                    $("#eliminacionUsuario").modal("toggle");
+    
                 })
                 .catch((error)=>{
                     console.log(error.response);
                 });
-                this.listar_usuarios();   
+                this.usuario = {};
+                this.listar_usuarios(); 
+                    $("#eliminacionUsuario").modal("toggle");
+                  
             },nuevoUsuario(){
               $("#formulario").modal("toggle");
             }, eliminarUsuario(param_usuario){
@@ -274,6 +315,32 @@ import VuePaginate from "vue-paginate";
             buscarUsuario(){
                 clearTimeout(this.setTimeoutBuscador);
                 this.setTimeoutBuscador = setTimeout(this.listar_usuarios, 350);
+            },
+            onChange(event) {
+
+             axios.get("/usuarios_filtrar",{
+                    params: {
+                        key: event.target.value
+                    }
+                }).then((response)=>{
+                    this.lista_usuarios = response.data;
+                }).catch((error)=>{
+                    console.log(error.response)
+                })
+              console.log(event.target.value)
+            },
+            onChange2(event) {
+
+             axios.get("/usuarios_filtrar2",{
+                    params: {
+                        key2: event.target.value
+                    }
+                }).then((response)=>{
+                    this.lista_usuarios = response.data;
+                }).catch((error)=>{
+                    console.log(error.response)
+                })
+              console.log(event.target.value)
             }
         }
     }

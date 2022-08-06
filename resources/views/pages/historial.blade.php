@@ -32,7 +32,7 @@
                 icon: 'success',
                 title: 'Pago Exitoso',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1000
                 });
               var token_id = response.data.id;
               $('#token_id').val(token_id);

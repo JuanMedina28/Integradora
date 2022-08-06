@@ -17,14 +17,15 @@
                         <div class="col-6"></div>
                         <div class="col-3">
                             <label style="color: white;">Filtrar:</label>
-                            <select class="form-control" data-toggle="select" title="Simple select"  style="color:white;background: black;">
+                            <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select"  style="color:white;background: black;">
                                             <option disabled selected>Tipo de Servicio</option>
-                                            <option>Ingeribles - Alimentos y bebidas.</option>
-                                            <option>Ambiente - Sonido y  luces.</option>
-                                            <option>Música - Músicos y DJ's.</option>
-                                            <option>Decoración - Exteriores e interiores.</option>
-                                            <option>Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
-                                            <option>Personal de servicio - Exteriores e interiores.</option>
+                                            <option value="1">Ingeribles - Alimentos y bebidas.</option>
+                                            <option value="2">Ambiente - Sonido y luces.</option>
+                                            <option value="3">Música - Músicos y DJ's.</option>
+                                            <option value="4">Decoración - Exteriores e interiores.</option>
+                                            <option value="5">Extras- Hileras, tortilleros, centros de mesa, recuerdos, etc.</option>
+                                            <option value="6">Personal de servicio - Exteriores e interiores.</option>
+                                            <option value="7">Mostrar Todos</option>
                             </select>
                         </div>
                     </div>
@@ -99,7 +100,8 @@ export default {
             negocios: {},
             paginate: ['var_servicios', 'var_negocios'],
             buscador: '',
-            setTimeoutBuscador: ''
+            setTimeoutBuscador: '',
+            key: ''
         }
     }, methods:{
         listar_negocios(){
@@ -149,7 +151,20 @@ export default {
          buscarServicio(){
                 clearTimeout(this.setTimeoutBuscador);
                 this.setTimeoutBuscador = setTimeout(this.listar_servicios, 350);
-            }
+            },
+        onChange(event) {
+
+             axios.get("/servicios_filtrar",{
+                    params: {
+                        key: event.target.value
+                    }
+                }).then((response)=>{
+                    this.servicios = response.data;
+                }).catch((error)=>{
+                    console.log(error.response)
+                })
+            console.log(event.target.value)
+        }
     }
 }
 </script>

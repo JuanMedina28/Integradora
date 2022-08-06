@@ -7,6 +7,7 @@ use App\Http\Controllers\prestador_s;
 use App\Http\Controllers\Profile_2;
 use App\Http\Controllers\servicios;
 use App\Http\Controllers\user_n;
+use App\Models\m_pservicio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -52,12 +53,13 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get("/servicios_listar2", [servicios::class, 'listar2']);
 		Route::post("/servicio_guardar", [servicios::class, 'guardar']);
 		Route::post("/servicio_editar", [servicios::class, 'editar']);
-		Route::delete("/servicio_eliminar/{id}", [servicios::class, 'eliminar']);
-		Route::get("/verIMG/{id}", [AlimentosController::class, 'verArchivos']);
+		Route::post("/servicio_baja/{id}", [servicios::class, 'eliminar']);
+		Route::get("/verIMG/{id}", [servicios::class, 'verArchivos']);
 
 		Route::get("/negocios", [prestador_s::class, 'vista'])->name('crud_negocios');
 		Route::get("/negocios_listar1", [prestador_s::class, 'listar1']);
 		Route::get("/negocios_listar2", [prestador_s::class, 'listar2']);
+		Route::post("/negocio_baja/{id}", [prestador_s::class, 'baja']);
 
 		Route::get("/clientes", [InicioController::class, 'vista'])->name('crud_clientes');
 
@@ -65,14 +67,23 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get("/usuarios_listar", [user_n::class, 'listar']);
 		Route::post("/usuarios_editar", [user_n::class, 'editar']);
 		Route::post("/usuarios_guardar", [user_n::class, 'guardar']);
-		Route::delete("/usuarios_eliminar/{id}", [user_n::class, 'eliminar']);
+		Route::post("/usuarios_baja/{id}", [user_n::class, 'eliminar']);
+		Route::get("/usuarios_filtrar", [user_n::class, 'filtro']);
+		Route::get("/usuarios_filtrar2", [user_n::class, 'filtro2']);
+
+		Route::get("/negocios_filtrar", [prestador_s::class, 'filtro']);
+		Route::get("/negocios_filtrar2", [prestador_s::class, 'filtro2']);
 
 		Route::get("/pedidos", [detalle_v::class, 'vista'])->name('pedidos');
 		Route::get("/compras", [detalle_v::class, 'vista2'])->name('compras');
 		Route::get("/compras_listar", [detalle_v::class, 'lista_ventas']);
+		Route::get("/compras_listar2", [detalle_v::class, 'lista_ventas2']);
+		Route::get("/compras_listar3", [detalle_v::class, 'lista_ventas3']);
+		Route::get("/items_carrito", [detalle_v::class, 'lista_vcar']);
+		Route::get("/items_carrito2", [detalle_v::class, 'lista_vcar2']);
 		Route::post("/compras_borrar", [detalle_v::class, 'eliminar_venta2']);
 
-		Route::get("/muestra", [carrito::class, 'muestra']);
+		
 
 		Route::get("/carrito", [carrito::class, 'vista'])->name('carrito');
 
@@ -86,6 +97,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get("/consulta",[Profile_2::class, 'nose']);
 		Route::post("/nameEmail",[Profile_2::class, 'nameEmail']);
 		Route::post("/pModify",[Profile_2::class, 'password']);
+
+		Route::get('/servicios_filtrar', [servicios::class, 'filtro']);
 
 	});
 	
