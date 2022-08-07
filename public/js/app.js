@@ -6678,7 +6678,7 @@ var render = function render() {
       _c = _vm._self._c;
 
   return _c("div", [_vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "container-fluid bg-gris-oxford",
+    staticClass: "container-fluid",
     staticStyle: {
       "min-height": "80vh"
     }
@@ -6782,7 +6782,7 @@ var render = function render() {
       role: "document"
     }
   }, [_c("div", {
-    staticClass: "modal-content bg-gris-oxford"
+    staticClass: "modal-content"
   }, [_vm._m(2), _vm._v(" "), _c("div", {
     staticClass: "modal-body"
   }, [_c("form", {
