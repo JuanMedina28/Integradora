@@ -27,16 +27,17 @@
             });
 
             var sucess_callbak = function(response) {
+                var token_id = response.data.id;
+              $('#token_id').val(token_id);
+              $('#payment-form').submit();
                 Swal.fire({
                 position: 'center',
                 icon: 'success',
                 title: 'Pago Exitoso',
                 showConfirmButton: false,
-                timer: 1000
+                timer: 300
                 });
-              var token_id = response.data.id;
-              $('#token_id').val(token_id);
-              $('#payment-form').submit();
+
             };
 
             var error_callbak = function(response) {

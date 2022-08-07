@@ -6,7 +6,7 @@
                     <div class="header pb-12">
                       <div class="row align-items-center py-4">
                         <div class="col-lg-6 col-7">
-                          <h1 class=" text-rosita d-inline-block mb-0">Ventas</h1>
+                          <h1 class=" text-rosita d-inline-block mb-0"><span v-if="logeado.tipo_us==2">Mis Ventas</span><span v-if="logeado.tipo_us==1">Ventas del Sistema</span></h1>
                           <h4 class="text-white mb-0">Aquí puedes visualizar las ventas que se han realizado</h4>
                         </div>
                       </div>
@@ -155,7 +155,6 @@
                      
                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                             <div class="card-header bg-white border-0">
-                                
                                 <paginate name="var_item" :per=10 :list="list_items" class="card-body">
                                     <div  v-for="v_item in paginated('var_item')">
                                     <form method="post" autocomplete="off">
@@ -163,25 +162,28 @@
                                     <div class="d-flex justify-content-center row">
                                         <div class="col-md-10">
                                             <div class="row p-2 bg-white border rounded">
-                                                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" style="max-height: 150px;" src="/argon/img/theme/open_logo.png"></div>
+                                                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" :src="'/storage/'+v_item.img"></div>
                                                 <div class="col-md-6 mt-1">
-                                                    <h5>Fecha de la compra: {{v_item.fecha}}</h5>
-                                                    <p class="text-justify text-truncate para mb-0">Servicios: {{v_item.cant}}</p>
-                                                    <div v-if="v_item.status==1">
-                                                    <p class="text-justify text-truncate para mb-0">Estatus: En Proceso</p>
+                                                    <h5>{{v_item.fecha}}</h5>
+                                                    <h6>Fecha del evento: {{v_item.fevent2}}</h6>
+                                                    <p class="text-justify text-truncate para mb-0">Cliente: {{v_item.name}} {{v_item.ap}} {{v_item.am}}</p>
+                                                    <p class="text-justify text-truncate para mb-0">Paquete: {{v_item.tipo}}</p>
+                                                    <p class="text-justify text-truncate para mb-0">Servicios: {{v_item.scant}}</p>
+                                                     <div v-if="v_item.st==1">
+                                                    <p class="text-justify text-truncate para mb-0">Estatus: Pagada/En Proceso</p>
                                                     </div>
-                                                    <div v-if="v_item.status==2">
+                                                    <div v-if="v_item.st==2">
                                                     <p class="text-justify text-truncate para mb-0">Estatus: Concluida</p>
                                                     </div>
                                                 </div>
                                                 <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                                                     <div class="d-flex flex-row align-items-center">
-                                                        <h4 class="mr-1">${{v_item.total}} MXN</h4>
+                                                        <h4 class="mr-1">${{v_item.stotal}} MXN</h4>
                                                     </div>
                                                     <h5 class="text-success">Total</h5>
                                                     
                                                     <div class="d-flex flex-column mt-4">
-                                                        <button class="btn btn-primary btn-sm" type="button" @click="abrir(v_item)">Ver Detalle</button>
+                                                        <button class="btn btn-primary btn-sm" type="button" @click="concluir(v_item)">Ver Detalle</button>
                                                         
                                                     </div>
                                                     
@@ -217,27 +219,27 @@
                                     <div class="d-flex justify-content-center row">
                                         <div class="col-md-10">
                                             <div class="row p-2 bg-white border rounded">
-                                                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" style="max-height: 150px;" src="/argon/img/theme/open_logo.png"></div>
+                                                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" :src="'/storage/'+v_item2.img"></div>
                                                 <div class="col-md-6 mt-1">
-                                                    <h5>Fecha de la compra: {{v_item2.fecha}}</h5>
-                                                    <p class="text-justify text-truncate para mb-0">Servicios: {{v_item2.cant}}</p>
-                                                    <div v-if="v_item2.status==1">
-                                                    <p class="text-justify text-truncate para mb-0">Estatus: En Proceso</p>
+                                                    <h5>{{v_item2.fecha}}</h5>
+                                                    <h5>Fecha del evento: {{v_item2.fevent2}}</h5>
+                                                    <p class="text-justify text-truncate para mb-0">Cliente: {{v_item2.name}} {{v_item2.ap}} {{v_item2.am}}</p>
+                                                    <p class="text-justify text-truncate para mb-0">Paquete: {{v_item2.tipo}}</p>
+                                                    <p class="text-justify text-truncate para mb-0">Servicios: {{v_item2.scant}}</p>
+                                                     <div v-if="v_item2.sta==2">
+                                                    <p class="text-justify text-truncate para mb-0">Estatus: Pagada/En Proceso</p>
                                                     </div>
-                                                    <div v-if="v_item2.status==2">
+                                                    <div v-if="v_item2.sta==3">
                                                     <p class="text-justify text-truncate para mb-0">Estatus: Concluida</p>
                                                     </div>
                                                 </div>
                                                 <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                                                     <div class="d-flex flex-row align-items-center">
-                                                        <h4 class="mr-1">${{v_item2.total}} MXN</h4>
+                                                        <h4 class="mr-1">${{v_item2.stotal}} MXN</h4>
                                                     </div>
                                                     <h5 class="text-success">Total</h5>
                                                     
-                                                    <div class="d-flex flex-column mt-4">
-                                                        <button class="btn btn-primary btn-sm" type="button" @click="abrir2(v_item2)">Ver Detalle</button>
-                                                        
-                                                    </div>
+
                                                     
                                                 </div>
                                             </div>
@@ -389,7 +391,10 @@
                 list_items: {},
                 list_itemsEnv: {},
                 list_itemsCar: {},
-                paginate: ['var_item', 'var_itemsEnv', 'var_itemsCar',  'var_itemsCar2'],
+                paginate: ['var_item', 
+                'var_itemsEnv', 
+                'var_itemsCar',  
+                'var_itemsCar2'],
                 carrito: {},
                 carrito2: {},
                 list_itemsCar2: {},
@@ -434,6 +439,19 @@
                     console.log(error.response);
                 })
             },
+            finVenta(){
+                axios.get('/nego_finventa', {
+                    params: {
+                        carrito: this.carrito.id
+                    }
+                }).then((response)=>{
+                    this.list_itemsCar = response.data;
+                    
+                }).catch((error)=>{
+                    console.log(error.response);
+                })
+                this.items();
+            },
             itemsCarrito2(){
                 axios.get('/items_carrito2', {
                     params: {
@@ -451,6 +469,12 @@
                 console.log(this.carrito);
                 this.itemsCarrito();
               $("#tarjeta").modal("toggle");
+              
+            },
+            concluir(param_venta){
+                this.carrito = param_venta;
+                console.log(this.carrito);
+                this.finVenta();
               
             },
             abrir2(param_venta2){

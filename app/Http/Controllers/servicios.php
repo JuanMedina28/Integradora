@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\m_carrito;
 use App\Models\m_servicio;
+use App\Models\m_solicitud;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,22 @@ class servicios extends Controller
         return $serv;
     }
 
+    public function listar_busqueda2(Request $request){
+
+        $serv = DB::table('servicio')
+        ->where('tipo_serv','ilike', '%'.$request->tipo_ser.'%')
+        ->orwhere('des','ilike', '%'.$request->tipo_ser.'%')
+        ->select('servicio.*')->where('id_us', Auth::user()->id)
+        ->get();
+        return $serv;
+    }
+
+    public function listar_serv2(){
+
+        $serv = m_servicio::all();
+        return $serv;
+    }
+
     public function eliminar_serv(Request $request){
         $car = m_carrito::where('id_serv', $request->id);
         $car->delete();
@@ -54,27 +71,85 @@ class servicios extends Controller
        
         if($request->id==null||$request->id==0){
             $serv = new m_servicio();
-        }else{
-            $serv = m_servicio::find($request->id);
-        }
-        
-        $serv->tipo_serv =$request->tipo_serv;
-        $serv->des =$request->des;
-        $serv->precio =$request->precio;
-        if($request->url_img != null){
-            if($request->file('url_img')->isValid()){
-                $ruta_archivo = $request->file('url_img')->store('imagenes','public');
-                $serv->url_img =$ruta_archivo;
+            $serv->tipo_serv =$request->tipo_serv;
+            $serv->des =$request->des;
+            $serv->nombre_libro="No Aplica";
+            $serv->precio =$request->precio;
+            if($request->url_img != null || $request->url_img != 'No Aplica'){
+                if($request->file('url_img')->isValid()){
+                    $ruta_archivo = $request->file('url_img')->store('imagenes','public');
+                    $serv->url_img =$ruta_archivo;
+                }
+            }else{
+                $serv->url_img =$request->url_img;
             }
-        }else{
-            $serv->url_img ="Sin Aplicar";
-        }
-        $serv->nombre_libro="No aplica";
-        $serv->id_us =Auth::user()->id;
-        $serv->save();
+            $serv->id_us =Auth::user()->id;
+            $serv->save();
+    
+            return 'Guardado con exito'.$serv;
 
-        return $serv;
+        }else{
+            $serv = m_servicio::where('id',$request->id)->first();
+            $serv->tipo_serv =$request->tipo_serv;
+            $serv->des =$request->des;
+            $serv->nombre_libro="No Aplica";
+            $serv->precio =$request->precio;
+            $serv->url_img =$request->url_img;
+            $serv->id_us =Auth::user()->id;
+            $serv->save();
+    
+            return 'Se guardo el cambio'.$serv;
+        }
+
+        return 'Algo salio mal';
+       
     }
+
+        /*------------------------------------------Solicitudes de Servicio------------------------------*/
+
+ public function guardar_sol(Request $request){
+
+            $pserv= $serv = DB::table('pservicio')
+                ->join("users", "users.id", "=", "pservicio.id_us")
+                ->where('pservicio.id_us', $request->id_ps)
+                ->select('pservicio.*')
+                ->get();
+                
+                $serv = new m_servicio();
+                $serv->tipo_serv =$request->tipo_serv;
+                $serv->des =$request->des;
+                $serv->solicitud="si";
+                $serv->precio ="";
+                $serv->nombre_libro="No Aplica";
+                $serv->id_us =$pserv->id;
+                $serv->url_img ="imagenes/logo.jpg";
+                $serv->save();
+    
+                $sol = new m_solicitud();
+                $sol->id_us_cli= Auth::user()->id;
+                $sol->id_ps=$request->id_ps;
+                $sol->save();
+    
+                return 'Todo salio bien';
+        }
+    
+        public function listar_serv3(){
+    
+            $user = User::where('id', Auth::user()->id)->first();
+    
+            $serv = DB::table('servicio')
+            ->join("users", "users.id", "=", "servicio.id_us")
+            ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->where('users.municipio',$user->municipio )
+            ->select('servicio.*','users.municipio as muni' )
+            ->get();
+            return $serv;
+        }
+    
+    
+    
+    
+            /*------------------------------------------Fin Solicitudes de Servicio------------------------------*/
     
     /******************Funciones para web******************/ 
     public function vista(){
@@ -210,11 +285,7 @@ class servicios extends Controller
 
         
     }
-    public function listar_serv2(){
 
-        $serv = m_servicio::all();
-        return $serv;
-    }
     public function filtro(Request $request){
         $filtro = $request->key;
 

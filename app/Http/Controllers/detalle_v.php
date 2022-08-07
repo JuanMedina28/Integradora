@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\m_detalle_venta;
 use App\Models\m_servicio;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,8 @@ class detalle_v extends Controller
             $ser = m_servicio::where('id', $request->id_ser)->first();
             $dventa->total = $dventa->total + $ser->precio;
             $dventa->fecha = date("Y/m/d");
+            $dventa->save();
+            return $dventa;
         } else {
             $dventa = new m_detalle_venta();
             $dventa->no_venta = "No Aplica";
@@ -38,9 +41,11 @@ class detalle_v extends Controller
             $dventa->id_user = Auth::user()->id;
             $ser = m_servicio::where('id', $request->id_ser)->first();
             $dventa->total = $ser->precio;
+            $dventa->save();
+            return $dventa;
         }
 
-        $dventa->save();
+        
     }
     
 
@@ -63,20 +68,24 @@ class detalle_v extends Controller
 
         return $ventas;
     }
-    public function lista_vcar(Request $request)
-    {
-       
 
-         $lcarrito = DB::table('dventa')
+    public function lista_venta_nego()
+    {
+        $lcarrito = DB::table('dventa')
             ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
             ->join("servicio", "servicio.id", "=", "carrito.id_serv")
-            ->join("users", "users.id", "=", "servicio.id_us")
-            ->join("pservicio", "pservicio.id_us", "=", "users.id")
-            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
-            ->where('carrito.status', 1)
-            ->where('dventa.status', 1)
-            ->where('dventa.id', $request->carrito)
-            ->distinct('tipo_serv')
+            ->join("users", "users.id", "=", "dventa.id_user")
+            ->join("pservicio", "pservicio.id_us", "=", "servicio.id_us")
+            ->select('carrito.*','dventa.fevent2 as fevent2', 
+            'dventa.fecha as fecha', 
+            'servicio.tipo_serv as tipo',
+            'users.name as name',
+             'users.apaterno as ap', 
+             'users.amaterno as am',
+             'dventa.id as id_v',
+             'dventa.status as st')
+            ->where('pservicio.id_us', Auth::user()->id)
+            ->orderBy('dventa.fecha', 'desc')
             ->get();
 
         return $lcarrito;
@@ -84,6 +93,26 @@ class detalle_v extends Controller
 
     /****************************Fin Lista Ventas ********************************/
 
+ /*********************************Validar fecha****************************** */
+        public function validar_fecha(Request $request){
+        
+            $lcarrito = DB::table('dventa')
+           ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+           ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+           ->select('carrito.*')
+           ->where('dventa.fevent2',$request->fecha)
+           ->where('carrito.status', 1)
+           ->get();
+
+           if($lcarrito){
+               return "Ya existe una venta";
+           }else{
+               return "No existe una venta";
+           }
+
+   }
+
+   /****************************validar fecha ********************************/
 
     /***************************eliminar Venta*************************** */
     public function eliminar_venta(Request $request)
@@ -167,44 +196,103 @@ class detalle_v extends Controller
     }
     public function lista_ventas2()
     {
-        
-        $ventas = DB::table('dventa')
-            ->select('dventa.*')
-            ->where('status', 1)
-            ->orderBy('fecha', 'desc')
-            ->orderBy('status', 'asc')
-            ->get();
+        $tipus = User::find(Auth::user()->id);
 
+        if($tipus->tipo_us == 1){
+            $ventas = DB::table('dventa')
+                ->select('dventa.*')
+                ->where('status', 1)
+                ->orderBy('fecha', 'desc')
+                ->orderBy('status', 'asc')
+                ->get();
+        }else{
+            $ventas = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "dventa.id_user")
+            ->join("pservicio", "pservicio.id_us", "=", "servicio.id_us")
+            ->select('carrito.*','dventa.fevent2 as fevent2', 
+            'dventa.fecha as fecha', 
+            'servicio.tipo_serv as tipo',
+            'servicio.url_img as img',
+            'users.name as name',
+             'users.apaterno as ap', 
+             'users.amaterno as am',
+             'dventa.id as id_v',
+             'dventa.status as st',
+             'carrito.status as sta')
+            ->where('pservicio.id_us', Auth::user()->id)
+            ->where('carrito.status',2)
+            ->orderBy('dventa.fecha', 'desc')
+            ->get();
+                
+        }
         return $ventas;
     }
     public function lista_ventas3()
     {
-        $ventas = DB::table('dventa')
-            
-            ->select('dventa.*')
-            ->where('status', 2)
-            ->orderBy('fecha', 'desc')
-            ->orderBy('status', 'asc')
-            ->get();
+        $tipus = User::find(Auth::user()->id);
 
+        if($tipus->tipo_us == 1){
+            $ventas = DB::table('dventa')
+                ->select('dventa.*')
+                ->where('status', 2)
+                ->orderBy('fecha', 'desc')
+                ->orderBy('status', 'asc')
+                ->get();
+        }else{
+            $ventas = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "dventa.id_user")
+            ->join("pservicio", "pservicio.id_us", "=", "servicio.id_us")
+            ->select('carrito.*','dventa.fevent2 as fevent2', 
+            'dventa.fecha as fecha', 
+            'servicio.tipo_serv as tipo',
+            'servicio.url_img as img',
+            'users.name as name',
+             'users.apaterno as ap', 
+             'users.amaterno as am',
+             'dventa.id as id_v',
+             'dventa.status as st',
+             'carrito.status as sta')
+            ->where('pservicio.id_us', Auth::user()->id)
+            ->where('carrito.status', 3)
+            ->orderBy('dventa.fecha', 'desc')
+            ->get();
+                
+        }
         return $ventas;
     }
     public function lista_vcar2(Request $request)
     {
-        
+
          $lcarrito = DB::table('dventa')
             ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
             ->join("servicio", "servicio.id", "=", "carrito.id_serv")
             ->join("users", "users.id", "=", "servicio.id_us")
             ->join("pservicio", "pservicio.id_us", "=", "users.id")
             ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
-            ->where('carrito.status', 2)
-            ->where('dventa.status', 2)
+
             ->where('dventa.id', $request->carrito2)
             ->distinct('tipo_serv')
             ->get();
-
+      
         return $lcarrito;
+    }
+    public function detalleVen(Request $request){
+
+        $lcarrito = DB::table('dventa')
+        ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+        ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+        ->join("users", "users.id", "=", "servicio.id_us")
+        ->join("pservicio", "pservicio.id_us", "=", "users.id")
+        ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img', 'carrito.status as sta')
+        ->where('carrito.id_dventa', $request->carrito)
+        ->distinct('tipo_serv')
+        ->get();
+        return $lcarrito;
+
     } 
     public function eliminar_venta2(Request $request)
     {
@@ -250,6 +338,23 @@ class detalle_v extends Controller
         }
 
         $dventa->save();
+    }
+    public function lista_vcar(Request $request)
+    {
+       
+
+         $lcarrito = DB::table('dventa')
+            ->join("carrito", "carrito.id_dventa", "=", "dventa.id")
+            ->join("servicio", "servicio.id", "=", "carrito.id_serv")
+            ->join("users", "users.id", "=", "servicio.id_us")
+            ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
+   
+            ->where('dventa.id', $request->carrito)
+            ->distinct('tipo_serv')
+            ->get();
+
+        return $lcarrito;
     }
     /**************FIn Funciones Web********** */
 }

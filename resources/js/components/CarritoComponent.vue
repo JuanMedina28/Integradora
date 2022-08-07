@@ -1,9 +1,9 @@
 <template>
     <div>
 
-        <div class="header pb-5 pt-5 pt-lg-8 d-flex align-items-center" style="background-image: url(&quot;../argon/img/theme/fondo-carrito.jpg&quot;); background-size: cover; background-position: center top;"><span class="mask bg-black-gradient opacity-6"></span> <div class="container-fluid d-flex align-items-center"><div class="row"><div class="col-md-12 col-lg-7"><h1 class="display-2 text-white">Bienvenido!</h1> <p class="text-white mt-0 mb-5">Esta es tu página de servicios. Puedes ver los servicios que te interese adquirir o eliminarlos.</p></div></div></div></div>
+        <div class="header pb-5 pt-5 pt-lg-8 d-flex align-items-center" style="background-image: url(&quot;../argon/img/theme/fondo-carrito.jpg&quot;); background-size: cover; background-position: center top;"><span class="mask bg-black-gradient opacity-6"></span> <div class="container-fluid d-flex align-items-center"><div class="row"><div class="col-md-12 col-lg-7"><h1 class="display-2 text-white">Mis Servicios</h1> <p class="text-white mt-0 mb-5">Esta es tu página de servicios. Puedes ver los servicios que te interese adquirir o eliminarlos.</p></div></div></div></div>
 
-        <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
+        <div class="container-fluid " style="min-height: 80vh">
                 <br><br>
                 <div class="card shadow">
                         <div class="card-header border-0">

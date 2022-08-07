@@ -29,8 +29,6 @@ class prestador_s extends Controller
                    
     }
 
-
-
     public function listar_psrz(){
 
         $us = DB::table('pservicio')
@@ -39,6 +37,15 @@ class prestador_s extends Controller
         ->get();
         //$us=m_user::where('id',Auth::user()->id)->first();
         //$us= User::all();
+        return $us;
+    }
+
+    public function listar_unps(){
+
+        $us = DB::table('pservicio')
+        ->select('pservicio.*')
+        ->where('id_us', Auth::user()->id)
+        ->get();
         return $us;
     }
 
@@ -79,6 +86,8 @@ class prestador_s extends Controller
 
         $userModify = User::find($request->user()->id);
         $userModify->celular = $request->celular;
+        $userModify->estado = $request->estado;
+        $userModify->municipio = $request->municipio;
         $userModify->tipo_us = 2;
         $userModify->status = 1;
         if($request->url_logo != null){

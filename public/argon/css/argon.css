@@ -16597,7 +16597,7 @@ a.text-teal:focus
 
 .cards-servicios .back{
     transform: perspective(600px) rotateY(180deg);
-    background: rgb(3, 35, 54);
+    background: #ff2bba;
     padding: 15px;
     color: #f3f3f3;
     display: flex;

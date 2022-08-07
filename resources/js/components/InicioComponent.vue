@@ -3,20 +3,20 @@
 
         <form>
                  
-                <div class="header pt-4  pb-4" style="background-image: url('img/bg-2.jpg'); background-size: cover; background-position: center;" >
+                <div class="header bg-shadow pt-4  pb-4" style="background-image: url('img/bg-2.jpg'); background-size: cover; background-position: center;" >
 
                 <center><a><img :src="'img/ps-lg.png'" width="300" ></a></center>
                 </div>
-                <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh"><br>
+                <div class="container-fluid mt-0 " style="min-height: 80vh"><br>
                         <center><h1 class="text-rosita">Servicios Disponibles</h1></center><br>
                         
             <div class="row mb-4" >
                         <div class="col-3">
-                            <label style="color: white;">Buscar Servicio:</label><input v-model="buscador" @keyup="buscarServicio" style="color:white;background: black;" type="search" class="form-control"  placeholder="Buscar Servicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
+                            <label style="">Buscar Servicio:</label><input v-model="buscador" @keyup="buscarServicio" style="color:white;background: black;" type="search" class="form-control"  placeholder="Buscar Servicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
                         </div>
-                        <div class="col-6"></div>
-                        <div class="col-3">
-                            <label style="color: white;">Filtrar:</label>
+                        <div class="col-5"></div>
+                        <div class="col-4">
+                            <label style="">Filtrar:</label>
                             <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select"  style="color:white;background: black;">
                                             <option disabled selected>Tipo de Servicio</option>
                                             <option value="1">Ingeribles - Alimentos y bebidas.</option>
@@ -46,7 +46,7 @@
                                     <b>${{ around(v_servicio.precio) }} MXN</b>
                                     
                                    
-                                    <a href="#" class="btn btn-dark text-cyan" @click="cargaItem(v_servicio)">Agregar al Carrito</a>
+                                    <a href="#" class="btn btn-dark text-cyan" @click="cargaItem(v_servicio)">Contratar</a>
                                 
                                 </div>
                             </div>

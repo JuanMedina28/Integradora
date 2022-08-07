@@ -7,6 +7,7 @@ use App\Http\Controllers\prestador_s;
 use App\Http\Controllers\Profile_2;
 use App\Http\Controllers\servicios;
 use App\Http\Controllers\user_n;
+use App\Models\m_carrito;
 use App\Models\m_pservicio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -83,7 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get("/items_carrito2", [detalle_v::class, 'lista_vcar2']);
 		Route::post("/compras_borrar", [detalle_v::class, 'eliminar_venta2']);
 
-		
+		Route::get("/nego_finventa", [carrito::class, 'finVenta']);
 
 		Route::get("/carrito", [carrito::class, 'vista'])->name('carrito');
 
@@ -92,6 +93,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post("/carrito_guardar", [carrito::class, 'guardar_c2']);
 		Route::post("/newItem", [detalle_v::class, 'guardar_venta2']);
 		Route::post("/deleteItem", [carrito::class, 'eliminar_carrito2']);
+
+		Route::get("/detalleVen",[detalle_v::class, 'detalleVen']);
 
 		Route::post("/modificarFotoPerfil",[Profile_2::class, 'foto']);
 		Route::get("/consulta",[Profile_2::class, 'nose']);

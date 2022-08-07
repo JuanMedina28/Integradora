@@ -115,6 +115,7 @@ class carrito extends Controller
         if ($sventa && $us) {
             $dventa = m_detalle_venta::find($sventa->id);
             $dventa->status = $request->status;
+            $dventa->fevent2 = $request->fevent;
             /*-----------------------------------OpenPAY-------------------------------------------*/
             try {
 
@@ -179,6 +180,19 @@ class carrito extends Controller
 
     /*********************************Fin Pagar Venta************************* */
 
+    public function concluir(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id', $request->id_v)->where('status', 2)->first();
+
+        if ($sventa) {
+            $sventa->status = 3;
+            $sventa->save();
+            return 'Concluida';
+             }
+             return 'Fallo el Concluir'.$request->id_v;
+    }
+
     /*************Funciones Web*************** */
     public function vista(){
         return view('pages.carrito');
@@ -192,6 +206,7 @@ class carrito extends Controller
         if ($sventa && $us) {
             $dventa = m_detalle_venta::find($sventa->id);
             $dventa->status = 2;
+            $dventa->fevent2 = date("Y/m/d");
             /*-----------------------------------OpenPAY-------------------------------------------*/
             try {
 
@@ -302,7 +317,13 @@ class carrito extends Controller
             $carrito->status = 1;
             $carrito->save();
         }
-    }
 
+    }
+    public function finVenta(Request $request){
+           $car = m_carrito::find($request->carrito);
+           $car->status = 3;
+           $car->save();
+           
+    }
     /*************Fin Funciones Web*************** */
 }

@@ -88,7 +88,7 @@
             </div>
 
             <div v-if="logeado.tipo_us==2">
-            <center><h1 class="text-rosita">Bienvenido: <span style="color: white;">{{logeado.names}}</span></h1></center>
+            <center><h1 class="text-rosita">Bienvenido: <span style="color: white;">{{logeado.name}}</span></h1></center>
                     
                         
                     <section>

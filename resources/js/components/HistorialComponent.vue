@@ -36,7 +36,10 @@
                     </div>
                     <h5 class="text-success">Total</h5>
                     <div v-if="v_item.status==1">
-                    <div class="d-flex flex-column mt-4"><button class="btn btn-primary btn-sm" type="button" @click="abrir()">Pagar</button><button class="btn btn-outline-primary btn-sm mt-2" type="button" @click="eliminar()">Descartar</button></div>
+                    <div class="d-flex flex-column mt-4"><button class="btn btn-primary btn-sm" type="button" @click="abrir()">Pagar</button><button class="btn btn-outline-primary btn-sm mt-2" type="button" @click="descartar()">Descartar</button></div>
+                    </div>
+                    <div v-if="v_item.status!=1">
+                    <div class="d-flex flex-column mt-4"><button class="btn btn-outline-primary btn-sm mt-2" type="button" @click="detalles(v_item)">Ver Detalles</button></div>
                     </div>
                 </div>
             </div>
@@ -95,6 +98,11 @@
                                                 <label class="form-control-label" for="input-email">CCV:</label>
                                                 <input type="number" id="ccv" name="ccv" class="form-control form-control-alternative" data-openpay-card="cvv2" placeholder="010">
                                             </div>
+                                             
+                                        </div>
+                                        <div class="">
+                                            <label class="">Fecha del evento:</label>
+                                            <input type="Date" value="2022-08-08" min="2022-08-07"  class="form-control form-control-alternative" id="exampleFormControlInput1" >
                                         </div>
                                         <div class="text-center">
                                             <!--<button type="button" id="pay-button" class="btn btn-success mt-4">Guardar</button>-->
@@ -111,6 +119,76 @@
                 </div>
             </div>
 
+                <div class="modal fade" id="descartar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content ">
+                    <div class="modal-header">
+                      <h1 class="modal-title text-rosita" id="exampleModalLabel">Descartar compra</h1>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                            <p>¿Desea descartar los elementos de esta compra?</p>
+                      </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-dark text-rosita" @click="descartar()" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-dark text-cyan" @click="descartar()" data-dismiss="modal">Confirmar</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="detalles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content ">
+                    <div class="modal-header">
+                      <h1 class="modal-title text-rosita" id="exampleModalLabel">Detalles de la compra</h1>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="detalles()">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                            <paginate name="var_itemsCar" :per=10 :list="list_itemsCar" class="card-body">
+                                    <div  v-for="v_itemc in paginated('var_itemsCar')">
+                                    <form method="post" autocomplete="off">
+                                    <div class="container mt-5 mb-5">
+                                        <div class="d-flex justify-content-center row">
+                                            <div class="col-md-12">
+                                                <div class="row p-2 bg-white border rounded">
+                                                    <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" :src="'/storage/'+v_itemc.url_img"></div>
+                                                    <div class="col-md-6 mt-1">
+                                                        <h5>{{v_itemc.cat}}</h5>
+                                                        <p class="text-justify text-truncate para mb-0">Nombre: {{v_itemc.tipo_serv}}</p>
+                                                        <p class="text-justify text-truncate para mb-0">Cantidad: {{v_itemc.scant}}</p>
+                                                        <p class="text-justify text-truncate para mb-0">Costo: {{v_itemc.precio}}</p>
+                                                        <div v-if="v_itemc.sta==2">
+                                                        <p class="text-justify text-truncate para mb-0"><span style="color: red;">Pagada/En Proceso</span></p>
+                                                        </div>
+                                                        <div v-if="v_itemc.sta==3">
+                                                        <p class="text-justify text-truncate para mb-0"><span style="color: green;">Entregada</span></p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </form>
+
+                                        </div>
+                                        
+
+                                    </paginate>
+                      </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-dark text-rosita" @click="detallesCerrar()" data-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
            
         </div>
 
@@ -130,9 +208,11 @@
             return {
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 list_items: {},
-                paginate: ['var_item'],
+                list_itemsCar: {},
+                paginate: ['var_item', 'var_itemsCar'],
                 ruta: '',
                 unique_item: {},
+                carrito: {},
                 total: 0
             }
         },methods:{
@@ -147,6 +227,38 @@
               $("#tarjeta").modal("toggle");
               
             },
+            detallesCar(){
+            axios.get('/detalleVen', {
+                    params: {
+                        carrito: this.carrito.id
+                    }
+                }).then((response)=>{
+                    this.list_itemsCar = response.data;
+                    
+                }).catch((error)=>{
+                    console.log(error.response);
+                })
+            },
+            detalles(param){
+                this.carrito = param;
+                console.log(this.carrito);
+                this.detallesCar();
+              $("#detalles").modal("toggle");
+              
+            },
+            detallesCerrar(){
+                this.carrito = {};
+                console.log(this.carrito);
+                
+              $("#detalles").modal("toggle");
+              
+            },
+            descartar(){
+
+              $("#descartar").modal("toggle");
+              
+            },
+            
         }
     }
 </script>

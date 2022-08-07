@@ -89,42 +89,30 @@ class user_n extends Controller
         
     }
 
+    public function guardar_us2(Request $request){
         
+        $user = User::where('id', Auth::user()->id)->first();
     
-
-
-    public function guardar2(Request $request){
-
-        $userid = auth()->id();
-
-        $user = User::find($request->id = $userid);
-
-        $user->name = $request->name;
-        $user->apaterno = $request->apaterno;
-        $user->amaterno = $request->amaterno;
+        $user->name =$request->name;
+        $user->apaterno =$request->apaterno;
+        $user->amaterno =$request->amaterno;
         $user->celular =$request->celular;
-        if($request->url_img_us != null){
-            if($request->file('url_img_us')->isValid()){
-                $ruta_archivo = $request->file('url_img_us')->store('imagenes','public');
-                $user->url_img_us =$ruta_archivo;
-            }
-        }else{
-            $user->url_img_us ="Sin Aplicar";
-        }
-
-        $userModify = User::find($request->user()->id);
-        $userModify->tipo_us = 3;
-        $userModify->status = 1;
-        $userModify->save();
-
         $user->save();
-
-
+        return $user;
     }
-    public function usuarioEspec(Request $request){
-        //if($request->user()->password=='$2y$10$7DAnuvpcYp6Yh3R1WYRN4eCKwGEzZqmAcnTyWP15UR4Av0EzhW6DW'){                    
-        return User::find($request->user()->id);
+
+    public function guardar_us3(Request $request){
+    
+        $user = User::where('id', Auth::user()->id)->first();
+
+        $user->calleyn =$request->calle;
+        $user->n_iden =$request->no;
+        $user->municipio =$request->cp;
+        $user->cp =$request->mun;
+        $user->save();
+        return $user;
     }
+
 
     /************Funciones administrar usuarios++++++++ */
     public function vista(){
@@ -227,6 +215,41 @@ public function filtro2(Request $request){
             $usuarios =  User::all();
         }
     return $usuarios;
+}
+
+public function guardar2(Request $request){
+
+    $userid = auth()->id();
+
+    $user = User::find($request->id = $userid);
+
+    $user->name = $request->name;
+    $user->apaterno = $request->apaterno;
+    $user->amaterno = $request->amaterno;
+    $user->celular =$request->celular;
+    $user->estado =$request->estado;
+    $user->municipio =$request->municipio;
+    if($request->url_img_us != null){
+        if($request->file('url_img_us')->isValid()){
+            $ruta_archivo = $request->file('url_img_us')->store('imagenes','public');
+            $user->url_img_us =$ruta_archivo;
+        }
+    }else{
+        $user->url_img_us ="Sin Aplicar";
+    }
+
+    $userModify = User::find($request->user()->id);
+    $userModify->tipo_us = 3;
+    $userModify->status = 1;
+    $userModify->save();
+
+    $user->save();
+
+
+}
+public function usuarioEspec(Request $request){
+    //if($request->user()->password=='$2y$10$7DAnuvpcYp6Yh3R1WYRN4eCKwGEzZqmAcnTyWP15UR4Av0EzhW6DW'){                    
+    return User::find($request->user()->id);
 }
 /********************Fin Funciones********** */
 
