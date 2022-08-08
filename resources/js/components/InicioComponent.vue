@@ -31,7 +31,7 @@
                     </div>
                 <div class="row">
                     <paginate name="var_servicios" :per="8" :list="servicios" tag="div" class="card-deck">
-                        <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
+                        <div class="col-auto" v-for="v_servicio in paginated('var_servicios')">
                             <div class="cards-servicios">
                                 <div class="face front">
                                     <a href="#" @click="abrirFoto(v_servicio.url_img)">
@@ -63,7 +63,7 @@
                     <center><h1 class="text-rosita">Negocios</h1></center><br><br>
                     <div class="row">
                         <paginate name="var_negocios" :per="8" :list="negocios" tag="div" class="card-deck">
-                        <div class="col-3" v-for="negocio in paginated('var_negocios')">
+                        <div class="col-auto" v-for="negocio in paginated('var_negocios')">
                             <div class="card_negoCL bg-dark">
                               <div class="head_negoCL">
                                 <div class="circle_negoCL" style="margin-left: -20px;"></div>
@@ -78,7 +78,6 @@
                                 <p>{{ negocio.tipo_ser }}</p>
                                 <b>{{negocio.nego_email}}</b>
                                 <p>Tel: {{negocio.nego_celular}}</p>
-                                <p>{{negocio.rfc}}</p>
                               </div>
                               <div class="contact_negoCL">
                                 <a href="#" class="btn btn-dark bg-dark text-cyan" @click="ira(negocio)">Solicitar</a>
@@ -188,6 +187,22 @@ export default {
             .catch((error)=>{
                 console.log(error.response);
             })
+            axios.post('/sol_serviciov', datosNegocio)
+            .then((response) => {
+                
+            })
+            .catch((error)=>{
+                console.log(error.response);
+            })
+            axios.post('/sol_servicioc', datosNegocio)
+            .then((response) => {
+                
+            })
+            .catch((error)=>{
+                console.log(error.response);
+            })
+            this.negocio = {};
+            window.location.reload();
         },
         ira(param){
             this.negocio = param;

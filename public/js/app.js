@@ -5573,6 +5573,14 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error.response);
       });
+      axios.post('/sol_serviciov', datosNegocio).then(function (response) {})["catch"](function (error) {
+        console.log(error.response);
+      });
+      axios.post('/sol_servicioc', datosNegocio).then(function (response) {})["catch"](function (error) {
+        console.log(error.response);
+      });
+      this.negocio = {};
+      window.location.reload();
     },
     ira: function ira(param) {
       this.negocio = param;
@@ -6240,7 +6248,7 @@ Vue.use((vue_paginate__WEBPACK_IMPORTED_MODULE_0___default()));
         console.log(error.response);
       });
     },
-    guardarServicio: function guardarServicio() {
+    guardarNegocio: function guardarNegocio() {
       var _this3 = this;
 
       if (this.logeado.tipo_us == 2) {
@@ -6281,6 +6289,7 @@ Vue.use((vue_paginate__WEBPACK_IMPORTED_MODULE_0___default()));
     editar_servicio: function editar_servicio(param_servicio) {
       this.editando = true;
       this.servicio = param_servicio;
+      console.log(this.servicio);
       this.nuevoServicio();
     },
     eliminar_servicio: function eliminar_servicio() {
@@ -7570,7 +7579,7 @@ var render = function render() {
     }
   }, _vm._l(_vm.paginated("var_servicios"), function (v_servicio) {
     return _c("div", {
-      staticClass: "col-3"
+      staticClass: "col-auto"
     }, [_c("div", {
       staticClass: "cards-servicios"
     }, [_c("div", {
@@ -7631,7 +7640,7 @@ var render = function render() {
     }
   }, _vm._l(_vm.paginated("var_negocios"), function (negocio) {
     return _c("div", {
-      staticClass: "col-3"
+      staticClass: "col-auto"
     }, [_c("div", {
       staticClass: "card_negoCL bg-dark"
     }, [_c("div", {
@@ -7655,7 +7664,7 @@ var render = function render() {
       }
     })])])]), _vm._v(" "), _c("div", {
       staticClass: "des_negoCL"
-    }, [_c("p", [_vm._v(_vm._s(negocio.razon_social))]), _vm._v(" "), _c("p", [_vm._v(_vm._s(negocio.tipo_ser))]), _vm._v(" "), _c("b", [_vm._v(_vm._s(negocio.nego_email))]), _vm._v(" "), _c("p", [_vm._v("Tel: " + _vm._s(negocio.nego_celular))]), _vm._v(" "), _c("p", [_vm._v(_vm._s(negocio.rfc))])]), _vm._v(" "), _c("div", {
+    }, [_c("p", [_vm._v(_vm._s(negocio.razon_social))]), _vm._v(" "), _c("p", [_vm._v(_vm._s(negocio.tipo_ser))]), _vm._v(" "), _c("b", [_vm._v(_vm._s(negocio.nego_email))]), _vm._v(" "), _c("p", [_vm._v("Tel: " + _vm._s(negocio.nego_celular))])]), _vm._v(" "), _c("div", {
       staticClass: "contact_negoCL"
     }, [_c("a", {
       staticClass: "btn btn-dark bg-dark text-cyan",
@@ -9459,14 +9468,8 @@ var render = function render() {
     staticClass: "col"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
     staticClass: "card-profile-stats d-flex justify-content-center mt-md-5"
-  }), _vm._v(" "), _c("div", {
-    staticClass: "card-profile-stats d-flex justify-content-center mt-md-5"
-  }, [_c("br"), _vm._v(" "), _c("h1", {
-    staticClass: "text-rosita"
-  }, [_vm._v(_vm._s(_vm.logeado.name))])]), _vm._v(" "), _c("center", [_c("div", {
+  }), _vm._v(" "), _c("center", [_c("div", {
     staticClass: "card-profile-stats d-flex justify-content-center"
-  }, [_c("div", {
-    staticClass: "d-flex justify-content-between"
   }, [_c("a", {
     staticClass: "btn btn-dark bg-black text-cyan mr-4",
     attrs: {
@@ -9474,7 +9477,7 @@ var render = function render() {
       "data-toggle": "modal",
       "data-target": "#viewfoto"
     }
-  }, [_vm._v("Modificar foto")])])])])], 1)]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Modificar foto")])])])], 1)]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-xl-8 order-xl-1"
   }, [_c("div", {
     staticClass: "card bg-secondary shadow"
@@ -9535,6 +9538,68 @@ var render = function render() {
   })]), _vm._v(" "), _c("div", {}, [_c("label", {
     staticClass: "form-control-label",
     attrs: {
+      "for": "input-name"
+    }
+  }, [_vm._v("Apellido Paterno:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.logeado.apaterno,
+      expression: "logeado.apaterno"
+    }],
+    staticClass: "form-control form-control-alternative",
+    attrs: {
+      type: "text",
+      name: "name",
+      id: "input-name",
+      placeholder: _vm.logeado.apaterno,
+      required: "",
+      autofocus: ""
+    },
+    domProps: {
+      value: _vm.logeado.apaterno
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.logeado, "apaterno", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {}, [_c("label", {
+    staticClass: "form-control-label",
+    attrs: {
+      "for": "input-name"
+    }
+  }, [_vm._v("Apellido Materno:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.logeado.amaterno,
+      expression: "logeado.amaterno"
+    }],
+    staticClass: "form-control form-control-alternative",
+    attrs: {
+      type: "text",
+      name: "name",
+      id: "input-name",
+      placeholder: _vm.logeado.amaterno,
+      required: "",
+      autofocus: ""
+    },
+    domProps: {
+      value: _vm.logeado.amaterno
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.logeado, "amaterno", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {}, [_c("label", {
+    staticClass: "form-control-label",
+    attrs: {
       "for": "input-email"
     }
   }, [_vm._v("Correo:")]), _vm._v(" "), _c("input", {
@@ -9560,6 +9625,36 @@ var render = function render() {
         if ($event.target.composing) return;
 
         _vm.$set(_vm.logeado, "email", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {}, [_c("label", {
+    staticClass: "form-control-label",
+    attrs: {
+      "for": "input-email"
+    }
+  }, [_vm._v("Teléfono:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.logeado.celular,
+      expression: "logeado.celular"
+    }],
+    staticClass: "form-control form-control-alternative",
+    attrs: {
+      type: "tel",
+      name: "email",
+      id: "input-email",
+      placeholder: _vm.logeado.celular,
+      required: ""
+    },
+    domProps: {
+      value: _vm.logeado.celular
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.logeado, "celular", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -10804,7 +10899,15 @@ var render = function render() {
     on: {
       click: _vm.cerrarModal
     }
-  }, [_vm._v("Cerrar")])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Cerrar")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-dark text-cyan",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: _vm.guardarNegocio
+    }
+  }, [_vm._v("Guardar")])])])])]), _vm._v(" "), _c("div", {
     staticClass: "modal fade",
     attrs: {
       id: "eliminacionServicio",

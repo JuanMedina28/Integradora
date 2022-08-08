@@ -371,6 +371,34 @@ class detalle_v extends Controller
 
         $dventa->save();
     }
+    public function guardar_dventa3(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        if ($sventa) {
+            $dventa = m_detalle_venta::find($sventa->id);
+            $dventa->cant = $sventa->cant + 1;
+            $ser = m_servicio::where('tipo_serv', $request->tipo_serv)->first();
+            $dventa->total = $dventa->total + $ser->precio;
+            $dventa->fecha = date("Y/m/d");
+            $dventa->save();
+            return $dventa;
+        } else {
+            $dventa = new m_detalle_venta();
+            $dventa->no_venta = "No Aplica";
+            $dventa->fecha = date("Y/m/d");
+            $dventa->status = 1;
+            $dventa->cant = 1;
+            $dventa->id_user = Auth::user()->id;
+            $ser = m_servicio::where('tipo_serv', $request->tipo_serv)->first();
+            $dventa->total = $ser->precio;
+            $dventa->save();
+            return $dventa;
+        }
+
+        
+    }
     public function lista_vcar(Request $request)
     {
        

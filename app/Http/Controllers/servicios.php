@@ -299,6 +299,7 @@ class servicios extends Controller
         $nuevoServicio->precio=$request->precio;
         $nuevoServicio->des=$request->des;
         $nuevoServicio->tipo_serv=$request->tipo_serv;
+        $nuevoServicio->solicitud='no';
         if($request->url_img != null){
             if($request->file('url_img')->isValid()){
                 $ruta_archivo = $request->file('url_img')->store('imagenes','public');

@@ -125,6 +125,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-dark text-rosita" @click="cerrarModal">Cerrar</button>
+                      <button type="button" class="btn btn-dark text-cyan" @click="guardarNegocio">Guardar</button>
                     </div>
                   </div>
                 </div>
@@ -227,7 +228,7 @@ Vue.use(VuePaginate)
                     console.log(error.response)
                 })
             },
-            guardarServicio(){
+            guardarNegocio(){
               if(this.logeado.tipo_us == 2){
                 this.servicio.id_us = this.logeado.id
               }
@@ -261,6 +262,7 @@ Vue.use(VuePaginate)
             editar_servicio(param_servicio){
                this.editando = true;
                this.servicio = param_servicio;
+               console.log(this.servicio);
                this.nuevoServicio();
             },
             eliminar_servicio(){

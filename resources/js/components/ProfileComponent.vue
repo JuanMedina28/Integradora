@@ -24,15 +24,12 @@
                                     </div>
                                         <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                                         </div> 
-                                        <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                                            <br>
-                                            <h1 class="text-rosita">{{logeado.name}}</h1>
-                                        </div>
+
                                         <center>
                                             <div class="card-profile-stats d-flex justify-content-center ">
-                                                <div class="d-flex justify-content-between">
+                                               
                                                 <a href="#" data-toggle="modal" data-target="#viewfoto" class="btn btn-dark bg-black text-cyan mr-4">Modificar foto</a>
-                                                </div>
+                                                
                                             </div>
                                         </center>   
                                     </div>
@@ -88,10 +85,21 @@
                                             <input type="text" name="name" id="input-name" class="form-control form-control-alternative" :placeholder="logeado.name" v-model="logeado.name" required autofocus>
                                         </div>
                                         <div class="">
+                                            <label class="form-control-label" for="input-name">Apellido Paterno:</label>
+                                            <input type="text" name="name" id="input-name" class="form-control form-control-alternative" :placeholder="logeado.apaterno" v-model="logeado.apaterno" required autofocus>
+                                        </div>
+                                        <div class="">
+                                            <label class="form-control-label" for="input-name">Apellido Materno:</label>
+                                            <input type="text" name="name" id="input-name" class="form-control form-control-alternative" :placeholder="logeado.amaterno" v-model="logeado.amaterno" required autofocus>
+                                        </div>
+                                        <div class="">
                                             <label class="form-control-label" for="input-email">Correo:</label>
                                             <input type="email" name="email" id="input-email" class="form-control form-control-alternative" :placeholder="logeado.email" v-model="logeado.email" required>
                                         </div>
-
+                                        <div class="">
+                                            <label class="form-control-label" for="input-email">Teléfono:</label>
+                                            <input type="tel" name="email" id="input-email" class="form-control form-control-alternative" :placeholder="logeado.celular" v-model="logeado.celular" required>
+                                        </div>
                                         <div class="text-center">
                                             <button type="button" class="btn btn-dark text-cyan mt-4" @click="modifyInformation()">Guardar</button>
                                         </div>
