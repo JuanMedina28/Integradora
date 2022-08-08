@@ -99,6 +99,10 @@ Route::get('servicios/listar3',
     [servicios::class,'listar_serv3']  
 )->middleware("auth:api");
 
+Route::get('servicios/listar4',
+    [servicios::class,'listar_serv4']  
+)->middleware("auth:api");
+
 Route::post('servicios/eliminar',
     [servicios::class,'eliminar_serv']  
 )->middleware("auth:api");
@@ -106,6 +110,10 @@ Route::post('servicios/eliminar',
 /*--------------------------Ventas---------------------------*/
 Route::post('ventas/guardar',
     [detalle_v::class,'guardar_venta']  
+)->middleware("auth:api");
+
+Route::post('ventas/guardar2',
+    [detalle_v::class,'guardar_venta2']  
 )->middleware("auth:api");
 
 Route::post('ventas/eliminar',
@@ -138,6 +146,10 @@ Route::post('ventas/pagar2',
 
 Route::post('carrito/guardar',
     [carrito::class,'guardar_c']  
+)->middleware("auth:api");
+
+Route::post('carrito/guardar2',
+    [carrito::class,'guardar_c2']  
 )->middleware("auth:api");
 
 Route::post('carrito/eliminar',

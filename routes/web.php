@@ -97,8 +97,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::post("/procesarPagos", [carrito::class, 'pagar_venta2']);
 		Route::get("/items", [carrito::class, 'lista_carrito']);
-		Route::post("/carrito_guardar", [carrito::class, 'guardar_c2']);
-		Route::post("/newItem", [detalle_v::class, 'guardar_venta2']);
+		Route::post("/carrito_guardar", [carrito::class, 'guardar_carrito2']);
+		Route::post("/newItem", [detalle_v::class, 'guardar_dventa2']);
 		Route::post("/deleteItem", [carrito::class, 'eliminar_carrito2']);
 
 		Route::get("/detalleVen",[detalle_v::class, 'detalleVen']);
