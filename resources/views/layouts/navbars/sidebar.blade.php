@@ -132,6 +132,14 @@
                 </li>
                 @endif
                
+                @if(Auth::user()->can('mostarNegocio'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('solicitudes')}}">
+                        <i class="ni ni-bag-17 text-degradado"></i>
+                        <h3><span class="nav-link-text text-cyan">Solicitudes</span></h3>
+                    </a>
+                </li>
+                @endif
                 
                 @if(Auth::user()->can('mostarAdmin&Negocio'))
                 <li class="nav-item">

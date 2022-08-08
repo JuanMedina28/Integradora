@@ -1,5 +1,5 @@
 <template>
-<div class="bg-gris-oxford">
+<div class="">
         
                 <div class="header bg-dark pt-6 pt-nd-12">
                   <div class="container-fluid">
@@ -13,7 +13,7 @@
                     </div>
                   </div>
                 </div>
-            <div class="container bg-gris-oxford col-12" style="min-height: 83vh">
+            <div class="container  col-12" style="min-height: 83vh">
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col"><br><br>
@@ -150,9 +150,6 @@
                     <div v-if="logeado.tipo_us==2">
                     <div class="tab-content" id="myTabContent">
 
-                        
-                        
-                     
                         <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                             <div class="card-header bg-white border-0">
                                 <paginate name="var_item" :per=10 :list="list_items" class="card-body">

@@ -8,7 +8,7 @@
             <div class="col-lg-5 col-md-7">
                 <div class="card  shadow border-0">
                     <div class="card-header bg-transparent pb-5">
-                        <h1 style="text-align: center">Iniciar Sesion</h1>
+                        <h1 style="text-align: center" class="text-rosita">Iniciar Sesion</h1>
                     </div>
                     <div class="card-body px-lg-5 py-lg-2">
                        

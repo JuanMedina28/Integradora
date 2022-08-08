@@ -29,7 +29,7 @@
                             </select>
                         </div>
                     </div>
-
+                <div class="row">
                     <paginate name="var_servicios" :per="8" :list="servicios" tag="div" class="card-deck">
                         <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
                             <div class="cards-servicios">
@@ -52,6 +52,7 @@
                             </div>
                         </div>
                         </paginate>
+                        </div>
                         <nav aria-label="...">
                             <br>
                               <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
@@ -59,21 +60,33 @@
                         </nav>
                         
 
-                    <center><h1 class="text-rosita">Negocios</h1></center><br>
-                    <paginate name="var_negocios" :per="3" :list="negocios" tag="div" class="card-deck">
-                            <div class="card" style="max-width: 18rem;" v-for="negocio in paginated('var_negocios')">
-                                <img class="card-img-top" width="300px" height="250px" :src="'/storage/'+negocio.url_logo" alt="Card image cap">
-                                <div class="card-body">
-                                    <h3 class="card-title">{{negocio.razon_social}}</h3>
-                                    <p class="card-text">{{negocio.tipo_ser}}</p>
-                                    <p class="card-text">Contacto: {{negocio.nego_email}}</p>
-                                    <p class="card-text">Telefono: {{negocio.nego_celular}}</p>
+                    <center><h1 class="text-rosita">Negocios</h1></center><br><br>
+                    <div class="row">
+                        <paginate name="var_negocios" :per="8" :list="negocios" tag="div" class="card-deck">
+                        <div class="col-3" v-for="negocio in paginated('var_negocios')">
+                            <div class="card_negoCL bg-dark">
+                              <div class="head_negoCL">
+                                <div class="circle_negoCL" style="margin-left: -20px;"></div>
+                                <div class="img_negoCL">
+                                  <a @click="abrirFoto(negocio.url_logo)">
+                                    <img :src="'/storage/'+negocio.url_logo">
+                                  </a>
                                 </div>
-                                 <div class="card-footer text-muted">
-                                    <a href="#" class="btn btn-dark text-cyan" @click="ira()">Ver mas...</a>
-                                </div>  
+                              </div>
+                              <div class="des_negoCL">
+                                <p>{{ negocio.razon_social }}</p>
+                                <p>{{ negocio.tipo_ser }}</p>
+                                <b>{{negocio.nego_email}}</b>
+                                <p>Tel: {{negocio.nego_celular}}</p>
+                                <p>{{negocio.rfc}}</p>
+                              </div>
+                              <div class="contact_negoCL">
+                                <a href="#" class="btn btn-dark bg-dark text-cyan" @click="ira(negocio)">Solicitar</a>
+                              </div>
                             </div>
-                    </paginate>
+                        </div>
+                        </paginate>
+                    </div>
                     <nav aria-label="...">
                             <br>
                             <paginate-links for="var_negocios" :classes="{'ul': ['pagination','justify-content-end','nb-0'], 'li': 'page-item', 'a':['page-link', 'bg-dark']}"></paginate-links>
@@ -83,6 +96,43 @@
                     
                 </div>
         </form>
+                        <div class="modal fade" id="solicitud" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content ">
+                    <div class="modal-header">
+                      <h1 class="modal-title text-rosita" id="exampleModalLabel">Solicitar Servicio</h1>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="row">
+                         <div class="col-12">  
+                        <h3>Puedes ingresar una imagen de Muestra</h3>
+                        <div class="custom-file">
+                            <input type="file" require class="form-control form-control-alternative" id="url"  accept="image/*" @change="subirFoto">
+                        </div>
+                        </div> 
+                        <br>
+                        <label for="">Titulo del Servicio</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-alternative" id="descripcionNegocio" v-model="negocio.tipo_serv" placeholder="Escribe un nombre para la solicitud">
+                        </div>
+                        <label for="">Descripción</label>
+                        <div class="form-group">
+                            <textarea class="form-control" id="descripcion"  rows="3" v-model="negocio.des"  placeholder="Escribe una descripción detallada del servicio"></textarea>
+                        </div>
+                        </div>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-dark text-rosita" @click="ira()" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-dark text-cyan" @click="regSer()" data-dismiss="modal">Enviar</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
     </div>
 
 </template>
@@ -98,12 +148,16 @@ export default {
         return{
             servicios: {},
             negocios: {},
+            negocio: {},
             paginate: ['var_servicios', 'var_negocios'],
             buscador: '',
             setTimeoutBuscador: '',
             key: ''
         }
     }, methods:{
+        subirFoto(e){
+            this.negocio.url = e.target.files[0];
+        },
         listar_negocios(){
                 axios.get('/negocios_listar2')
                 .then((response) => {
@@ -113,8 +167,33 @@ export default {
                     console.log(error.response);
                 })
         },
-        ira(){
-                window.location.href = 'http://localhost:8000' +'/servicios'
+        regSer(){
+            const datosNegocio = new FormData;
+            datosNegocio.set('razon_social',this.negocio.razon_social);
+            datosNegocio.set('tipo_ser',this.negocio.tipo_ser);
+            datosNegocio.set('email',this.negocio.nego_email);
+            datosNegocio.set('celular',this.negocio.nego_celular);
+            datosNegocio.set('rfc',this.negocio.rfc);
+            datosNegocio.set('precio',this.negocio.etiquetas);
+            datosNegocio.set('url',this.negocio.url);
+            datosNegocio.set('tipo_serv',this.negocio.tipo_serv);
+            datosNegocio.set('des',this.negocio.des);
+            datosNegocio.set('id_pser',this.negocio.id_us);
+
+            axios.post('/sol_servicio', datosNegocio)
+            .then((response) => {
+                this.negocio = {};
+                window.location.reload();
+            })
+            .catch((error)=>{
+                console.log(error.response);
+            })
+        },
+        ira(param){
+            this.negocio = param;
+            console.log(this.negocio);
+            $("#solicitud").modal("toggle");
+              
         },
         listar_servicios(){
                 axios.get("/servicios_listar2",{

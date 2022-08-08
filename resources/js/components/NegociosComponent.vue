@@ -10,7 +10,7 @@
                           <h1 class="text-rosita d-inline-block mb-0">Negocios</h1>
                         </div>
                         <div class="col-lg-6 col-5 text-right">
-                          <button type="button" @click="nuevoNegocio()" class="btn btn-sm btn-dark bg-dark"><h4 class="text-cyan">Nuevo Negocio</h4></button>
+                          <!--<button type="button" @click="nuevoNegocio()" class="btn btn-sm btn-dark bg-dark"><h4 class="text-cyan">Nuevo Negocio</h4></button>-->
                         </div>
                       </div>
                     </div>
@@ -18,10 +18,10 @@
             </div>
 
             <!-- TABLA -->
-            <div class="container-fluid mt-0 bg-gris-oxford" style="min-height: 80vh">
+            <div class="container-fluid mt-0 " style="min-height: 80vh"> <br><br>
               <div class="row mb-4" >
                         <div class="col-3">
-                          <label style="color: white;">Buscar:</label>
+                          <label style="color: #2d2d2d">Buscar:</label>
                             <div class="input-group ">
                               
                 <input type="search" class="form-control" placeholder="Recipient's username" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
@@ -33,7 +33,7 @@
                         <div class="col-3"></div>
                         <div class="col-3">
 
-                            <label style="color: white;">Filtrar:</label>
+                            <label style="color: #2d2d2d">Filtrar:</label>
                             <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Giro del negocio</option>
                                             <option value="1">Ingeribles - Alimentos y bebidas.</option>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-3">
 
-                            <label style="color: white;">Estatus</label>
+                            <label style="color: #2d2d2d">Estatus</label>
                             <select class="form-control" @change="onChange2($event)" v-model="key2" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Eslige el estatus</option>
                                             <option value="1">Habilitado</option>
@@ -57,7 +57,7 @@
                             </select>
                         </div>
                     </div>
-              
+                    <div class="row">             
                         <paginate name="var_negocios" :per="8" :list="lista_negocios" tag="div" class="card-deck">
                         <div class="col-3" v-for="v_negocio in paginated('var_negocios')">
                             <div class="card_nego bg-dark">
@@ -88,6 +88,7 @@
                             </div>
                         </div>
                         </paginate>
+                        </div> 
                         <nav aria-label="...">
                             <br>
                               <paginate-links for="var_negocios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
@@ -103,17 +104,17 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title text-black" id="exampleModalLabel">Negocio</h1>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="cerrarModal()">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
                                 <!-- FORMULARIO -->
-                                  <input type="text" class="form-control" id="nombreNegocio" v-model="negocio.razon_social" placeholder="Nombre del negocio.">
+                                  <input type="text" disabled class="form-control" id="nombreNegocio" v-model="negocio.razon_social" placeholder="Nombre del negocio.">
                                   <br>
                                   <label>Giro del negocio:</label>
                                   
-                                    <select class="form-control" data-toggle="select" title="Simple select" v-model="negocio.tipo_ser">
+                                    <select class="form-control" disabled data-toggle="select" title="Simple select" v-model="negocio.tipo_ser">
                                             <option disabled selected>Elige tu tipo de Negocio</option>
                                             <option>Ingeribles - Alimentos y bebidas.</option>
                                             <option>Ambiente - Sonido y  luces.</option>
@@ -124,17 +125,16 @@
                                     </select>
                                  
                                   <br>
-                                  <input type="text" class="form-control form-control-alternative" id="giroNegocio" v-model="negocio.nego_email" placeholder="RFC del negocio">
+                                  <input type="text" disabled class="form-control form-control-alternative" id="giroNegocio" v-model="negocio.nego_email" placeholder="RFC del negocio">
                                   <br>
-                                  <input type="tel" minlength="10" maxlength="10" class="form-control form-control-alternative" id="telefono" v-model="negocio.nego_celular"  placeholder="Telefono del negocio">
+                                  <input type="tel" disabled minlength="10" maxlength="10" class="form-control form-control-alternative" id="telefono" v-model="negocio.nego_celular"  placeholder="Telefono del negocio">
                                    <br>   
-                                  <input type="text" class="form-control form-control-alternative" id="etiquetasNegocio" v-model="negocio.rfc" placeholder="Razón social del negocio">
+                                  <input type="text" disabled class="form-control form-control-alternative" id="etiquetasNegocio" v-model="negocio.rfc" placeholder="Razón social del negocio">
                                   <br>
-                                  <input type="file" class="form-control" id="url_logo"  accept="image/*" @change="subirFoto">
+                                  <input type="file" disabled class="form-control" id="url_logo"  accept="image/*" @change="subirFoto">
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-dark text-rosita" @click="cerrarModal">Cerrar</button>
-                      <button type="button" class="btn btn-dark text-cyan" @click="guardarNegocio">Guardar</button>
+                      <button type="button" class="btn btn-dark text-rosita" @click="cerrarModal()">Cerrar</button>
                     </div>
                   </div>
                 </div>

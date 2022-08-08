@@ -9,6 +9,7 @@ use App\Http\Controllers\servicios;
 use App\Http\Controllers\user_n;
 use App\Models\m_carrito;
 use App\Models\m_pservicio;
+use App\Models\m_servicio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,8 +25,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+	$servicios = m_servicio::all();
+    return view('index', array('servicios' => $servicios));
 })->name('index');
+Route::get('/terminos', function () {
+    return view('terminos');
+})->name('terminos');
 
 
 
@@ -38,8 +43,9 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::group(['middleware' => 'valUser'], function() {
-		Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-		Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+		$servicios = m_servicio::all();		
+		Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home', array('servicios' => $servicios));
+		Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home', array('servicios' => $servicios));
 		Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 		Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 		Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
@@ -56,6 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post("/servicio_editar", [servicios::class, 'editar']);
 		Route::post("/servicio_baja/{id}", [servicios::class, 'eliminar']);
 		Route::get("/verIMG/{id}", [servicios::class, 'verArchivos']);
+		Route::post("/sol_servicio", [servicios::class, 'solServ']);
 
 		Route::get("/negocios", [prestador_s::class, 'vista'])->name('crud_negocios');
 		Route::get("/negocios_listar1", [prestador_s::class, 'listar1']);
@@ -102,6 +109,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post("/pModify",[Profile_2::class, 'password']);
 
 		Route::get('/servicios_filtrar', [servicios::class, 'filtro']);
+
+		Route::get('/solicitud', [detalle_v::class, 'vsolicitud'])->name('solicitudes');
+		Route::get('/item_solicitud', [servicios::class, 'listar3']);
+		Route::get('/item_solicitud2', [servicios::class, 'listar4']);
 
 	});
 	

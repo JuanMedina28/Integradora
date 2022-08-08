@@ -88,14 +88,14 @@
             </div>
 
             <div v-if="logeado.tipo_us==2">
-            <center><h1 class="text-rosita">Bienvenido: <span style="color: white;">{{logeado.name}}</span></h1></center>
+            <center><h1 class="text-rosita">Bienvenido: <span style="color: black;">{{logeado.name}}</span></h1></center>
                     
-                        
+                    <div class="container justify-content-center aling-items-center" > 
+
                     <section>
                     
                     <div class="row">
-                       
-                        <div class="col-3">
+                        <div class="col">
                             <div class="cards-servicios">
                                 <div class="face front">
                                     <img src="storage/menu/envio.jpg" alt="" />
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-3">
+                        <div class="col">
                             <div class="cards-servicios">
                                 <div class="face front">
                                     <img src="storage/menu/tarjeta-de-debito.webp" alt="" />
@@ -128,6 +128,7 @@
                         </div>
                     </div>
                 </section>
+                    </div>
                         
                         
             </div>

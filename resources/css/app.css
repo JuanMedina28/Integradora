@@ -1,0 +1,85 @@
+.cards-servicios{
+    position: relative;
+    width: 300px;
+    height: 350px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.cards-servicios .face{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.cards-servicios .front{
+    transform: perspective(600px) rotateY(0deg);
+    box-shadow: 0 5px 10px #000000;
+}
+
+.cards-servicios .front img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cards-servicios .front h3{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    color: #ffffff;
+    background: rgba(0, 0, 0, .6);
+    text-align: center;
+}
+
+.cards-servicios .back{
+    transform: perspective(600px) rotateY(180deg);
+    background: rgb(3, 35, 54);
+    padding: 15px;
+    color: #f3f3f3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    box-shadow: 0  5px 10px #000000;
+}
+
+.cards-servicios .back .link{
+    border-top: solid 1px #f3f3f3;
+    width: 100%;
+    height: 75px;
+    line-height: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.cards-servicios .back .link a{
+    color: #f3f3f3;
+    width: 100%;
+}
+
+.cards-servicios .back h3,h2,h1{
+    letter-spacing: 2px;
+    color: #ffffff;
+    
+}
+
+.cards-servicios .back p{
+    letter-spacing: 1px;
+}
+
+.cards-servicios:hover .front{
+    transform: perspective(600px) rotateY(180deg);
+}
+
+.cards-servicios:hover .back{
+    transform: perspective(600px) rotateY(360deg);
+}

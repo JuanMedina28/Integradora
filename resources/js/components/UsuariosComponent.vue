@@ -9,7 +9,7 @@
                             <h1 class="text-rosita d-inline-block mb-0">Usuarios</h1>
                         </div>
                         <div class="col-lg-6 col-5 text-right">
-                            <button type="button"  @click="nuevoUsuario()" class="btn btn-sm btn-dark bg-dark"><h4 class="text-cyan">Nuevo Usuario</h4></button>
+                            <!--button type="button"  @click="nuevoUsuario()" class="btn btn-sm btn-dark bg-dark"><h4 class="text-cyan">Nuevo Usuario</h4></button>-->
                         </div>
                     </div>
                 </div>
@@ -17,11 +17,11 @@
         </div>
 
         <!-- TABLA -->
-        <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
-            
+        <div class="container-fluid " style="min-height: 80vh">
+             <br><br>
               <div class="row mb-4" >
                         <div class="col-3">
-                          <label style="color: white;">Buscar:</label>
+                          <label style="color: #2d2d2d">Buscar:</label>
                             <div class="input-group ">
                               
                 <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarUsuario" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
@@ -33,7 +33,7 @@
                         <div class="col-3"></div>
                         <div class="col-3">
 
-                            <label style="color: white;">Filtrar:</label>
+                            <label style="color: #2d2d2d">Filtrar:</label>
                             <select class="form-control" @change="onChange2($event)" v-model="key2" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Tipo de Servicio</option>
                                             <option value="3">Clientes</option>
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-3">
 
-                            <label style="color: white;">Estatus</label>
+                            <label style="color: #2d2d2d">Estatus</label>
                             <select class="form-control" @change="onChange($event)" v-model="key" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Eslige el estatus</option>
                                             <option value="1">Habilitado</option>
@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-
+                <div class="row">
                 <paginate name="var_usuarios" :per="8" :list="lista_usuarios" tag="div" class="card-deck">
                         <div class="col-3" v-for="usuario in paginated('var_usuarios')">
                             <div class="card_usu bg-dark">
@@ -85,12 +85,13 @@
                                 <h3>{{usuario.celular}}</h3>
                               </div>
                               <div class="contact_usu">
-                                <a  type="button" class="dropdown-item bg-dark text-cyan" @click="editar_usuario(usuario)">Modificar</a>
-                                <a  type="button" class="dropdown-item bg-dark text-rosita" @click="eliminarUsuario(usuario)">Eliminar</a>
+                                <a  type="button" class="dropdown-item bg-dark text-cyan" @click="editar_usuario(usuario)">Ver Detalles</a>
+                                <a  type="button" class="dropdown-item bg-dark text-rosita" @click="eliminarUsuario(usuario)">Alta/Baja</a>
                               </div>
                             </div>
                         </div>
                         </paginate>
+                        </div>
                         <nav aria-label="...">
                             <br>
                               <paginate-links for="var_usuarios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
@@ -111,9 +112,11 @@
                     </div>
                     <div class="modal-body">
                                 <!-- FORMULARIO -->
-                                  <input type="text" class="form-control" id="nombreUsuario" v-model="usuario.name" placeholder="Nombre Completo...">
+                                  <label for="">Nombre: </label>
+                                  <input type="text" disabled class="form-control" id="nombreUsuario" v-model="usuario.name" placeholder="Nombre Completo...">
                                   <br>
-                                  <input type="email" class="form-control" id="emailUsuario" v-model="usuario.email" rows="3" placeholder="Email...">
+                                  <label for="">Correo: </label>
+                                  <input type="email" disabled class="form-control" id="emailUsuario" v-model="usuario.email" rows="3" placeholder="Email...">
                                   <div v-if="this.editando==false">
                                     <br>
                                     <input type="password" class="form-control" id="passwordUsuario" v-model="usuario.password" placeholder="Password...">
@@ -123,16 +126,23 @@
                                     
                                   </div>
                                   <br>
-                                  <input type="tel" minlength="10" maxlength="10" class="form-control" id="celular" v-model="usuario.celular" placeholder="Telefono...">
+                                  <label for="">Teléfono: </label>
+                                  <input type="tel" disabled minlength="10" maxlength="10" class="form-control" id="celular" v-model="usuario.celular" placeholder="Telefono...">
+                                    <br>
+                                    <label for="">Estado: </label>
+                                  <input type="text" disabled minlength="10" maxlength="10" class="form-control" id="celular" v-model="usuario.estado" placeholder="Estado">
+                                    <br>
+                                    <label for="">Municipio: </label>
+                                  <input type="text" disabled minlength="10" maxlength="10" class="form-control" id="celular" v-model="usuario.municipio" placeholder="Municipio">
                                     <br>
                                   <label>Tipo de Usuario:</label>
-                                  <select name="select" class="form-control"  v-model="usuario.tipo_us">
+                                  <select name="select" disabled class="form-control"  v-model="usuario.tipo_us">
                                       <option  :value="1" >Administrador</option>
                                       <option  :value="2" >Negocio</option>  
                                       <option  :value="3" >Cliente</option>                       
                                   </select>
                                   <br>
-                                  <input type="file" class="form-control" id="url_img_us"  accept="image/*" @change="subirFoto">
+                                  <!--<input type="file" class="form-control" id="url_img_us"  accept="image/*" @change="subirFoto">-->
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-dark text-rosita" @click="cerrarModal">Cerrar</button>
@@ -147,17 +157,17 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <h5 class="modal-title" id="exampleModalLabel">Alta/Baja</h5>
+                      <button type="button" class="close" data-dismiss="modal" @click="eliminarUsuario()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
-                      <h4>¿Seguro que desea eliminar este negocio?</h4>
+                      <h4>¿Seguro que desea modificar este negocio?</h4>
                       </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <button type="button" class="btn btn-primary" @click="eliminar_usuario()" id="botoncito">Eliminar</button>
+                      <button type="button" class="btn btn-dark text-rosita" @click="eliminarUsuario()"  data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-dark text-cyan" @click="eliminar_usuario()" id="botoncito">Eliminar</button>
                     </div>
                   </div>
                 </div>

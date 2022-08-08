@@ -194,6 +194,9 @@ class detalle_v extends Controller
     public function vista2(){
         return view('pages.historial');
     }
+    public function vsolicitud(){
+        return view('pages.solicitudes');
+    }
     public function lista_ventas2()
     {
         $tipus = User::find(Auth::user()->id);

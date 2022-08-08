@@ -30,6 +30,7 @@ Vue.component('negocios-component', require('./components/NegociosComponent.vue'
 Vue.component('inicioroot-component', require('./components/InicioRootComponent.vue').default);
 Vue.component('carrito-component', require('./components/CarritoComponent.vue').default);
 Vue.component('historial-component', require('./components/HistorialComponent.vue').default);
+Vue.component('solicitud-component', require('./components/SolicitudesComponent.vue').default);
 /**
 /**
  * Next, we will create a fresh Vue application instance and attach it to

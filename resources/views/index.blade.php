@@ -38,6 +38,36 @@
             </div>
         </header>
         <!-- Icons Grid-->
+                <!-- HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH -->
+                <div class="row justify-content-center aling-items-center bg-black">
+                    <center><h1 class="text-rosita" style="margin-top: 2rem">Servicios Destacados</h1></center>
+                        @php
+                            $count = 0;
+                        @endphp
+                        @foreach($servicios as $servicios)
+                        @break($count == 4)
+                            <div class="col-auto" style="margin: 2rem">
+                                <div class="cards-servicios">
+                                    <div class="face front">
+                                        <img alt="Image placeholder" src="/storage/{{$servicios->url_img}}">
+                                        <h3>{{ $servicios->tipo_serv }}</h3>
+                                    </div>
+                                    <div class="face back">
+                                        <h2>{{ $servicios->tipo_serv }}</h2>
+                                        <h4>{{$servicios->des}}</h4>
+                                        <h4>${{ $servicios->precio }} MXN</h4>
+                                        <div class="contact_serv">
+                                            <a href="{{ route('login') }}" class="btn btn-dark text-cyan" style="align-items: flex-end;">Ver más...</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @php
+                            $count++;
+                        @endphp
+                        @endforeach
+                    </div>
+                <!-- HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH -->
         <section class="features-icons bg-gris-oxford text-center text-white">
             <div class="container">
                 <div class="row">

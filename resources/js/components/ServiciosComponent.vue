@@ -16,12 +16,12 @@
                   </div>
                 </div>
                 
-    <div class="container-fluid bg-gris-oxford" style="min-height: 80vh">
+    <div class="container-fluid" style="min-height: 80vh">
       <br><br>
 
             <div class="row mb-4" >
                         <div class="col-3">
-                          <label style="color: white;">Buscar:</label>
+                          <label style="color: #2d2d2d">Buscar:</label>
                             <div class="input-group ">
                               
                 <input type="search" class="form-control" placeholder="Recipient's username" v-model="buscador" @keyup="buscarServicio" aria-label="Buscar Usuario..." aria-describedby="button-addon2">
@@ -33,7 +33,7 @@
                         <div class="col-3"></div>
                         <div class="col-3">
 
-                            <label style="color: white;">Filtrar:</label>
+                            <label style="color: #2d2d2d">Filtrar:</label>
                             <select class="form-control" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Tipo de Servicio</option>
                                             <option>Ingeribles - Alimentos y bebidas.</option>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-3">
 
-                            <label style="color: white;">Estatus</label>
+                            <label style="color: #2d2d2d">Estatus</label>
                             <select class="form-control" data-toggle="select" title="Simple select" >
                                             <option disabled selected>Eslige el estatus</option>
                                             <option>Habilitado</option>
@@ -57,7 +57,7 @@
                     </div>
 
 
-            
+            <div class="row " >
                         <paginate name="var_servicios" :per="8" :list="lista_servicios" tag="div" class="card-deck">
                         <div class="col-3" v-for="v_servicio in paginated('var_servicios')">
                             <div class="cards-servicios">
@@ -69,10 +69,10 @@
                                 </div>
                                 <div class="face back">
                                 <div v-if="v_servicio.statusn==2">
-                                <span class="text-white bg-red" style="font-size: 20px;">Inhabilitado</span>
+                                <span class="text-white btn bg-red" style="font-size: 20px;">Inhabilitado</span>
                                 </div>
                                 <div v-if="v_servicio.statusn==1">
-                                <span class="text-white bg-green" style="font-size: 24px;">Habilitado</span>
+                                <span class="text-white btn bg-green" style="font-size: 24px;">Habilitado</span>
                                 </div>
                                     <h3>{{ v_servicio.nego_name}}</h3>
                                     <p>{{ v_servicio.des }}</p>
@@ -85,6 +85,7 @@
                             </div>
                         </div>
                         </paginate>
+                        </div>
                         <nav aria-label="...">
                             <br>
                               <paginate-links for="var_servicios" :classes="{'ul': ['pagination','justify-content-end','nb-0','text-rosita'], 'li': ['page-item',], 'a':['page-link', 'bg-dark']}"></paginate-links>
@@ -124,7 +125,6 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-dark text-rosita" @click="cerrarModal">Cerrar</button>
-                      <button type="button" class="btn btn-dark text-cyan"  @click="guardarServicio()">Guardar</button>
                     </div>
                   </div>
                 </div>

@@ -35,7 +35,7 @@
                 icon: 'success',
                 title: 'Pago Exitoso',
                 showConfirmButton: false,
-                timer: 300
+                timer: 3000
                 });
 
             };

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\m_carrito;
+use App\Models\m_pservicio;
 use App\Models\m_servicio;
 use App\Models\m_solicitud;
 use App\Models\User;
@@ -17,16 +18,18 @@ class servicios extends Controller
 
         $serv = DB::table('servicio')->where('id_us', Auth::user()->id)
         ->select('servicio.*')
+        ->where('solicitud', 'no')
         ->get();
         return $serv;
     }
 
-    public function listar_serv_tipo(Request $request){
+    public function listar_serv_tipo(Request $request){//
 
         $serv = DB::table('servicio')
         ->join("users", "users.id", "=", "servicio.id_us")
         ->join("pservicio", "pservicio.id_us", "=", "users.id")
         ->where('pservicio.tipo_ser', $request->tipo_ser)
+        ->where('solicitud', 'no')
         ->select('servicio.*', 'pservicio.tipo_ser as tipo')
         ->get();
         return $serv;
@@ -36,6 +39,7 @@ class servicios extends Controller
 
         $serv = DB::table('servicio')
         ->where('tipo_serv','like', '%'.$request->tipo_ser.'%')
+        ->where('solicitud', 'no')
         ->orwhere('des','like', '%'.$request->tipo_ser.'%')
         ->select('servicio.*')
         ->get();
@@ -47,6 +51,7 @@ class servicios extends Controller
         $serv = DB::table('servicio')
         ->where('tipo_serv','ilike', '%'.$request->tipo_ser.'%')
         ->orwhere('des','ilike', '%'.$request->tipo_ser.'%')
+        ->where('solicitud', 'no')
         ->select('servicio.*')->where('id_us', Auth::user()->id)
         ->get();
         return $serv;
@@ -106,31 +111,42 @@ class servicios extends Controller
     }
 
         /*------------------------------------------Solicitudes de Servicio------------------------------*/
+   
+        public function guardar_sol(Request $request){
 
- public function guardar_sol(Request $request){
-
-            $pserv= $serv = DB::table('pservicio')
-                ->join("users", "users.id", "=", "pservicio.id_us")
-                ->where('pservicio.id_us', $request->id_ps)
-                ->select('pservicio.*')
-                ->get();
+            $pserv = m_pservicio::where('id_us',$request->id_pser)->first();
+            
                 
-                $serv = new m_servicio();
-                $serv->tipo_serv =$request->tipo_serv;
-                $serv->des =$request->des;
-                $serv->solicitud="si";
-                $serv->precio ="";
-                $serv->nombre_libro="No Aplica";
-                $serv->id_us =$pserv->id;
-                $serv->url_img ="imagenes/logo.jpg";
-                $serv->save();
+                if($pserv){
+                    $serv = new m_servicio();
+                    $serv->tipo_serv =$request->tipo_serv;
+                    $serv->des =$request->des;
+                    $serv->solicitud="si";
+                    $serv->precio =$request->precio;
+                    $serv->nombre_libro="No Aplica";
+                    $serv->id_us = $pserv->id_us;
+                    if($request->url_img != null || $request->url_img != 'No Aplica'){
+                        if($request->file('url_img')->isValid()){
+                            $ruta_archivo = $request->file('url_img')->store('imagenes','public');
+                            $serv->url_img =$ruta_archivo;
+                        }
+                    }else{
+                        $serv->url_img ="imagenes/logo.jpg";
+                    }
+                    
+                    $serv->save();
+        
+                    return 'Todo salio bien';
     
-                $sol = new m_solicitud();
-                $sol->id_us_cli= Auth::user()->id;
-                $sol->id_ps=$request->id_ps;
-                $sol->save();
-    
-                return 'Todo salio bien';
+                }else{
+                    $serv = m_servicio::where('id',$request->id_ser)->first();
+                    $serv->solicitud="aceptada";
+                    $serv->precio =$request->precio;
+                    $serv->notas =$request->notas;
+                    $serv->save();
+                    return 'No Hay prestador';
+                }
+               
         }
     
         public function listar_serv3(){
@@ -140,8 +156,17 @@ class servicios extends Controller
             $serv = DB::table('servicio')
             ->join("users", "users.id", "=", "servicio.id_us")
             ->join("pservicio", "pservicio.id_us", "=", "users.id")
+            ->where('solicitud', 'no')
             ->where('users.municipio',$user->municipio )
             ->select('servicio.*','users.municipio as muni' )
+            ->get();
+            return $serv;
+        }
+        public function listar_serv4(){
+
+            $serv = DB::table('servicio')
+            ->where('id_us', Auth::user()->id)
+            ->where('solicitud', 'si')
             ->get();
             return $serv;
         }
@@ -167,6 +192,7 @@ class servicios extends Controller
             if($filtro!=null){
                 $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
                 ->select("servicio.*",'users.name as nego_name')
+                ->where('solicitud', 'no')
                 ->where('tipo_serv', 'like', '%'.$filtro.'%')
                 ->get();
                 if($usuarios!=null){
@@ -174,11 +200,13 @@ class servicios extends Controller
                 }else{
                     $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
                     ->select("servicio.*",'users.name as nego_name','users.status as statusn')
+                    ->where('solicitud', 'no')
                     ->get();
                 }
             }else{
                 $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
                     ->select("servicio.*",'users.name as nego_name','users.status as statusn')
+                    ->where('solicitud', 'no')
                     ->get();
             }
 
@@ -189,6 +217,7 @@ class servicios extends Controller
 
             return m_servicio::join('users','users.id','=','servicio.id_us')
         ->select("servicio.*",'users.name as nego_name')
+        ->where('solicitud', 'no')
         ->where('users.id', '=', $request->user()->id)
         ->get();
 
@@ -205,12 +234,14 @@ class servicios extends Controller
             $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
             ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
             ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->where('solicitud', 'no')
             ->where('tipo_serv', 'ilike', '%'.$filtro.'%')
             ->orWhere('tipo_ser', 'ilike', '%'.$filtro.'%')
             ->get();
             if(empty($usuarios)){
                 $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
                 ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+                ->where('solicitud', 'no')
                 ->select("servicio.*",'pservicio.tipo_ser as nego_name')
                 ->get();
             }
@@ -218,6 +249,7 @@ class servicios extends Controller
         }else{
             $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
             ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
+            ->where('solicitud', 'no')
             ->select("servicio.*",'pservicio.tipo_ser as nego_name')
             ->get();
         }
@@ -227,6 +259,27 @@ class servicios extends Controller
         
         
     }
+    public function listar3(){
+
+        
+
+        $serv = DB::table('servicio')
+        ->where('id_us', Auth::user()->id)
+        ->where('solicitud', 'si')
+        ->get();
+        return $serv;
+    }
+    public function listar4(){
+
+        
+
+        $serv = DB::table('servicio')
+        ->where('id_us', Auth::user()->id)
+        ->where('solicitud', 'aceptada')
+        ->get();
+        return $serv;
+    }
+
 
     public function guardar(Request $request){
         $nuevoServicio = new m_servicio();
@@ -317,16 +370,55 @@ class servicios extends Controller
             $usuarios =  m_servicio::join('users','users.id','=','servicio.id_us')
             ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
             ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->where('solicitud', 'no')
             ->where('pservicio.tipo_ser', 'ilike', '%'.$filtro.'%')
             ->get();
         }else{
             $usuarios = m_servicio::join('users','users.id','=','servicio.id_us')
             ->join('pservicio', 'users.id', '=', 'pservicio.id_us')
             ->select("servicio.*",'pservicio.tipo_ser as nego_name')
+            ->where('solicitud', 'no')
             ->get();
 
         }
         return $usuarios;
+    }
+    public function solServ(Request $request){
+
+
+        $pserv = m_pservicio::where('id_us',$request->id_pser)->first();
+        
+            
+            if($pserv){
+                $serv = new m_servicio();
+                $serv->tipo_serv =$request->tipo_serv;
+                $serv->des =$request->des;
+                $serv->solicitud="si";
+                $serv->precio = 0.00;
+                $serv->nombre_libro="No Aplica";
+                $serv->id_us = $pserv->id_us;
+                if($request->url != null || $request->url != 'No Aplica'){
+                    if($request->file('url')->isValid()){
+                        $ruta_archivo = $request->file('url')->store('imagenes','public');
+                        $serv->url_img =$ruta_archivo;
+                    }
+                }else{
+                    $serv->url = "imagenes/default.png";
+                }
+                
+                $serv->save();
+    
+                return 'Todo salio bien';
+
+            }else{
+                $serv = m_servicio::where('id',$request->id_ser)->first();
+                $serv->solicitud="aceptada";
+                $serv->precio =$request->precio;
+                $serv->notas =$request->notas;
+                $serv->save();                             
+                return 'No Hay prestador';
+            }
+           
     }
     /***************************Fin Funciones WEB************ */
 
