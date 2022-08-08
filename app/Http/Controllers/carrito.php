@@ -53,6 +53,40 @@ class carrito extends Controller
 
     /**********************************Fin Guardar Carrito*********************** */
 
+    /********************************Guardar carrito2***************************** */
+
+    public function guardar_c2(Request $request)
+    {
+
+        $sventa = m_detalle_venta::where('id_user', Auth::user()->id)->where('status', 1)->first();
+
+        $ser = m_servicio::where('tipo_serv', $request->tipo_serv)->first();
+
+        $carrito = m_carrito::where('id_serv', $ser->id)->where('status', 1)->first();
+
+        if ($carrito && $sventa && $ser) {
+            //$carrito2 = m_venta::where('id_dventa',$sventa->id)->find($request->id_libro);
+            $carrito2 = m_carrito::where('id_dventa', $sventa->id)
+                ->where('id_serv', $request->id_ser)
+                ->first();
+            $carrito2->scant = $carrito->scant + 1;
+            $carrito2->stotal = $carrito->stotal + $ser->precio;
+            $carrito2->save();
+            return 'Carrito detalle existente';
+        } else {
+            $carrito3 = new m_carrito();
+            $carrito3->id_serv = $ser->id;
+            $carrito3->id_dventa = $sventa->id;
+            $carrito3->scant = 1;
+            $carrito3->stotal = $ser->precio;
+            $carrito3->status = $request->status;
+            $carrito3->save();
+            return 'carrito nuevo';
+        }
+    }
+
+    /**********************************Fin Guardar Carrito2*********************** */
+
     /********************************Eliminar carrito***************************** */
     public function eliminar_carrito(Request $request)
     {
@@ -92,7 +126,7 @@ class carrito extends Controller
             ->join("servicio", "servicio.id", "=", "carrito.id_serv")
             ->join("users", "users.id", "=", "servicio.id_us")
             ->join("pservicio", "pservicio.id_us", "=", "users.id")
-            ->select('carrito.*', 'servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
+            ->select('carrito.*', 'servicio.solicitud as solicitud','servicio.tipo_serv as tipo_serv', 'servicio.precio as precio', 'users.name as nom', 'pservicio.tipo_ser as cat', 'servicio.url_img as url_img')
             ->where('carrito.status', 1)
             ->where('dventa.status', 1)
             ->where('dventa.id_user', Auth::user()->id)
