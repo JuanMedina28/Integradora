@@ -5655,9 +5655,14 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     console.log("Component mounted.");
     this.usuarioEspec();
+    this.listar_servicio();
   },
   data: function data() {
     return {
+      servicio: {},
+      lista_servicios: {},
+      ruta: '',
+      paginate: ['var_servicios'],
       logeado: {}
     };
   },
@@ -5689,6 +5694,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     irVentas: function irVentas() {
       window.location.href = '/servicios';
+    },
+    listar_servicio: function listar_servicio() {
+      var _this2 = this;
+
+      axios.get("/servicios_listar", {
+        params: {
+          buscador: this.buscador
+        }
+      }).then(function (response) {
+        _this2.lista_servicios = response.data;
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
+    },
+    around: function around(value) {
+      return parseFloat(Math.round(value)).toFixed(2);
     }
   }
 });
@@ -7922,53 +7943,88 @@ var render = function render() {
         return _vm.mandarPagos();
       }
     }
-  }, [_vm._v("Details")])])])])])])])], 1) : _vm._e(), _vm._v(" "), _vm.logeado.tipo_us == 2 ? _c("div", [_c("center", [_c("h1", {
-    staticClass: "text-rosita"
-  }, [_vm._v("Bienvenido: "), _c("span", {
-    staticStyle: {
-      color: "black"
-    }
-  }, [_vm._v(_vm._s(_vm.logeado.name))])])]), _vm._v(" "), _c("div", {
-    staticClass: "container justify-content-center aling-items-center"
-  }, [_c("section", [_c("div", {
+  }, [_vm._v("Details")])])])])])])])], 1) : _vm._e(), _vm._v(" "), _vm.logeado.tipo_us == 2 ? _c("div", [_vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col"
-  }, [_c("div", {
-    staticClass: "cards-servicios"
-  }, [_vm._m(4), _vm._v(" "), _c("div", {
-    staticClass: "face back"
-  }, [_c("h1", [_vm._v("Servicios")]), _vm._v(" "), _c("p", [_vm._v("Aquí podrás administrar todos los servicios que se han registrado")]), _vm._v(" "), _c("div", {
-    staticClass: "link"
-  }, [_c("a", {
-    staticClass: "btn btn-dark text-cyan",
+  }, [_c("paginate", {
+    staticClass: "card-deck",
     attrs: {
-      href: "#"
-    },
-    on: {
-      click: function click($event) {
-        return _vm.mandarServicios();
+      name: "var_servicios",
+      per: 8,
+      list: _vm.lista_servicios,
+      tag: "div"
+    }
+  }, _vm._l(_vm.paginated("var_servicios"), function (v_servicio) {
+    return _c("div", {
+      staticClass: "col-3"
+    }, [_c("div", {
+      staticClass: "cards-servicios"
+    }, [_c("div", {
+      staticClass: "face front"
+    }, [_c("a", {
+      attrs: {
+        href: "#"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.abrirFoto(v_servicio.url_img);
+        }
+      }
+    }, [_c("img", {
+      attrs: {
+        alt: "Image placeholder",
+        width: "30px",
+        height: "30px",
+        src: "/storage/" + v_servicio.url_img
+      }
+    })]), _vm._v(" "), _c("h3", [_vm._v(_vm._s(v_servicio.tipo_serv))])]), _vm._v(" "), _c("div", {
+      staticClass: "face back"
+    }, [v_servicio.statusn == 2 ? _c("div", [_c("span", {
+      staticClass: "text-white btn bg-red",
+      staticStyle: {
+        "font-size": "20px"
+      }
+    }, [_vm._v("Inhabilitado")])]) : _vm._e(), _vm._v(" "), v_servicio.statusn == 1 ? _c("div", [_c("span", {
+      staticClass: "text-white btn bg-green",
+      staticStyle: {
+        "font-size": "24px"
+      }
+    }, [_vm._v("Habilitado")])]) : _vm._e(), _vm._v(" "), _c("h3", [_vm._v(_vm._s(v_servicio.nego_name))]), _vm._v(" "), _c("p", [_vm._v(_vm._s(v_servicio.des))]), _vm._v(" "), _c("b", [_vm._v("$" + _vm._s(_vm.around(v_servicio.precio)) + " MXN")]), _vm._v(" "), _c("div", {
+      staticClass: "contact_serv"
+    }, [_c("a", {
+      staticClass: "dropdown-item btn-dark bg-dark text-cyan",
+      attrs: {
+        type: "button"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.editar_servicio(v_servicio);
+        }
+      }
+    }, [_vm._v("Detalles")]), _vm._v(" "), _c("a", {
+      staticClass: "dropdown-item btn-dark bg-dark text-rosita",
+      attrs: {
+        type: "button"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.eliminarServicio(v_servicio);
+        }
+      }
+    }, [_vm._v("Alta/Baja")])])])])]);
+  }), 0)], 1), _vm._v(" "), _c("nav", {
+    attrs: {
+      "aria-label": "..."
+    }
+  }, [_c("br"), _vm._v(" "), _c("paginate-links", {
+    attrs: {
+      "for": "var_servicios",
+      classes: {
+        ul: ["pagination", "justify-content-end", "nb-0", "text-rosita"],
+        li: ["page-item"],
+        a: ["page-link", "bg-dark"]
       }
     }
-  }, [_vm._v("Details")])])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col"
-  }, [_c("div", {
-    staticClass: "cards-servicios"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
-    staticClass: "face back"
-  }, [_c("h1", [_vm._v("Pagos")]), _vm._v(" "), _c("p", [_vm._v("Aquí podrás administrar todos los pagos que se han realizado")]), _vm._v(" "), _c("div", {
-    staticClass: "link"
-  }, [_c("a", {
-    staticClass: "btn btn-dark text-cyan",
-    attrs: {
-      href: "#"
-    },
-    on: {
-      click: function click($event) {
-        return _vm.mandarPagos();
-      }
-    }
-  }, [_vm._v("Details")])])])])])])])])], 1) : _vm._e()])]);
+  }), _vm._v(" "), _c("br")], 1)]) : _vm._e()])]);
 };
 
 var staticRenderFns = [function () {
@@ -8024,25 +8080,137 @@ var staticRenderFns = [function () {
       _c = _vm._self._c;
 
   return _c("div", {
-    staticClass: "face front"
-  }, [_c("img", {
-    attrs: {
-      src: "storage/menu/envio.jpg",
-      alt: ""
+    staticClass: "row",
+    staticStyle: {
+      "max-height": ""
     }
-  }), _vm._v(" "), _c("h3", [_vm._v("Servicios")])]);
-}, function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("div", {
-    staticClass: "face front"
-  }, [_c("img", {
+  }, [_c("div", {
+    staticClass: "carousel slide",
     attrs: {
-      src: "storage/menu/tarjeta-de-debito.webp",
-      alt: ""
+      id: "carouselExampleCaptions",
+      "data-bs-ride": "false"
     }
-  }), _vm._v(" "), _c("h3", [_vm._v("Pagos")])]);
+  }, [_c("div", {
+    staticClass: "carousel-indicators"
+  }, [_c("button", {
+    staticClass: "active",
+    attrs: {
+      type: "button",
+      "data-bs-target": "#carouselExampleCaptions",
+      "data-bs-slide-to": "0",
+      "aria-current": "true",
+      "aria-label": "Slide 1"
+    }
+  }), _vm._v(" "), _c("button", {
+    attrs: {
+      type: "button",
+      "data-bs-target": "#carouselExampleCaptions",
+      "data-bs-slide-to": "1",
+      "aria-label": "Slide 2"
+    }
+  }), _vm._v(" "), _c("button", {
+    attrs: {
+      type: "button",
+      "data-bs-target": "#carouselExampleCaptions",
+      "data-bs-slide-to": "2",
+      "aria-label": "Slide 3"
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "carousel-inner"
+  }, [_c("div", {
+    staticClass: "carousel-item active"
+  }, [_c("img", {
+    staticClass: "d-block",
+    staticStyle: {
+      width: "100%",
+      height: "20rem"
+    },
+    attrs: {
+      src: "storage/menu/slider-1.png"
+    }
+  }), _vm._v(" "), _c("div", {
+    staticClass: "carousel-caption d-none d-md-block"
+  }, [_c("a", {
+    attrs: {
+      href: "/servicios"
+    }
+  }, [_c("h1", {
+    staticClass: "btn btn-dark bg-black text-cyan"
+  }, [_vm._v("Servicios")])]), _vm._v(" "), _c("p", {
+    staticClass: "text-white"
+  }), _c("h2", [_vm._v("Aquí podrás administrar todos los servicios que se han registrado")]), _c("p")])]), _vm._v(" "), _c("div", {
+    staticClass: "carousel-item"
+  }, [_c("img", {
+    staticClass: "d-block",
+    staticStyle: {
+      width: "100%",
+      height: "20rem"
+    },
+    attrs: {
+      src: "storage/menu/slider-2.png"
+    }
+  }), _vm._v(" "), _c("div", {
+    staticClass: "carousel-caption d-none d-md-block"
+  }, [_c("a", {
+    attrs: {
+      href: "/pedidos"
+    }
+  }, [_c("h2", {
+    staticClass: "btn btn-dark bg-black text-cyan"
+  }, [_vm._v("Pedidos")])]), _vm._v(" "), _c("p"), _c("h2", {
+    staticClass: "text-white"
+  }, [_vm._v("Aquí podrás administrar todos los pedidos que se han realizado")]), _c("p")])]), _vm._v(" "), _c("div", {
+    staticClass: "carousel-item"
+  }, [_c("img", {
+    staticClass: "d-block",
+    staticStyle: {
+      width: "100%",
+      height: "20rem"
+    },
+    attrs: {
+      src: "storage/menu/slider-3.png"
+    }
+  }), _vm._v(" "), _c("div", {
+    staticClass: "carousel-caption d-none d-md-block"
+  }, [_c("a", {
+    attrs: {
+      href: "/solicitud"
+    }
+  }, [_c("h2", {
+    staticClass: "btn btn-dark bg-black text-cyan"
+  }, [_vm._v("Solicitudes")])]), _vm._v(" "), _c("p", {
+    staticClass: "text-white"
+  }), _c("h2", {
+    staticClass: "text-white"
+  }, [_vm._v("Aquí podrás administrar todas las solicitudes que se han generado")]), _c("p")])])]), _vm._v(" "), _c("button", {
+    staticClass: "carousel-control-prev",
+    attrs: {
+      type: "button",
+      "data-bs-target": "#carouselExampleCaptions",
+      "data-bs-slide": "prev"
+    }
+  }, [_c("span", {
+    staticClass: "carousel-control-prev-icon",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "visually-hidden"
+  }, [_vm._v("Previous")])]), _vm._v(" "), _c("button", {
+    staticClass: "carousel-control-next",
+    attrs: {
+      type: "button",
+      "data-bs-target": "#carouselExampleCaptions",
+      "data-bs-slide": "next"
+    }
+  }, [_c("span", {
+    staticClass: "carousel-control-next-icon",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c("span", {
+    staticClass: "visually-hidden"
+  }, [_vm._v("Next")])])])]);
 }];
 render._withStripped = true;
 
